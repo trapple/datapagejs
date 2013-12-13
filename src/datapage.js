@@ -9,10 +9,10 @@
  *
  */
 var DataPage = function (total_entries, entries_per_page, current_page, pages_per_pageset) {
-  this._total_entries = total_entries || 10;
+  this._total_entries = total_entries || 0;
   this._entries_per_page = entries_per_page || 10;
   this._current_page = current_page || 1;
-  this._pages_per_pageset = pages_per_pageset || 5;
+  this._pages_per_pageset = pages_per_pageset || 10;
 };
 
 DataPage.prototype.entries_per_page = function (val) {
@@ -115,9 +115,6 @@ DataPage.prototype.pageset = function () {
   if( this.current_page() > parseInt(len/2) ){
     splice_start = this.current_page() - parseInt(len/2) - 1;
   }
-  //console.log('cp',this.current_page());
-  //console.log('lp',this.last_page());
-  //console.log('len',len);
 
   if( this.current_page() + parseInt(len/2) > this.last_page() ){
     splice_start = this.last_page() - len;
