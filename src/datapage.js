@@ -167,6 +167,20 @@ DataPage.prototype.pageset = function () {
   return page_all;
 };
 
+/*
+ * @method has_next_pageset
+ */
+DataPage.prototype.has_next_pageset = function () {
+  return  (this.pageset()[ this.pages_per_pageset() - 1] !== this.last_page() ); 
+};
+
+/*
+ * @method has_previous_pageset
+ */
+DataPage.prototype.has_previous_pageset = function () {
+  return (this.first_page() !== this.pageset()[0]);
+};
+
 DataPage.prototype.parseVal = function (val) {
   if(typeof val !== 'number')
     throw new Error('no number');

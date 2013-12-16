@@ -171,4 +171,25 @@ describe("DataPage", function () {
     expect( pager.pageset() ).toEqual( [89,90,91,92,93,94,95,96,97,98] );
     //console.log(pager.pageset());
   });
+
+  it('has_next_pageset', function () {
+    pager.total_entries(500);
+    pager.entries_per_page(5);
+    pager.pages_per_pageset(10);
+    pager.current_page(100);
+    expect( pager.has_next_pageset() ).toEqual( false );   
+    pager.current_page(95);
+    expect( pager.has_next_pageset() ).toEqual( true );   
+  });
+
+  it('has_previous_pageset', function () {
+    pager.total_entries(500);
+    pager.entries_per_page(5);
+    pager.pages_per_pageset(10);
+    pager.current_page(7);
+    expect( pager.has_previous_pageset() ).toEqual( true );   
+    pager.current_page(6);
+    expect( pager.has_previous_pageset() ).toEqual( false );   
+     
+  });
 });

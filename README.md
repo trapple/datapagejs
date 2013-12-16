@@ -70,3 +70,7 @@ pager.entries_per_page();
 ### pages_per_pageset
 
 ### pageset
+
+### has_next_pageset
+
+### has_previous_pageset
