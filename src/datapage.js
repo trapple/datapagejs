@@ -15,6 +15,10 @@ var DataPage = function (total_entries, entries_per_page, current_page, pages_pe
   this._pages_per_pageset = pages_per_pageset || 10;
 };
 
+/*
+ * @method entries_per_page
+ * @param {Number|null}
+ */
 DataPage.prototype.entries_per_page = function (val) {
   if(val !== undefined){
     this._entries_per_page = this.parseVal(val);
@@ -22,10 +26,14 @@ DataPage.prototype.entries_per_page = function (val) {
   return this._entries_per_page;
 };
 
+/*
+ * @method current_page
+ * @param {Number|null}
+ */
 DataPage.prototype.current_page = function (val) {
   if(val !== undefined){
     val = this.parseVal(val);
-    this._current_page = val
+    this._current_page = val;
     if(val > this.last_page())
       this._current_page = this.last_page();
     return this._current_page;
@@ -33,25 +41,37 @@ DataPage.prototype.current_page = function (val) {
   return this._current_page;
 };
 
+/*
+ * @method total_entries
+ * @param {Number|null}
+ */
 DataPage.prototype.total_entries = function (val) {
   if(val !== undefined)
     this._total_entries = this.parseUnsignedInt(val);
   return this._total_entries;
 };
 
+/*
+ * @method entries_on_this_page
+ */
 DataPage.prototype.entries_on_this_page = function () {
   if(this.total_entries() === 0){
     return 0;
   }else{
     return this.last() - this.first();
   }
-}
+};
 
-
+/*
+ * @method first_page
+ */
 DataPage.prototype.first_page = function () {
   return 1;
 };
 
+/*
+ * @method last_page
+ */
 DataPage.prototype.last_page = function () {
   var pages = this.total_entries() / this.entries_per_page();
   var last_page;
@@ -65,6 +85,9 @@ DataPage.prototype.last_page = function () {
   return last_page;
 };
 
+/*
+ * @method first
+ */
 DataPage.prototype.first = function () {
   if(this.total_entries() === 0){
     return 0;
@@ -73,6 +96,9 @@ DataPage.prototype.first = function () {
   }
 };
 
+/*
+ * @method last
+ */
 DataPage.prototype.last = function () {
   if( this.current_page() == this.last_page() ){
     return this.total_entries();
@@ -81,18 +107,28 @@ DataPage.prototype.last = function () {
   }
 };
 
+/*
+ * @method previous_page
+ */
 DataPage.prototype.previous_page = function () {
   if( this.current_page() > 1 ){
     return this.current_page() - 1;
   } else {
     return;
   }
-}
+};
 
+/*
+ * @method next_page
+ */
 DataPage.prototype.next_page = function () {
   return this.current_page() < this.last_page() ? this.current_page() + 1 : undefined;
-}
+};
 
+/*
+ * @method pages_per_pageset
+ * @param {Number|null}
+ */
 DataPage.prototype.pages_per_pageset = function (val) {
   if(val !== undefined){
     this._pages_per_pageset = this.parseVal(val);
@@ -100,8 +136,12 @@ DataPage.prototype.pages_per_pageset = function (val) {
       this._pages_per_pageset = this.last_page();
   }
   return this._pages_per_pageset;
-}
+};
 
+/*
+ * @method pageset
+ * @param {Number|null}
+ */
 DataPage.prototype.pageset = function () {
   var page_all = [];
   var page_set = [];
@@ -125,7 +165,7 @@ DataPage.prototype.pageset = function () {
   }
 
   return page_all;
-}
+};
 
 DataPage.prototype.parseVal = function (val) {
   if(typeof val !== 'number')

@@ -9,7 +9,7 @@ describe("DataPage", function () {
   
   it('no args', function () {
     var pager = new DataPage();
-    expect( pager.total_entries() ).toEqual(10);
+    expect( pager.total_entries() ).toEqual(0);
     expect( pager.entries_per_page() ).toEqual(10);
     expect( pager.current_page() ).toEqual(1);
   });
