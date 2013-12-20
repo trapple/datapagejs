@@ -30,7 +30,7 @@ METHODS
 
 ```
 new DataPage();
-ew DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
 // default value
 // total_entries || 0
 // entries_per_page || 10
@@ -50,10 +50,16 @@ pager.entries_per_page();
 ```
 
 ### current_page
+```
+// set
+pager.current_page(2)
+// get
+pager.current_page();
+```
 
-### total_entries
+### total_entries ( set | get )
 
-### entries_on_this_page
+### entries_on_this_page ( set | get )
 
 ### first_page
 
@@ -67,7 +73,7 @@ pager.entries_per_page();
 
 ### next_page
 
-### pages_per_pageset
+### pages_per_pageset ( set | get )
 
 ### pageset
 
