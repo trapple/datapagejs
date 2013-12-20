@@ -14,11 +14,39 @@ describe("DataPage", function () {
     expect( pager.current_page() ).toEqual(1);
   });
 
+  it('set invalid args', function () {
+    expect( function () {
+      var pager = new DataPage("foo", 20, 5, 10);
+    }).toThrow("no number");
+    expect( function () {
+      var pager = new DataPage(300, "bar", 5, 10);
+    }).toThrow("no number");
+    expect( function () {
+      var pager = new DataPage(300, 20, "baz", 10);
+    }).toThrow("no number");
+    expect( function () {
+      var pager = new DataPage(300, 20, 5, "fizz");
+    }).toThrow("no number");
+  });
+
+  it('set invalid number bun can parseInt', function () {
+    var pager = new DataPage("500", "20", "3", "5");
+    expect( pager.total_entries() ).toEqual(500);
+    expect( pager.entries_per_page() ).toEqual(20);
+    expect( pager.current_page() ).toEqual(3);
+    expect( pager.pages_per_pageset() ).toEqual(5);
+  });
+
   it('entries_per_page', function () { 
     pager.entries_per_page(5);
     expect( pager.entries_per_page() ).toEqual(5);
+
     pager.entries_per_page(3.5);
     expect( pager.entries_per_page() ).toEqual(3);
+
+    pager.entries_per_page("5");
+    expect( pager.entries_per_page() ).toEqual(5);
+
     expect( function(){pager.entries_per_page(0)} ).toThrow();
     expect( function(){pager.entries_per_page('hoge')} ).toThrow('no number');
   });
@@ -26,9 +54,13 @@ describe("DataPage", function () {
   it('current_page', function () {
     pager.total_entries(100);
     pager.entries_per_page(20);
+
     pager.current_page(2);
     expect( pager.current_page() ).toEqual(2);
-    
+
+    pager.current_page("2");
+    expect( pager.current_page() ).toEqual(2);
+
     pager.entries_per_page(20);
     pager.current_page(6);
     expect( pager.current_page() ).toEqual(5);
@@ -42,8 +74,13 @@ describe("DataPage", function () {
   it('total_entries', function () {
     pager.total_entries(400);    
     expect( pager.total_entries() ).toEqual(400);
+
     pager.total_entries(4.5);
     expect( pager.total_entries() ).toEqual(4);
+
+    pager.total_entries("400");    
+    expect( pager.total_entries() ).toEqual(400);
+
     pager.total_entries(0);
     expect( pager.total_entries() ).toEqual(0);
     expect( function(){pager.total_entries('fuga')} ).toThrow('no number');
@@ -137,10 +174,15 @@ describe("DataPage", function () {
     pager.current_page(15);
     pager.pages_per_pageset(10);
     expect( pager.pages_per_pageset() ).toEqual(10);
+
     pager.pages_per_pageset(100);
     expect( pager.pages_per_pageset() ).toEqual(100);
+
     pager.pages_per_pageset(101);
     expect( pager.pages_per_pageset() ).toEqual(100);
+
+    pager.pages_per_pageset("5");
+    expect( pager.pages_per_pageset() ).toEqual(5);
   });
 
   it('pageset', function () {

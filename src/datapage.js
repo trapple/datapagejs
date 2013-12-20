@@ -9,10 +9,15 @@
  *
  */
 var DataPage = function (total_entries, entries_per_page, current_page, pages_per_pageset) {
-  this._total_entries = total_entries || 0;
-  this._entries_per_page = entries_per_page || 10;
-  this._current_page = current_page || 1;
+  this._total_entries     = total_entries || 0;
+  this._entries_per_page  = entries_per_page || 10;
+  this._current_page      = current_page || 1;
   this._pages_per_pageset = pages_per_pageset || 10;
+
+  this._total_entries     = this.parseUnsignedInt( this._total_entries );
+  this._entries_per_page  = this.parseVal( this._entries_per_page );
+  this._current_page      = this.parseVal( this._current_page );
+  this._pages_per_pageset = this.parseVal( this._pages_per_pageset );
 };
 
 /*
@@ -182,16 +187,20 @@ DataPage.prototype.has_previous_pageset = function () {
 };
 
 DataPage.prototype.parseVal = function (val) {
-  if(typeof val !== 'number')
+  val = parseInt(val);
+  if( typeof val !== 'number'|| isNaN(val) ){
     throw new Error('no number');
-  if(val < 1)
+  }
+  if(val < 1) {
     throw new Error('no int');
-  return parseInt(val);
+  }
+  return val;
 };
 
 DataPage.prototype.parseUnsignedInt = function (val) {
-  if(typeof val !== 'number')
+  val = parseInt(val);
+  if(typeof val !== 'number' || isNaN(val))
     throw new Error('no number');
-  return parseInt(val);
+  return val;
 };
 
