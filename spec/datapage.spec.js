@@ -29,7 +29,7 @@ describe("DataPage", function () {
     }).toThrow("no number");
   });
 
-  it('set invalid number bun can parseInt', function () {
+  it('set invalid number but can parseInt', function () {
     var pager = new DataPage("500", "20", "3", "5");
     expect( pager.total_entries() ).toEqual(500);
     expect( pager.entries_per_page() ).toEqual(20);

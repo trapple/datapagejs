@@ -1,19 +1,7 @@
 module.exports = function (grunt) {
-  grunt.initConfig({
-    jshint: {
-      src: 'src/datapage.js'
-    },
-    uglify: {
-      min: {
-        files: {
-          'dest/datapage.min.js': ['src/datapage.js']
-        }
-      }
-    }
-  });
+  require('load-grunt-config')(grunt);
 
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-
-  grunt.registerTask('dist', ['jshint', 'uglify']);
+  grunt.registerTask("default", ["watch"]);
+  grunt.registerTask("dev", ["jshint", "karma", "concat", "jsbeautifier"]);
+  grunt.registerTask('dist', ['dev', 'uglify']);
 };
