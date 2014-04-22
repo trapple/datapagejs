@@ -80,3 +80,5 @@ pager.current_page();
 ### has_next_pageset
 
 ### has_previous_pageset
+
+[![Build Status](https://travis-ci.org/trapple/datapagejs.svg?branch=master)](https://travis-ci.org/trapple/datapagejs)
