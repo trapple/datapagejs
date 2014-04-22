@@ -6,6 +6,10 @@ describe("DataPage", function () {
   beforeEach(function () {
     pager = new DataPage(); 
   });
+
+  it('travis fail test', function () {
+    throw new Error('err');
+  });
   
   it('no args', function () {
     var pager = new DataPage();
