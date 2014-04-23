@@ -8,6 +8,15 @@
  * Version 1.0.0
  *
  */
+(function (root, factory) {
+  if (typeof exports === 'object') {
+    module.exports = factory();
+  }else{
+    root.DataPage = factory();
+  }
+}(this, function () {
+
+
 var DataPage = function (total_entries, entries_per_page, current_page, pages_per_pageset) {
   this._total_entries     = total_entries || 0;
   this._entries_per_page  = entries_per_page || 10;
@@ -204,3 +213,5 @@ DataPage.prototype.parseUnsignedInt = function (val) {
   return val;
 };
 
+return DataPage;
+}));
