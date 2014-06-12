@@ -3,5 +3,5 @@ module.exports = function (grunt) {
 
   grunt.registerTask("default", ["watch"]);
   grunt.registerTask("dev", ["jshint", "karma", "concat", "jsbeautifier"]);
-  grunt.registerTask('dist', ['dev', 'copy', 'uglify']);
+  grunt.registerTask('dist', ['dev', 'uglify']);
 };
