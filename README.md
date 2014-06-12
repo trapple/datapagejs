@@ -3,6 +3,28 @@ DataPage - Simple Pagenation Data Object
 
 [![Build Status](https://travis-ci.org/trapple/datapagejs.svg?branch=master)](https://travis-ci.org/trapple/datapagejs)
 
+USAGE
+--------------------------------------
+
+### Node
+
+```
+$ npm install datapage
+```
+
+Then:
+
+```
+var DataPage = require('datapage');
+```
+
+### Browser
+
+```
+<script src="datapage.js"></script>
+```
+
+
 SYNOPSIS
 --------------------------------------
 
@@ -46,7 +68,7 @@ sets or gets the total number of entries per page (which defaults 10)
 
 ```
 // set
-pager.entries_per_page(15)
+pager.entries_per_page(15);
 // get
 pager.entries_per_page();
 ```
@@ -54,18 +76,50 @@ pager.entries_per_page();
 ### current_page
 ```
 // set
-pager.current_page(2)
+pager.current_page(2);
 // get
 pager.current_page();
 ```
 
 ### total_entries ( set | get )
 
-### entries_on_this_page ( set | get )
+```
+// set
+pager.total_entries(300);
+// get
+pager.pager.total_entries();
+```
+
+### entries_on_this_page
+
+```
+var total_entries = 300,
+	entries_per_page = 10,
+	current_page = 2,
+	pages_per_pageset = 5;
+var pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+pager.entries_on_this_page(); // returns 10
+```
+
+```
+var total_entries = 317,
+	entries_per_page = 10,
+	current_page = 32,
+	pages_per_pageset = 5;
+var pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+pager.entries_on_this_page(); // returns 7
+```
 
 ### first_page
 
+always returns 1
+
 ### last_page
+
+```
+var pager = new DataPage(500, 30, 1); 
+pager.last_page(); returns 17
+```
 
 ### fast
 

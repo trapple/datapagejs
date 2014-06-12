@@ -72,7 +72,7 @@ DataPage.prototype.entries_on_this_page = function () {
   if(this.total_entries() === 0){
     return 0;
   }else{
-    return this.last() - this.first();
+    return this.last() - this.first() + 1;//
   }
 };
 

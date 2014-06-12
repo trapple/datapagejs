@@ -3,7 +3,7 @@
  * Simple Pagenation Data Object
  * https://github.com/trapple/datapagejs.git
  * Copyright 2013 trapple
- * Version: 1.1.0
+ * Version: 1.3.0
  */
 (function(root, factory) {
     if (typeof exports === 'object') {
@@ -69,7 +69,7 @@
         if (this.total_entries() === 0) {
             return 0;
         } else {
-            return this.last() - this.first();
+            return this.last() - this.first() + 1; //
         }
     };
 
