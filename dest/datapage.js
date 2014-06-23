@@ -3,7 +3,7 @@
  * Simple Pagenation Data Object
  * https://github.com/trapple/datapagejs.git
  * Copyright 2013 trapple
- * Version: 1.3.0
+ * Version: 1.3.1
  */
 (function(root, factory) {
     if (typeof exports === 'object') {
