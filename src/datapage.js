@@ -1,13 +1,3 @@
-/*
- * DataPage
- * Simple data object for pagenation.
- *
- * http://github.com/trapple/datapagejs
- *
- * Copyright(c)2013 trapple
- * Version 1.0.0
- *
- */
 (function (root, factory) {
   if (typeof exports === 'object') {
     module.exports = factory();

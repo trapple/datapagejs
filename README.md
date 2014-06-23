@@ -29,8 +29,6 @@ SYNOPSIS
 --------------------------------------
 
 ```
-new DataPage();
-
 var pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
 pager.first_page();
 pager.last_page();
