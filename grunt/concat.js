@@ -3,7 +3,7 @@ module.exports = {
     src: [
       "src/datapage.js"
     ],
-    dest: "dest/datapage.js",
+    dest: "dist/datapage.js",
     nonull: true,
   },
   options: {
