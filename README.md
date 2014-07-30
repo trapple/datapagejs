@@ -21,6 +21,11 @@ var DataPage = require('datapage');
 ### Browser
 
 ```
+bower install datapage
+```
+Then:
+
+```
 <script src="datapage.js"></script>
 ```
 
