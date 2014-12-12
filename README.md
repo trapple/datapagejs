@@ -1,4 +1,4 @@
-DataPage - Simple Pagenation Data Object 
+DataPage.js - Simple Pagenation Data Object 
 ==================================================
 
 [![Build Status](https://travis-ci.org/trapple/datapagejs.svg?branch=master)](https://travis-ci.org/trapple/datapagejs)
@@ -139,3 +139,18 @@ pager.last_page(); returns 17
 ### has_next_pageset
 
 ### has_previous_pageset
+
+SEE ALSO
+--------------------------------------
+This software has been ported from [Data::Page](http://search.cpan.org/~lbrocard/Data-Page/lib/Data/Page.pm)
+
+
+COPYRIGHT
+--------------------------------------
+&copy; 2014 trapple
+
+
+LICENSE
+--------------------------------------
+The "Artistic License"
+
