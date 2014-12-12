@@ -3,7 +3,28 @@ DataPage.js - Simple Pagenation Data Object
 
 [![Build Status](https://travis-ci.org/trapple/datapagejs.svg?branch=master)](https://travis-ci.org/trapple/datapagejs)
 
-USAGE
+SYNOPSIS
+--------------------------------------
+
+```
+var pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+pager.first_page();
+pager.last_page();
+pager.first();
+pager.last();
+
+pager.pageset() // 1,2,3,4,5...
+
+
+// default value
+// total_entries || 0
+// entries_per_page || 10
+// current_page || 1
+// pages_per_pageset || 10
+
+```
+
+INSTALL
 --------------------------------------
 
 ### Node
@@ -27,28 +48,6 @@ Then:
 
 ```
 <script src="datapage.js"></script>
-```
-
-
-SYNOPSIS
---------------------------------------
-
-```
-var pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
-pager.first_page();
-pager.last_page();
-pager.first();
-pager.last();
-
-pager.pageset() // 1,2,3,4,5...
-
-
-// default value
-// total_entries || 0
-// entries_per_page || 10
-// current_page || 1
-// pages_per_pageset || 10
-
 ```
 
 METHODS
