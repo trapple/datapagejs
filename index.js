@@ -1,1 +1,1 @@
-module.exports = require('./dest/datapage.js');
+module.exports = require('./dist/datapage.js');
