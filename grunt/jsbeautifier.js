@@ -1,5 +1,5 @@
 module.exports = {
   "dist": {
-    src: "dest/datapage.js",
+    src: "dist/datapage.js",
   }
 };
