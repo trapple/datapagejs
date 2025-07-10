@@ -1,175 +1,6 @@
-// テスト環境では型安全なクラス直接使用
+// メインのDataPageクラスをインポート
+import DataPage from '../src/datapage.js';
 import { DataPageType } from '../src/datapage.js';
-
-// UMDパターンを回避してテスト用に直接クラスを定義
-class TestDataPage implements DataPageType {
-  #total_entries: number;
-  #entries_per_page: number;
-  #current_page: number;
-  #pages_per_pageset: number;
-
-  get _total_entries(): number { return this.#total_entries; }
-  set _total_entries(value: number) { this.#total_entries = value; }
-  
-  get _entries_per_page(): number { return this.#entries_per_page; }
-  set _entries_per_page(value: number) { this.#entries_per_page = value; }
-  
-  get _current_page(): number { return this.#current_page; }
-  set _current_page(value: number) { this.#current_page = value; }
-  
-  get _pages_per_pageset(): number { return this.#pages_per_pageset; }
-  set _pages_per_pageset(value: number) { this.#pages_per_pageset = value; }
-
-  constructor(total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number) {
-    this.#total_entries     = total_entries || 0;
-    this.#entries_per_page  = entries_per_page || 10;
-    this.#current_page      = current_page || 1;
-    this.#pages_per_pageset = pages_per_pageset || 10;
-
-    this.#total_entries     = this.parseUnsignedInt( this.#total_entries );
-    this.#entries_per_page  = this.parseVal( this.#entries_per_page );
-    this.#current_page      = this.parseVal( this.#current_page );
-    this.#pages_per_pageset = this.parseVal( this.#pages_per_pageset );
-  }
-
-  entries_per_page(val?: number): number {
-    if(val !== undefined){
-      this._entries_per_page = this.parseVal(val);
-    }
-    return this._entries_per_page;
-  }
-
-  current_page(val?: number): number {
-    if(val !== undefined){
-      const parsedVal = this.parseVal(val);
-      this._current_page = parsedVal;
-      if(parsedVal > this.last_page())
-        this._current_page = this.last_page();
-      return this._current_page;
-    }
-    return this._current_page;
-  }
-
-  total_entries(val?: number): number {
-    if(val !== undefined)
-      this._total_entries = this.parseUnsignedInt(val);
-    return this._total_entries;
-  }
-
-  entries_on_this_page(): number {
-    if(this.total_entries() === 0){
-      return 0;
-    }else{
-      return this.last() - this.first() + 1;
-    }
-  }
-
-  first_page(): number {
-    return 1;
-  }
-
-  last_page(): number {
-    const pages = this.total_entries() / this.entries_per_page();
-    let last_page: number;
-    if( pages == parseInt(pages.toString()) ){
-      last_page = pages;
-    }else{
-      last_page = 1+ parseInt(pages.toString());
-    }
-    if( last_page < 1)
-      last_page = 1;
-    return last_page;
-  }
-
-  first(): number {
-    if(this.total_entries() === 0){
-      return 0;
-    }else{
-      return ( (this.current_page() - 1) * this.entries_per_page() ) + 1;
-    }
-  }
-
-  last(): number {
-    if( this.current_page() == this.last_page() ){
-      return this.total_entries();
-    } else {
-      return ( this.current_page() * this.entries_per_page() );
-    }
-  }
-
-  previous_page(): number | undefined {
-    if( this.current_page() > 1 ){
-      return this.current_page() - 1;
-    } else {
-      return undefined;
-    }
-  }
-
-  next_page(): number | undefined {
-    return this.current_page() < this.last_page() ? this.current_page() + 1 : undefined;
-  }
-
-  pages_per_pageset(val?: number): number {
-    if(val !== undefined){
-      this._pages_per_pageset = this.parseVal(val);
-      if( this._pages_per_pageset > this.last_page() )
-        this._pages_per_pageset = this.last_page();
-    }
-    return this._pages_per_pageset;
-  }
-
-  pageset(): number[] {
-    let page_all: number[] = [];
-    let i: number;
-    let splice_start: number = 0;
-    const len = this.pages_per_pageset();
-
-    for(i = this.first_page(); i <= this.last_page(); i++){
-      page_all.push(i);
-    }
-    if( this.current_page() > parseInt((len/2).toString()) ){
-      splice_start = this.current_page() - parseInt((len/2).toString()) - 1;
-    }
-
-    if( this.current_page() + parseInt((len/2).toString()) > this.last_page() ){
-      splice_start = this.last_page() - len;
-    }
-
-    if(page_all.length > len){
-      page_all = page_all.splice(splice_start, len);
-    }
-
-    return page_all;
-  }
-
-  has_next_pageset(): boolean {
-    return  (this.pageset()[ this.pages_per_pageset() - 1] !== this.last_page() ); 
-  }
-
-  has_previous_pageset(): boolean {
-    return (this.first_page() !== this.pageset()[0]);
-  }
-
-  parseVal(val: any): number {
-    const parsed = parseInt(val);
-    if( typeof parsed !== 'number'|| isNaN(parsed) ){
-      throw new Error('no number');
-    }
-    if(parsed < 1) {
-      throw new Error('no int');
-    }
-    return parsed;
-  }
-
-  parseUnsignedInt(val: any): number {
-    const parsed = parseInt(val);
-    if(typeof parsed !== 'number' || isNaN(parsed))
-      throw new Error('no number');
-    return parsed;
-  }
-}
-
-const DataPage = TestDataPage;
 
 describe("DataPage", function () {
 
@@ -183,16 +14,16 @@ describe("DataPage", function () {
   it('set invalid args', function () {
     expect( function () {
       new DataPage("foo" as any, 20, 5, 10);
-    }).toThrow("no number");
+    }).toThrow("Invalid number: foo");
     expect( function () {
       new DataPage(300, "bar" as any, 5, 10);
-    }).toThrow("no number");
+    }).toThrow("Invalid number: bar");
     expect( function () {
       new DataPage(300, 20, "baz" as any, 10);
-    }).toThrow("no number");
+    }).toThrow("Invalid number: baz");
     expect( function () {
       new DataPage(300, 20, 5, "fizz" as any);
-    }).toThrow("no number");
+    }).toThrow("Invalid number: fizz");
   });
 
   it('set invalid number but can parseInt', function () {
@@ -215,7 +46,7 @@ describe("DataPage", function () {
     expect( pager.entries_per_page() ).toEqual(5);
 
     expect( function(){pager.entries_per_page(0)} ).toThrow();
-    expect( function(){pager.entries_per_page('hoge' as any)} ).toThrow('no number');
+    expect( function(){pager.entries_per_page('hoge' as any)} ).toThrow('Invalid number: hoge');
   });
 
   it('current_page', function () {
@@ -235,8 +66,8 @@ describe("DataPage", function () {
 
     pager.current_page(4.5);
     expect( pager.current_page() ).toEqual(4);
-    expect( function(){pager.current_page(0) }).toThrow('no int');
-    expect( function(){pager.current_page('hoge' as any)} ).toThrow('no number');
+    expect( function(){pager.current_page(0) }).toThrow('Number must be positive: 0');
+    expect( function(){pager.current_page('hoge' as any)} ).toThrow('Invalid number: hoge');
   });
 
   it('total_entries', function () {
@@ -252,7 +83,7 @@ describe("DataPage", function () {
 
     pager.total_entries(0);
     expect( pager.total_entries() ).toEqual(0);
-    expect( function(){pager.total_entries('fuga' as any)} ).toThrow('no number');
+    expect( function(){pager.total_entries('fuga' as any)} ).toThrow('Invalid number: fuga');
   });
 
   it('entries_on_this_page', function () {

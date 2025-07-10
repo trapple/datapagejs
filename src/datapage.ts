@@ -28,15 +28,6 @@ interface DataPageConstructor {
   prototype: DataPageInstance;
 }
 
-// UMD パターン
-(function (root: any, factory: () => DataPageConstructor) {
-  if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.DataPage = factory();
-  }
-}(typeof self !== 'undefined' ? self : this, function () {
-
 // ES6 Class実装
 class DataPage implements DataPageInstance {
   #total_entries: number;
@@ -236,24 +227,38 @@ class DataPage implements DataPageInstance {
 
   parseVal(val: any): number {
     const parsed = parseInt(val);
-    if( typeof parsed !== 'number'|| isNaN(parsed) ){
-      throw new Error('no number');
+    if(isNaN(parsed) ){
+      throw new Error(`Invalid number: ${val}`);
     }
     if(parsed < 1) {
-      throw new Error('no int');
+      throw new Error(`Number must be positive: ${parsed}`);
     }
     return parsed;
   }
 
   parseUnsignedInt(val: any): number {
     const parsed = parseInt(val);
-    if(typeof parsed !== 'number' || isNaN(parsed))
-      throw new Error('no number');
+    if(isNaN(parsed))
+      throw new Error(`Invalid number: ${val}`);
     return parsed;
   }
 }
 
-return DataPage as unknown as DataPageConstructor;
+// UMD パターン
+(function (root: any, factory: () => DataPageConstructor) {
+  if (typeof exports === 'object' && typeof module !== 'undefined' && typeof module.exports === 'object') {
+    // CommonJS環境 - ES Module環境を避けるため、追加条件をチェック
+    try {
+      module.exports = factory();
+    } catch (e) {
+      // ES Module環境では何もしない
+    }
+  } else if (typeof root !== 'undefined') {
+    // ブラウザ環境
+    root.DataPage = factory();
+  }
+}(typeof self !== 'undefined' ? self : this, function () {
+  return DataPage as unknown as DataPageConstructor;
 }));
 
 // TypeScript向けの型定義export
@@ -261,5 +266,4 @@ export interface DataPageType extends DataPageInstance {}
 export interface DataPageConstructorType extends DataPageConstructor {}
 
 // ES Module対応のためのdefault export
-declare const DataPageModule: DataPageConstructor;
-export default DataPageModule;
+export default DataPage as unknown as DataPageConstructor;
