@@ -7,7 +7,7 @@
 }(this, function () {
 
 
-var DataPage = function (total_entries, entries_per_page, current_page, pages_per_pageset) {
+const DataPage = function (total_entries, entries_per_page, current_page, pages_per_pageset) {
   this._total_entries     = total_entries || 0;
   this._entries_per_page  = entries_per_page || 10;
   this._current_page      = current_page || 1;
@@ -77,8 +77,8 @@ DataPage.prototype.first_page = function () {
  * @method last_page
  */
 DataPage.prototype.last_page = function () {
-  var pages = this.total_entries() / this.entries_per_page();
-  var last_page;
+  const pages = this.total_entries() / this.entries_per_page();
+  let last_page;
   if( pages == parseInt(pages) ){
     last_page = pages;
   }else{
@@ -147,11 +147,10 @@ DataPage.prototype.pages_per_pageset = function (val) {
  * @param {Number|null}
  */
 DataPage.prototype.pageset = function () {
-  var page_all = [];
-  var page_set = [];
-  var i;
-  var splice_start = 0;
-  var len = this.pages_per_pageset();
+  let page_all = [];
+  let i;
+  let splice_start = 0;
+  const len = this.pages_per_pageset();
 
   for(i = this.first_page(); i <= this.last_page(); i++){
     page_all.push(i);

@@ -1,4 +1,19 @@
-// ES Module version for testing
+/*
+ * datapage
+ * Simple Pagination Data Object
+ * https://github.com/trapple/datapagejs.git
+ * Copyright 2013 trapple
+ * Version: 1.3.4
+ */
+(function (root, factory) {
+  if (typeof exports === 'object') {
+    module.exports = factory();
+  }else {
+    root.DataPage = factory();
+  }
+}(undefined, function () {
+
+
 const DataPage = function (total_entries, entries_per_page, current_page, pages_per_pageset) {
   this._total_entries     = total_entries || 0;
   this._entries_per_page  = entries_per_page || 10;
@@ -53,7 +68,7 @@ DataPage.prototype.total_entries = function (val) {
 DataPage.prototype.entries_on_this_page = function () {
   if(this.total_entries() === 0){
     return 0;
-  }else{
+  }else {
     return this.last() - this.first() + 1;//
   }
 };
@@ -73,7 +88,7 @@ DataPage.prototype.last_page = function () {
   let last_page;
   if( pages == parseInt(pages) ){
     last_page = pages;
-  }else{
+  }else {
     last_page = 1+ parseInt(pages);
   }
   if( last_page < 1)
@@ -87,7 +102,7 @@ DataPage.prototype.last_page = function () {
 DataPage.prototype.first = function () {
   if(this.total_entries() === 0){
     return 0;
-  }else{
+  }else {
     return ( (this.current_page() - 1) * this.entries_per_page() ) + 1;
   }
 };
@@ -194,4 +209,10 @@ DataPage.prototype.parseUnsignedInt = function (val) {
   return val;
 };
 
-export default DataPage;
+return DataPage;
+}));
+
+// ES Module対応のためのdefault export
+var DataPage$1 = DataPage;
+
+export { DataPage$1 as default };
