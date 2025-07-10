@@ -3,9 +3,14 @@
   "version": "1.3.4",
   "description": "Simple Pagenation Data Object",
   "main": "datapage.js",
+  "type": "module",
   "scripts": {
     "test": "./node_modules/karma/bin/karma start --single-run",
-    "build": "grunt dist"
+    "build": "grunt dist",
+    "lint": "eslint src/ spec/",
+    "lint:fix": "eslint src/ spec/ --fix",
+    "format": "prettier --write src/ spec/",
+    "format:check": "prettier --check src/ spec/"
   },
   "repository": {
     "type": "git",
@@ -22,9 +27,10 @@
     "npm": ">=8.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "eslint": "^9.30.1",
     "grunt": "~0.4.4",
     "grunt-contrib-concat": "~0.4.0",
-    "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-jsbeautifier": "~0.2.7",
@@ -34,9 +40,12 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-spec-reporter": "0.0.12",
     "load-grunt-config": "~0.8.0",
-    "phantomjs": "~1.9.7-4"
+    "phantomjs": "~1.9.7-4",
+    "prettier": "^3.6.2"
   },
   "keywords": [
-    "pagenation", "pager", "page"
+    "pagenation",
+    "pager",
+    "page"
   ]
 }
