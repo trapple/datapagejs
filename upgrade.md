@@ -79,13 +79,13 @@
   - package.json の型定義エントリ追加 ✅
 - 成果物: TypeScript開発環境の構築 ✅
 
-**Phase 2.1b: 現在のコードの段階的TypeScript化**
+**Phase 2.1b: 現在のコードの段階的TypeScript化** ✅
 - リスク: 中（既存APIは完全維持）
 - 作業内容:
-  - `src/datapage.js` → `src/datapage.ts` への変換
-  - UMDパターンを維持しながら型定義を追加
-  - コンストラクタ関数の型安全化
-- 成果物: 型安全なDataPageクラス（API互換性維持）
+  - `src/datapage.js` → `src/datapage.ts` への変換 ✅
+  - UMDパターンを維持しながら型定義を追加 ✅
+  - コンストラクタ関数の型安全化 ✅
+- 成果物: 型安全なDataPageクラス（API互換性維持） ✅
 
 **Phase 2.1c: ES6 Class構文への移行**
 - リスク: 高（コード構造の大幅変更）
@@ -233,7 +233,7 @@ npm run format     # Prettier整形
 
 **Phase 2.1: ES Modules対応（段階的実施）**
 1. **Phase 2.1a**: TypeScript環境セットアップ（リスク：低） ✅
-2. **Phase 2.1b**: 段階的TypeScript化（リスク：中）
+2. **Phase 2.1b**: 段階的TypeScript化（リスク：中） ✅
 3. **Phase 2.1c**: ES6 Class構文移行（リスク：高）
 4. **Phase 2.1d**: ビルド設定調整（リスク：中）
 5. **Phase 2.1e**: テストの型安全化（リスク：低）
