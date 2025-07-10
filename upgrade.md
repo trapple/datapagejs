@@ -20,9 +20,9 @@
 ## アップグレード計画
 
 ### Phase 1: 基盤の現代化
-1. **Node.js環境の更新**
-   - Node.js 18+ LTS対応
-   - package.jsonのengines設定追加
+1. **Node.js環境の更新** ✅
+   - Node.js 18+ LTS対応 ✅
+   - package.jsonのengines設定追加 ✅
 
 2. **ビルドツールの移行**
    - Grunt → Vite/Rollup

@@ -17,6 +17,10 @@
     "url": "https://github.com/trapple/datapagejs/issues"
   },
   "homepage": "https://github.com/trapple/datapagejs",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-contrib-concat": "~0.4.0",
