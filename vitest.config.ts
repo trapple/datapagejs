@@ -6,7 +6,7 @@ export default defineConfig({
     environment: 'jsdom',
     
     // テストファイルのパターン
-    include: ['spec/**/*.spec.js', 'spec/**/*.test.js'],
+    include: ['spec/**/*.spec.ts', 'spec/**/*.spec.js', 'spec/**/*.test.ts', 'spec/**/*.test.js'],
     
     // グローバルにテスト関数を利用可能にする
     globals: true,
@@ -15,7 +15,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      include: ['src/**/*.js'],
+      include: ['src/**/*.ts', 'src/**/*.js'],
       exclude: ['node_modules/', 'dist/', 'spec/']
     },
     
