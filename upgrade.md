@@ -25,9 +25,9 @@
    - package.jsonのengines設定追加 ✅
 
 2. **ビルドツールの移行**
-   - Grunt → Vite/Rollup
-   - JSHint → ESLint + Prettier
-   - Karma + PhantomJS → Vitest
+   - **Phase 1.2a**: JSHint → ESLint + Prettier
+   - **Phase 1.2b**: Karma + PhantomJS → Vitest
+   - **Phase 1.2c**: Grunt → Vite/Rollup
    
    **現在のGruntタスク分析:**
    - `grunt dev`: jshint → jsbeautifier → karma → concat
@@ -41,6 +41,20 @@
    - concat: src/datapage.js → dist/datapage.js（バナー付きコピー）
    - uglify: dist/datapage.js → dist/datapage.min.js（圧縮版生成）
    - watch: ファイル変更監視と自動ビルド
+
+   **Phase 1.2詳細分割:**
+   
+   **Phase 1.2a: JSHint → ESLint + Prettier**
+   - 作業内容: JSHint削除、ESLint + Prettierインストール、設定ファイル作成
+   - リスク: 低（既存ビルドに影響なし）
+   
+   **Phase 1.2b: Karma + PhantomJS → Vitest**
+   - 作業内容: Karma・PhantomJS削除、Vitestインストール、テスト設定移行
+   - リスク: 中（テスト実行環境の変更）
+   
+   **Phase 1.2c: Grunt → Vite/Rollup**
+   - 作業内容: Gruntタスク完全置き換え、ビルド設定作成、出力互換性確保
+   - リスク: 高（ビルドプロセス全体の変更）
 
 3. **依存関係の整理**
    - Bower削除
