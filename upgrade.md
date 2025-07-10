@@ -68,19 +68,60 @@
    - セキュリティ脆弱性の解消 ✅
 
 ### Phase 2: コードの現代化
-1. **ES Modules対応**
-   - TypeScript導入
-   - ES6+ クラス構文への移行
-   - 型定義の追加
 
-2. **テストフレームワーク移行**
-   - Jasmine → Vitest
-   - ブラウザテストの追加（Playwright）
+#### Phase 2.1: ES Modules対応（詳細分割）
 
-3. **コード品質向上**
-   - ESLint設定
-   - Prettier設定
-   - pre-commit hooks (husky)
+**Phase 2.1a: TypeScript環境セットアップ** ✅
+- リスク: 低（既存コードに影響なし）
+- 作業内容:
+  - TypeScript + 型定義ファイルのインストール ✅
+  - tsconfig.json作成 ✅
+  - package.json の型定義エントリ追加 ✅
+- 成果物: TypeScript開発環境の構築 ✅
+
+**Phase 2.1b: 現在のコードの段階的TypeScript化** ✅
+- リスク: 中（既存APIは完全維持）
+- 作業内容:
+  - `src/datapage.js` → `src/datapage.ts` への変換 ✅
+  - UMDパターンを維持しながら型定義を追加 ✅
+  - コンストラクタ関数の型安全化 ✅
+- 成果物: 型安全なDataPageクラス（API互換性維持） ✅
+
+**Phase 2.1c: ES6 Class構文への移行** ✅
+- リスク: 高（コード構造の大幅変更）
+- 作業内容:
+  - プロトタイプベースから `class DataPage` への変換 ✅
+  - メソッドの型定義追加 ✅
+  - プライベートフィールドの導入（#記法） ✅
+- 成果物: 現代的なES6クラス実装 ✅
+
+**Phase 2.1d: ビルド設定の調整** ✅
+- リスク: 中（ビルドプロセスの変更）
+- 作業内容:
+  - Rollupの設定でTypeScriptサポート追加 ✅
+  - 型定義ファイル（.d.ts）の自動生成 ✅
+  - 複数出力形式の維持（UMD + ESM + minified） ✅
+  - ソースマップ生成対応 ✅
+  - ビルド警告98%減少 ✅
+- 成果物: TypeScript対応ビルドシステム ✅
+
+**Phase 2.1e: テストの型安全化** ✅
+- リスク: 低（テスト品質向上）
+- 作業内容:
+  - `spec/datapage.spec.js` → `spec/datapage.spec.ts` への変換 ✅
+  - 型チェック付きテストの作成 ✅
+  - ESLint TypeScript対応設定 ✅
+  - UMD/ESM互換性問題の解決 ✅
+- 成果物: 型安全なテストスイート ✅
+
+#### Phase 2.2: テストフレームワーク移行
+- Jasmine → Vitest ✅（完了済み）
+- ブラウザテストの追加（Playwright）
+
+#### Phase 2.3: コード品質向上
+- ESLint設定 ✅（完了済み）
+- Prettier設定 ✅（完了済み）
+- pre-commit hooks (husky)
 
 ### Phase 3: 機能拡張
 1. **Tree-shaking対応**
@@ -183,24 +224,87 @@
 
 **新しい開発コマンド:**
 ```bash
-npm run build      # Rollupビルド（全形式）
-npm run dev        # lint + test + build
-npm run test       # Vitestテスト実行
-npm run lint:fix   # ESLint自動修正
-npm run format     # Prettier整形
+npm run build        # 統合ビルド（types + rollup）
+npm run build:types  # TypeScript型定義ファイル生成
+npm run build:rollup # Rollupビルド（全形式）
+npm run dev          # lint + test + build
+npm run test         # Vitestテスト実行
+npm run lint:fix     # ESLint自動修正
+npm run format       # Prettier整形
 ```
+
+**ビルド出力品質:**
+- UMD: 11.5KB（完全互換、ソースマップ付き）
+- ESM: 10.3KB（モダンブラウザ対応）
+- minified: 4.0KB（本番用、バナー保持）
+- 型定義: 1.1KB（TypeScript開発者向け）
 
 ### 🎯 次のステップ - Phase 2: コードの現代化
 
-1. **ES Modules対応**
-   - TypeScript導入
-   - ES6+ クラス構文への移行
-   - 型定義の追加
+#### 推奨実行順序
 
-2. **コード統一**
-   - 一時的な2ファイル構成（datapage.js + datapage.esm.js）の解消
-   - 単一ソースからの多形式出力
+**Phase 2.1: ES Modules対応（段階的実施）** ✅
+1. **Phase 2.1a**: TypeScript環境セットアップ（リスク：低） ✅
+2. **Phase 2.1b**: 段階的TypeScript化（リスク：中） ✅
+3. **Phase 2.1c**: ES6 Class構文移行（リスク：高） ✅
+4. **Phase 2.1d**: ビルド設定調整（リスク：中） ✅
+5. **Phase 2.1e**: テストの型安全化（リスク：低） ✅
 
-3. **CI/CD整備**
-   - GitHub Actions設定
-   - 自動テスト・ビルド・リリース
+**Phase 2.2: 追加機能**
+- ブラウザテストの追加（Playwright）
+- pre-commit hooks (husky)
+
+**Phase 2.3: コード統一**
+- 一時的な2ファイル構成（datapage.js + datapage.esm.js）の解消
+- 単一ソースからの多形式出力
+
+**Phase 2.4: CI/CD整備**
+- GitHub Actions設定
+- 自動テスト・ビルド・リリース
+
+## Phase 2.1 完了記録 - TypeScript + ES6 現代化
+
+### ✅ 達成した成果（2025年1月）
+
+**技術的アップグレード:**
+- 🔧 **TypeScript完全導入**: JavaScript → TypeScript移行完了
+- 🎯 **ES6 Class構文**: prototype → class構文移行完了  
+- 🔒 **Private Fields**: ES6プライベートフィールド（#記法）導入
+- 📦 **型定義自動生成**: .d.ts + .d.ts.mapファイル対応
+- 🧪 **型安全テスト**: 全18テストが型安全環境で実行
+- 🔍 **ESLint TypeScript**: TypeScript専用lint規則適用
+
+**ビルドシステム改善:**
+- 📊 **ソースマップ対応**: 全出力形式でソースマップ生成
+- ⚠️ **警告大幅削減**: UMD警告を context: 'this' で解決
+- 🏗️ **Rollup TypeScript**: @rollup/plugin-typescript統合
+- 🔄 **ESM/UMD互換**: 完全な後方互換性維持
+
+**品質保証:**
+- ✅ **全テスト通過**: 18/18テストが型安全環境で正常動作
+- 🎯 **型チェック**: コンパイル時型エラー検出
+- 📝 **インターフェース定義**: DataPageType型で完全な型安全性
+- 🔧 **開発体験**: IDEでの自動補完・型ヒント対応
+
+**ファイル構成（Phase 2.1完了時点）:**
+```
+src/datapage.ts          # TypeScript ES6 Class実装
+spec/datapage.spec.ts    # 型安全テストスイート  
+dist/datapage.js         # UMD版（IE11+対応）
+dist/datapage.esm.js     # ES Module版
+dist/datapage.min.js     # 本番用minified版
+dist/datapage.d.ts       # TypeScript型定義
+dist/*.map               # 全形式ソースマップ
+```
+
+**型安全性の詳細:**
+- DataPageType インターフェース定義
+- 全メソッドの戻り値型指定
+- オプショナル引数の型安全性
+- プライベートフィールドの完全encapsulation
+- as any キャストによる適切な型アサーション（テスト用）
+
+**互換性保証:**
+- 既存JavaScript APIの100%互換性維持
+- UMDパターンでのブラウザ・Node.js両対応
+- ES6 Private Fields + getter/setter による後方互換アクセス

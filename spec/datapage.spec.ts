@@ -1,11 +1,11 @@
-'use strict';
-
-import DataPage from '../src/datapage.esm.js';
+// メインのDataPageクラスをインポート
+import DataPage from '../src/datapage.js';
+import { DataPageType } from '../src/datapage.js';
 
 describe("DataPage", function () {
 
   it('no args', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     expect( pager.total_entries() ).toEqual(0);
     expect( pager.entries_per_page() ).toEqual(10);
     expect( pager.current_page() ).toEqual(1);
@@ -13,21 +13,21 @@ describe("DataPage", function () {
 
   it('set invalid args', function () {
     expect( function () {
-      new DataPage("foo", 20, 5, 10);
-    }).toThrow("no number");
+      new DataPage("foo" as any, 20, 5, 10);
+    }).toThrow("Invalid number: foo");
     expect( function () {
-      new DataPage(300, "bar", 5, 10);
-    }).toThrow("no number");
+      new DataPage(300, "bar" as any, 5, 10);
+    }).toThrow("Invalid number: bar");
     expect( function () {
-      new DataPage(300, 20, "baz", 10);
-    }).toThrow("no number");
+      new DataPage(300, 20, "baz" as any, 10);
+    }).toThrow("Invalid number: baz");
     expect( function () {
-      new DataPage(300, 20, 5, "fizz");
-    }).toThrow("no number");
+      new DataPage(300, 20, 5, "fizz" as any);
+    }).toThrow("Invalid number: fizz");
   });
 
   it('set invalid number but can parseInt', function () {
-    const pager = new DataPage("500", "20", "3", "5");
+    const pager: DataPageType = new DataPage("500" as any, "20" as any, "3" as any, "5" as any);
     expect( pager.total_entries() ).toEqual(500);
     expect( pager.entries_per_page() ).toEqual(20);
     expect( pager.current_page() ).toEqual(3);
@@ -35,29 +35,29 @@ describe("DataPage", function () {
   });
 
   it('entries_per_page', function () { 
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.entries_per_page(5);
     expect( pager.entries_per_page() ).toEqual(5);
 
     pager.entries_per_page(3.5);
     expect( pager.entries_per_page() ).toEqual(3);
 
-    pager.entries_per_page("5");
+    pager.entries_per_page("5" as any);
     expect( pager.entries_per_page() ).toEqual(5);
 
     expect( function(){pager.entries_per_page(0)} ).toThrow();
-    expect( function(){pager.entries_per_page('hoge')} ).toThrow('no number');
+    expect( function(){pager.entries_per_page('hoge' as any)} ).toThrow('Invalid number: hoge');
   });
 
   it('current_page', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(100);
     pager.entries_per_page(20);
 
     pager.current_page(2);
     expect( pager.current_page() ).toEqual(2);
 
-    pager.current_page("2");
+    pager.current_page("2" as any);
     expect( pager.current_page() ).toEqual(2);
 
     pager.entries_per_page(20);
@@ -66,51 +66,51 @@ describe("DataPage", function () {
 
     pager.current_page(4.5);
     expect( pager.current_page() ).toEqual(4);
-    expect( function(){pager.current_page(0) }).toThrow('no int');
-    expect( function(){pager.current_page('hoge')} ).toThrow('no number');
+    expect( function(){pager.current_page(0) }).toThrow('Number must be positive: 0');
+    expect( function(){pager.current_page('hoge' as any)} ).toThrow('Invalid number: hoge');
   });
 
   it('total_entries', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(400);    
     expect( pager.total_entries() ).toEqual(400);
 
     pager.total_entries(4.5);
     expect( pager.total_entries() ).toEqual(4);
 
-    pager.total_entries("400");    
+    pager.total_entries("400" as any);    
     expect( pager.total_entries() ).toEqual(400);
 
     pager.total_entries(0);
     expect( pager.total_entries() ).toEqual(0);
-    expect( function(){pager.total_entries('fuga')} ).toThrow('no number');
+    expect( function(){pager.total_entries('fuga' as any)} ).toThrow('Invalid number: fuga');
   });
 
   it('entries_on_this_page', function () {
-    const total_entries = 315,
-        entries_per_page = 10,
-        current_page = 2,
-        pages_per_pageset = 5;
-    const pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+    const total_entries: number = 315,
+        entries_per_page: number = 10,
+        current_page: number = 2,
+        pages_per_pageset: number = 5;
+    const pager: DataPageType = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
     expect( pager.entries_on_this_page() ).toEqual(10);
   });
 
   it('entries_on_this_page with lastpage', function () {
-    const total_entries = 315,
-        entries_per_page = 10,
-        current_page = 32,
-        pages_per_pageset = 5;
-    const pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+    const total_entries: number = 315,
+        entries_per_page: number = 10,
+        current_page: number = 32,
+        pages_per_pageset: number = 5;
+    const pager: DataPageType = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
     expect( pager.entries_on_this_page() ).toEqual(5);
   });
 
   it('first_page', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     expect( pager.first_page() ).toEqual(1);
   });
 
   it('last_page', function () {
-    const pager = new DataPage(500, 30, 1);
+    const pager: DataPageType = new DataPage(500, 30, 1);
     expect( pager.last_page() ).toEqual(17); 
 
     pager.total_entries(600);
@@ -127,7 +127,7 @@ describe("DataPage", function () {
   });
 
   it('first', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(0);
     expect( pager.first() ).toEqual(0);
 
@@ -144,7 +144,7 @@ describe("DataPage", function () {
   });
   
   it('last', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(0);
     expect( pager.last() ).toEqual(0);
 
@@ -161,7 +161,7 @@ describe("DataPage", function () {
   });
 
   it('previous_page', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(300);
     pager.entries_per_page(15);
     pager.current_page(5);
@@ -172,7 +172,7 @@ describe("DataPage", function () {
   });
 
   it('next_page', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(50);
     pager.entries_per_page(25);
     pager.current_page(2);
@@ -183,7 +183,7 @@ describe("DataPage", function () {
   });
 
   it('pages_per_pageset', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(500);
     pager.entries_per_page(5);
     pager.current_page(15);
@@ -196,12 +196,12 @@ describe("DataPage", function () {
     pager.pages_per_pageset(101);
     expect( pager.pages_per_pageset() ).toEqual(100);
 
-    pager.pages_per_pageset("5");
+    pager.pages_per_pageset("5" as any);
     expect( pager.pages_per_pageset() ).toEqual(5);
   });
 
   it('pageset', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(500);
     pager.entries_per_page(5);
     pager.pages_per_pageset(10);
@@ -231,7 +231,7 @@ describe("DataPage", function () {
   });
 
   it('has_next_pageset', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(500);
     pager.entries_per_page(5);
     pager.pages_per_pageset(10);
@@ -242,7 +242,7 @@ describe("DataPage", function () {
   });
 
   it('has_previous_pageset', function () {
-    const pager = new DataPage();
+    const pager: DataPageType = new DataPage();
     pager.total_entries(500);
     pager.entries_per_page(5);
     pager.pages_per_pageset(10);
