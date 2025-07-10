@@ -68,19 +68,56 @@
    - セキュリティ脆弱性の解消 ✅
 
 ### Phase 2: コードの現代化
-1. **ES Modules対応**
-   - TypeScript導入
-   - ES6+ クラス構文への移行
-   - 型定義の追加
 
-2. **テストフレームワーク移行**
-   - Jasmine → Vitest
-   - ブラウザテストの追加（Playwright）
+#### Phase 2.1: ES Modules対応（詳細分割）
 
-3. **コード品質向上**
-   - ESLint設定
-   - Prettier設定
-   - pre-commit hooks (husky)
+**Phase 2.1a: TypeScript環境セットアップ**
+- リスク: 低（既存コードに影響なし）
+- 作業内容:
+  - TypeScript + 型定義ファイルのインストール
+  - tsconfig.json作成
+  - package.json の型定義エントリ追加
+- 成果物: TypeScript開発環境の構築
+
+**Phase 2.1b: 現在のコードの段階的TypeScript化**
+- リスク: 中（既存APIは完全維持）
+- 作業内容:
+  - `src/datapage.js` → `src/datapage.ts` への変換
+  - UMDパターンを維持しながら型定義を追加
+  - コンストラクタ関数の型安全化
+- 成果物: 型安全なDataPageクラス（API互換性維持）
+
+**Phase 2.1c: ES6 Class構文への移行**
+- リスク: 高（コード構造の大幅変更）
+- 作業内容:
+  - プロトタイプベースから `class DataPage` への変換
+  - メソッドの型定義追加
+  - プライベートフィールドの導入
+- 成果物: 現代的なES6クラス実装
+
+**Phase 2.1d: ビルド設定の調整**
+- リスク: 中（ビルドプロセスの変更）
+- 作業内容:
+  - Rollupの設定でTypeScriptサポート追加
+  - 型定義ファイル（.d.ts）の自動生成
+  - 複数出力形式の維持（UMD + ESM + CJS）
+- 成果物: TypeScript対応ビルドシステム
+
+**Phase 2.1e: テストの型安全化**
+- リスク: 低（テスト品質向上）
+- 作業内容:
+  - `spec/datapage.spec.js` の TypeScript化
+  - 型チェック付きテストの作成
+- 成果物: 型安全なテストスイート
+
+#### Phase 2.2: テストフレームワーク移行
+- Jasmine → Vitest ✅（完了済み）
+- ブラウザテストの追加（Playwright）
+
+#### Phase 2.3: コード品質向上
+- ESLint設定 ✅（完了済み）
+- Prettier設定 ✅（完了済み）
+- pre-commit hooks (husky)
 
 ### Phase 3: 機能拡張
 1. **Tree-shaking対応**
@@ -192,15 +229,23 @@ npm run format     # Prettier整形
 
 ### 🎯 次のステップ - Phase 2: コードの現代化
 
-1. **ES Modules対応**
-   - TypeScript導入
-   - ES6+ クラス構文への移行
-   - 型定義の追加
+#### 推奨実行順序
 
-2. **コード統一**
-   - 一時的な2ファイル構成（datapage.js + datapage.esm.js）の解消
-   - 単一ソースからの多形式出力
+**Phase 2.1: ES Modules対応（段階的実施）**
+1. **Phase 2.1a**: TypeScript環境セットアップ（リスク：低）
+2. **Phase 2.1b**: 段階的TypeScript化（リスク：中）
+3. **Phase 2.1c**: ES6 Class構文移行（リスク：高）
+4. **Phase 2.1d**: ビルド設定調整（リスク：中）
+5. **Phase 2.1e**: テストの型安全化（リスク：低）
 
-3. **CI/CD整備**
-   - GitHub Actions設定
-   - 自動テスト・ビルド・リリース
+**Phase 2.2: 追加機能**
+- ブラウザテストの追加（Playwright）
+- pre-commit hooks (husky)
+
+**Phase 2.3: コード統一**
+- 一時的な2ファイル構成（datapage.js + datapage.esm.js）の解消
+- 単一ソースからの多形式出力
+
+**Phase 2.4: CI/CD整備**
+- GitHub Actions設定
+- 自動テスト・ビルド・リリース
