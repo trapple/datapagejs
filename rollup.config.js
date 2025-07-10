@@ -1,4 +1,5 @@
 import terser from '@rollup/plugin-terser'
+import typescript from '@rollup/plugin-typescript'
 
 const banner = `/*
  * datapage
@@ -11,32 +12,34 @@ const banner = `/*
 export default [
   // UMD build
   {
-    input: 'src/datapage.js',
+    input: 'src/datapage.ts',
     output: {
       file: 'dist/datapage.js',
       format: 'umd',
       name: 'DataPage',
       banner
-    }
+    },
+    plugins: [typescript({ tsconfig: './tsconfig.json', declaration: false })]
   },
   // UMD minified build
   {
-    input: 'src/datapage.js',
+    input: 'src/datapage.ts',
     output: {
       file: 'dist/datapage.min.js',
       format: 'umd',
       name: 'DataPage',
       banner
     },
-    plugins: [terser()]
+    plugins: [typescript({ tsconfig: './tsconfig.json', declaration: false }), terser()]
   },
   // ES Module build
   {
-    input: 'src/datapage.js',
+    input: 'src/datapage.ts',
     output: {
       file: 'dist/datapage.esm.js',
       format: 'es',
       banner
-    }
+    },
+    plugins: [typescript({ tsconfig: './tsconfig.json', declaration: false })]
   }
 ]
