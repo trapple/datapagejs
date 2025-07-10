@@ -17,9 +17,18 @@ export default [
       file: 'dist/datapage.js',
       format: 'umd',
       name: 'DataPage',
-      banner
+      banner,
+      sourcemap: true
     },
-    plugins: [typescript({ tsconfig: './tsconfig.json', declaration: false })]
+    plugins: [
+      typescript({ 
+        tsconfig: './tsconfig.json', 
+        declaration: false,
+        declarationMap: false,
+        sourceMap: true
+      })
+    ],
+    context: 'this'
   },
   // UMD minified build
   {
@@ -28,9 +37,25 @@ export default [
       file: 'dist/datapage.min.js',
       format: 'umd',
       name: 'DataPage',
-      banner
+      banner,
+      sourcemap: true
     },
-    plugins: [typescript({ tsconfig: './tsconfig.json', declaration: false }), terser()]
+    plugins: [
+      typescript({ 
+        tsconfig: './tsconfig.json', 
+        declaration: false,
+        declarationMap: false,
+        sourceMap: true
+      }), 
+      terser({
+        format: {
+          comments: function(node, comment) {
+            return comment.value.includes('datapage');
+          }
+        }
+      })
+    ],
+    context: 'this'
   },
   // ES Module build
   {
@@ -38,8 +63,16 @@ export default [
     output: {
       file: 'dist/datapage.esm.js',
       format: 'es',
-      banner
+      banner,
+      sourcemap: true
     },
-    plugins: [typescript({ tsconfig: './tsconfig.json', declaration: false })]
+    plugins: [
+      typescript({ 
+        tsconfig: './tsconfig.json', 
+        declaration: false,
+        declarationMap: false,
+        sourceMap: true
+      })
+    ]
   }
 ]

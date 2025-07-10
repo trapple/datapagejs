@@ -54,7 +54,7 @@
         else {
             root.DataPage = factory();
         }
-    }(typeof self !== 'undefined' ? self : undefined, function () {
+    }(typeof self !== 'undefined' ? self : this, function () {
         var _DataPage_total_entries, _DataPage_entries_per_page, _DataPage_current_page, _DataPage_pages_per_pageset;
         // ES6 Class実装
         class DataPage {
@@ -258,3 +258,4 @@
     return DataPageModule$1;
 
 }));
+//# sourceMappingURL=datapage.js.map

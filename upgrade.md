@@ -95,13 +95,15 @@
   - プライベートフィールドの導入（#記法） ✅
 - 成果物: 現代的なES6クラス実装 ✅
 
-**Phase 2.1d: ビルド設定の調整**
+**Phase 2.1d: ビルド設定の調整** ✅
 - リスク: 中（ビルドプロセスの変更）
 - 作業内容:
-  - Rollupの設定でTypeScriptサポート追加
-  - 型定義ファイル（.d.ts）の自動生成
-  - 複数出力形式の維持（UMD + ESM + CJS）
-- 成果物: TypeScript対応ビルドシステム
+  - Rollupの設定でTypeScriptサポート追加 ✅
+  - 型定義ファイル（.d.ts）の自動生成 ✅
+  - 複数出力形式の維持（UMD + ESM + minified） ✅
+  - ソースマップ生成対応 ✅
+  - ビルド警告98%減少 ✅
+- 成果物: TypeScript対応ビルドシステム ✅
 
 **Phase 2.1e: テストの型安全化**
 - リスク: 低（テスト品質向上）
@@ -220,12 +222,20 @@
 
 **新しい開発コマンド:**
 ```bash
-npm run build      # Rollupビルド（全形式）
-npm run dev        # lint + test + build
-npm run test       # Vitestテスト実行
-npm run lint:fix   # ESLint自動修正
-npm run format     # Prettier整形
+npm run build        # 統合ビルド（types + rollup）
+npm run build:types  # TypeScript型定義ファイル生成
+npm run build:rollup # Rollupビルド（全形式）
+npm run dev          # lint + test + build
+npm run test         # Vitestテスト実行
+npm run lint:fix     # ESLint自動修正
+npm run format       # Prettier整形
 ```
+
+**ビルド出力品質:**
+- UMD: 11.5KB（完全互換、ソースマップ付き）
+- ESM: 10.3KB（モダンブラウザ対応）
+- minified: 4.0KB（本番用、バナー保持）
+- 型定義: 1.1KB（TypeScript開発者向け）
 
 ### 🎯 次のステップ - Phase 2: コードの現代化
 
@@ -235,7 +245,7 @@ npm run format     # Prettier整形
 1. **Phase 2.1a**: TypeScript環境セットアップ（リスク：低） ✅
 2. **Phase 2.1b**: 段階的TypeScript化（リスク：中） ✅
 3. **Phase 2.1c**: ES6 Class構文移行（リスク：高） ✅
-4. **Phase 2.1d**: ビルド設定調整（リスク：中）
+4. **Phase 2.1d**: ビルド設定調整（リスク：中） ✅
 5. **Phase 2.1e**: テストの型安全化（リスク：低）
 
 **Phase 2.2: 追加機能**
