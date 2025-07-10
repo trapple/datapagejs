@@ -1,5 +1,7 @@
 'use strict';
 
+import DataPage from '../src/datapage.esm.js';
+
 describe("DataPage", function () {
 
   it('no args', function () {

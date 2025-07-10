@@ -1,0 +1,152 @@
+# DataPage.js アップグレード計画
+
+## 現状の問題点
+
+### 1. 依存関係の問題
+- **Grunt v0.4.4** (2014年) - 最新版は v1.6.1 (2023年)
+- **Karma v0.12.9** (2014年) - 最新版は v6.4.2 (2023年)
+- **PhantomJS** - 2018年に開発中止、セキュリティ脆弱性あり
+- **JSHint** - ESLintがより機能豊富で主流に
+
+### 2. 廃止された技術
+- **Bower** - 2017年に開発終了、npmが標準に
+- **PhantomJS** - 2018年に開発中止、Chrome Headlessに置き換え推奨
+
+### 3. 古いプラクティス
+- ES5構文のみ
+- UMDパターン（現在はES Modules + CJS両対応が標準）
+- 手動のコード品質チェック
+
+## アップグレード計画
+
+### Phase 1: 基盤の現代化
+1. **Node.js環境の更新** ✅
+   - Node.js 18+ LTS対応 ✅
+   - package.jsonのengines設定追加 ✅
+
+2. **ビルドツールの移行**
+   - **Phase 1.2a**: JSHint → ESLint + Prettier ✅
+   - **Phase 1.2b**: Karma + PhantomJS → Vitest ✅
+   - **Phase 1.2c**: Grunt → Vite/Rollup
+   
+   **現在のGruntタスク分析:**
+   - `grunt dev`: jshint → jsbeautifier → karma → concat
+   - `grunt dist`: dev → uglify
+   - `grunt` (default): watch (ファイル変更監視)
+   
+   **各タスクの役割:**
+   - jshint: コード品質チェック
+   - jsbeautifier: コード整形
+   - karma: テスト実行（PhantomJS使用）
+   - concat: src/datapage.js → dist/datapage.js（バナー付きコピー）
+   - uglify: dist/datapage.js → dist/datapage.min.js（圧縮版生成）
+   - watch: ファイル変更監視と自動ビルド
+
+   **Phase 1.2詳細分割:**
+   
+   **Phase 1.2a: JSHint → ESLint + Prettier** ✅
+   - 作業内容: JSHint削除、ESLint + Prettierインストール、設定ファイル作成
+   - リスク: 低（既存ビルドに影響なし）
+   - 完了: eslint.config.js、.prettierrc作成、package.jsonスクリプト追加
+   
+   **Phase 1.2b: Karma + PhantomJS → Vitest** ✅
+   - 作業内容: Karma・PhantomJS削除、Vitestインストール、テスト設定移行
+   - リスク: 中（テスト実行環境の変更）
+   - 完了: vitest.config.js作成、ES Module対応テストファイル（datapage.esm.js）作成
+   - 注意: 一時的にUMD（datapage.js）とESM（datapage.esm.js）の2ファイル構成
+   
+   **Phase 1.2c: Grunt → Vite/Rollup**
+   - 作業内容: Gruntタスク完全置き換え、ビルド設定作成、出力互換性確保
+   - リスク: 高（ビルドプロセス全体の変更）
+
+3. **依存関係の整理**
+   - Bower削除
+   - 全devDependenciesの最新版への更新
+
+### Phase 2: コードの現代化
+1. **ES Modules対応**
+   - TypeScript導入
+   - ES6+ クラス構文への移行
+   - 型定義の追加
+
+2. **テストフレームワーク移行**
+   - Jasmine → Vitest
+   - ブラウザテストの追加（Playwright）
+
+3. **コード品質向上**
+   - ESLint設定
+   - Prettier設定
+   - pre-commit hooks (husky)
+
+### Phase 3: 機能拡張
+1. **Tree-shaking対応**
+   - ES Modules形式での配布
+   - 個別メソッドのimport対応
+
+2. **TypeScript完全対応**
+   - TypeScriptで書き直し
+   - 型定義ファイルの生成
+
+3. **CI/CD整備**
+   - GitHub Actions
+   - 自動テスト・ビルド・リリース
+
+## 実装優先度
+
+### 高優先度（セキュリティ・互換性）
+1. PhantomJS除去
+2. 依存関係の脆弱性修正
+3. Node.js最新LTS対応
+
+### 中優先度（開発体験）
+1. ビルドツール移行
+2. TypeScript導入
+3. 現代的なテストフレームワーク
+
+### 低優先度（機能拡張）
+1. 追加機能の実装
+2. パフォーマンス最適化
+3. ドキュメント拡充
+
+## 移行スケジュール
+
+### Week 1-2: 基盤整備
+- 依存関係の更新
+- ビルドツールの移行
+- テスト環境の構築
+
+### Week 3-4: コード移行
+- TypeScript導入
+- ES Modules化
+- テストの書き直し
+
+### Week 5-6: 品質向上
+- CI/CD設定
+- ドキュメント更新
+- パフォーマンステスト
+
+## 後方互換性の維持
+
+- 既存のAPI仕様を完全に維持
+- UMD形式での配布も継続
+- 段階的な移行をサポート
+
+## 最終目標
+
+現代的なJavaScriptライブラリとして：
+- TypeScript完全対応
+- ES Modules + CommonJS両対応
+- 自動テスト・ビルド・リリース
+- 優れた開発者体験
+- 継続的なメンテナンス体制
+
+## Phase 2での改善予定
+
+### モジュール形式の統一
+現在の2ファイル構成（UMD + ESM）を以下のように改善予定：
+
+1. **TypeScript化** → ビルド時に複数形式を自動生成
+2. **Vite/Rollup** → UMD + ESM + CJS の自動ビルド
+3. **package.json** → `"main"`（CJS）、`"module"`（ESM）、`"browser"`（UMD）の分離
+
+これにより、テスト用の一時的なdatapage.esm.jsファイルは不要になります。
