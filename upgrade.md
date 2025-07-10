@@ -26,7 +26,7 @@
 
 2. **ビルドツールの移行**
    - **Phase 1.2a**: JSHint → ESLint + Prettier ✅
-   - **Phase 1.2b**: Karma + PhantomJS → Vitest
+   - **Phase 1.2b**: Karma + PhantomJS → Vitest ✅
    - **Phase 1.2c**: Grunt → Vite/Rollup
    
    **現在のGruntタスク分析:**
@@ -49,9 +49,11 @@
    - リスク: 低（既存ビルドに影響なし）
    - 完了: eslint.config.js、.prettierrc作成、package.jsonスクリプト追加
    
-   **Phase 1.2b: Karma + PhantomJS → Vitest**
+   **Phase 1.2b: Karma + PhantomJS → Vitest** ✅
    - 作業内容: Karma・PhantomJS削除、Vitestインストール、テスト設定移行
    - リスク: 中（テスト実行環境の変更）
+   - 完了: vitest.config.js作成、ES Module対応テストファイル（datapage.esm.js）作成
+   - 注意: 一時的にUMD（datapage.js）とESM（datapage.esm.js）の2ファイル構成
    
    **Phase 1.2c: Grunt → Vite/Rollup**
    - 作業内容: Gruntタスク完全置き換え、ビルド設定作成、出力互換性確保
@@ -137,3 +139,14 @@
 - 自動テスト・ビルド・リリース
 - 優れた開発者体験
 - 継続的なメンテナンス体制
+
+## Phase 2での改善予定
+
+### モジュール形式の統一
+現在の2ファイル構成（UMD + ESM）を以下のように改善予定：
+
+1. **TypeScript化** → ビルド時に複数形式を自動生成
+2. **Vite/Rollup** → UMD + ESM + CJS の自動ビルド
+3. **package.json** → `"main"`（CJS）、`"module"`（ESM）、`"browser"`（UMD）の分離
+
+これにより、テスト用の一時的なdatapage.esm.jsファイルは不要になります。
