@@ -28,6 +28,19 @@
    - Grunt → Vite/Rollup
    - JSHint → ESLint + Prettier
    - Karma + PhantomJS → Vitest
+   
+   **現在のGruntタスク分析:**
+   - `grunt dev`: jshint → jsbeautifier → karma → concat
+   - `grunt dist`: dev → uglify
+   - `grunt` (default): watch (ファイル変更監視)
+   
+   **各タスクの役割:**
+   - jshint: コード品質チェック
+   - jsbeautifier: コード整形
+   - karma: テスト実行（PhantomJS使用）
+   - concat: src/datapage.js → dist/datapage.js（バナー付きコピー）
+   - uglify: dist/datapage.js → dist/datapage.min.js（圧縮版生成）
+   - watch: ファイル変更監視と自動ビルド
 
 3. **依存関係の整理**
    - Bower削除
