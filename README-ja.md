@@ -1,13 +1,11 @@
-# DataPage.js - シンプルなページネーションデータオブジェクト
-
 [![npm version](https://badge.fury.io/js/datapage.svg)](https://badge.fury.io/js/datapage)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![ES6](https://img.shields.io/badge/ES6-Class-green.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 [![License](https://img.shields.io/badge/License-Artistic-blue.svg)](LICENSE)
 
-**[📖 English](README.md)**
+# DataPage.js - シンプルなページネーションデータオブジェクト
 
-現代的なTypeScript対応のシンプルなページネーションライブラリです。ブラウザとNode.js両方の環境で動作します。
+**[📖 English](README.md)**
 
 ## 概要
 

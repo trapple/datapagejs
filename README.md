@@ -1,13 +1,11 @@
-# DataPage.js - Simple Pagination Data Object
-
 [![npm version](https://badge.fury.io/js/datapage.svg)](https://badge.fury.io/js/datapage)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![ES6](https://img.shields.io/badge/ES6-Class-green.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)
 [![License](https://img.shields.io/badge/License-Artistic-blue.svg)](LICENSE)
 
-**[📖 日本語](README-ja.md)**
+# DataPage.js - Simple Pagination Data Object
 
-A modern TypeScript-ready simple pagination library that works in both browser and Node.js environments.
+**[📖 日本語](README-ja.md)**
 
 ## Overview
 
