@@ -83,6 +83,44 @@ const currentPage: number = pager.current_page();
 const pageSet: number[] = pager.pageset();
 ```
 
+### Architecture: Interface and Implementation Separation
+
+DataPage.js follows a clean separation between interface and implementation:
+
+- **`DataPage` Interface**: Internal contract for pagination functionality
+- **`DataPageType` Interface**: Public interface for consumers
+- **`DataPageImpl` Class**: Concrete implementation with private fields
+
+```typescript
+// Internal interface defines the core contract
+interface DataPage {
+  current_page(val?: number): number;
+  total_entries(val?: number): number;
+  pageset(): number[];
+  // ... other methods
+}
+
+// Public interface for consumers
+export interface DataPageType extends DataPage {}
+
+// Implementation class with modern ES6 features
+class DataPageImpl implements DataPage {
+  // Private fields using # syntax
+  #total_entries: number;
+  #entries_per_page: number;
+  // ... implementation details
+}
+
+// Users get DataPageImpl through constructor but type it as DataPageType
+export default DataPageImpl as unknown as DataPageConstructor;
+```
+
+This design provides several benefits:
+- **Type Safety**: Clear contracts through interfaces
+- **Encapsulation**: Private fields ensure data integrity
+- **Maintainability**: Implementation can evolve without breaking the API
+- **Modern JavaScript**: Uses ES6+ features while maintaining compatibility
+
 ## API Reference
 
 ### Constructor
@@ -250,6 +288,7 @@ pager.has_previous_pageset(); // returns true or false
 ## Features
 
 - 🔧 **Full TypeScript Support**: Complete type definitions included
+- 🏗️ **Clean Architecture**: Interface and implementation separation for better maintainability
 - 🎯 **ES6 Classes**: Modern ES6 class syntax with private fields
 - 📦 **Multiple Formats**: UMD, ES Modules, and CommonJS support
 - 🧪 **Well Tested**: Comprehensive test suite with 18 test cases

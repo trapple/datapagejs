@@ -1,4 +1,4 @@
-interface DataPageInstance {
+interface DataPage {
     _total_entries: number;
     _entries_per_page: number;
     _current_page: number;
@@ -21,13 +21,13 @@ interface DataPageInstance {
     parseUnsignedInt(val: any): number;
 }
 interface DataPageConstructor {
-    new (total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number): DataPageInstance;
-    prototype: DataPageInstance;
+    new (total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number): DataPage;
+    prototype: DataPage;
 }
-export interface DataPageType extends DataPageInstance {
+export interface DataPageType extends DataPage {
 }
 export interface DataPageConstructorType extends DataPageConstructor {
 }
-declare const DataPageModule: DataPageConstructor;
-export default DataPageModule;
+declare const _default: DataPageConstructor;
+export default _default;
 //# sourceMappingURL=datapage.d.ts.map

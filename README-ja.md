@@ -83,6 +83,44 @@ const currentPage: number = pager.current_page();
 const pageSet: number[] = pager.pageset();
 ```
 
+### アーキテクチャ: インターフェースと実装の分離
+
+DataPage.jsはインターフェースと実装の明確な分離に従っています：
+
+- **`DataPage` インターフェース**: ページネーション機能の内部契約
+- **`DataPageType` インターフェース**: 利用者向けの公開インターフェース
+- **`DataPageImpl` クラス**: プライベートフィールドを持つ具体的な実装
+
+```typescript
+// 内部インターフェースはコア契約を定義
+interface DataPage {
+  current_page(val?: number): number;
+  total_entries(val?: number): number;
+  pageset(): number[];
+  // ... その他のメソッド
+}
+
+// 利用者向けの公開インターフェース
+export interface DataPageType extends DataPage {}
+
+// 現代的なES6機能を使用した実装クラス
+class DataPageImpl implements DataPage {
+  // # 構文を使用したプライベートフィールド
+  #total_entries: number;
+  #entries_per_page: number;
+  // ... 実装の詳細
+}
+
+// 利用者はコンストラクタ経由でDataPageImplを取得し、DataPageTypeとして型付け
+export default DataPageImpl as unknown as DataPageConstructor;
+```
+
+この設計により、以下のような利点があります：
+- **型安全性**: インターフェースによる明確な契約
+- **カプセル化**: プライベートフィールドによるデータ整合性の保証
+- **保守性**: APIを壊すことなく実装を進化させることが可能
+- **現代的なJavaScript**: 互換性を維持しつつES6+機能を活用
+
 ## APIリファレンス
 
 ### コンストラクタ
@@ -250,6 +288,7 @@ pager.has_previous_pageset(); // true または false を返す
 ## 機能
 
 - 🔧 **完全なTypeScript対応**: 完全な型定義を含む
+- 🏗️ **クリーンアーキテクチャ**: 保守性を向上させるインターフェースと実装の分離
 - 🎯 **ES6クラス**: プライベートフィールドを持つ現代的なES6クラス構文
 - 📦 **複数フォーマット**: UMD、ES Modules、CommonJSサポート
 - 🧪 **十分にテスト済み**: 18のテストケースによる包括的なテストスイート
