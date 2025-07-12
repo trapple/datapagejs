@@ -29,6 +29,10 @@ import DataPage, { DataPageType } from 'datapage';
 
 const pager: DataPageType = new DataPage(300, 10, 2, 5);
 const pageNumbers: number[] = pager.pageset();
+
+// Backward compatibility: Direct property access
+console.log(pager._current_page); // 2
+pager._total_entries = 400; // Direct assignment
 ```
 
 **Default values:**
@@ -92,23 +96,39 @@ const pageSet: number[] = pager.pageset();
 DataPage.js follows a clean separation between interface and implementation:
 
 - **`DataPageType` Interface**: Public contract for pagination functionality
-- **`DataPage` Class**: Concrete implementation with private fields
+- **`DataPage` Class**: Concrete implementation with private fields and backward compatibility
 
 ```typescript
-// Public interface defines the contract
+// Public interface defines the complete contract
 interface DataPageType {
+  // Public properties for backward compatibility
+  _total_entries: number;
+  _entries_per_page: number;
+  _current_page: number;
+  _pages_per_pageset: number;
+  
+  // Core pagination methods
   current_page(val?: number): number;
   total_entries(val?: number): number;
   pageset(): number[];
   // ... other methods
+  
+  // Utility methods
+  parseVal(val: any): number;
+  parseUnsignedInt(val: any): number;
 }
 
 // Implementation class with modern ES6 features
 class DataPage implements DataPageType {
-  // Private fields using # syntax
+  // Private fields using # syntax for true encapsulation
   #total_entries: number;
   #entries_per_page: number;
-  // ... implementation details
+  // ...
+  
+  // Public getters/setters for backward compatibility
+  get _total_entries(): number { return this.#total_entries; }
+  set _total_entries(value: number) { this.#total_entries = value; }
+  // ...
 }
 
 // Clean exports
@@ -118,8 +138,9 @@ export type { DataPageType };
 
 This design provides several benefits:
 - **Type Safety**: Clear contracts through interfaces
-- **Encapsulation**: Private fields ensure data integrity
-- **Maintainability**: Implementation can evolve without breaking the API
+- **Encapsulation**: Private fields ensure data integrity while providing public access
+- **Backward Compatibility**: Legacy public properties remain accessible
+- **Maintainability**: Implementation can evolve without breaking existing code
 - **Modern JavaScript**: Uses ES6+ features while maintaining compatibility
 
 ## API Reference
@@ -284,6 +305,30 @@ Returns whether there is a previous pageset.
 ```typescript
 const pager = new DataPage(500, 10, 7, 5);
 pager.has_previous_pageset(); // returns true or false
+```
+
+### parseVal(val: any): number
+
+Parses and validates a positive integer value.
+
+```typescript
+const pager = new DataPage();
+const validValue = pager.parseVal(5); // returns 5
+const validString = pager.parseVal("10"); // returns 10
+// pager.parseVal(-1); // throws Error: "Number must be positive: -1"
+// pager.parseVal("abc"); // throws Error: "Invalid number: abc"
+```
+
+### parseUnsignedInt(val: any): number
+
+Parses an integer value (allows zero and positive numbers).
+
+```typescript
+const pager = new DataPage();
+const zeroValue = pager.parseUnsignedInt(0); // returns 0
+const positiveValue = pager.parseUnsignedInt(100); // returns 100
+const stringValue = pager.parseUnsignedInt("50"); // returns 50
+// pager.parseUnsignedInt("abc"); // throws Error: "Invalid number: abc"
 ```
 
 ## Features

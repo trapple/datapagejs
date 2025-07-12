@@ -29,6 +29,10 @@ import DataPage, { DataPageType } from 'datapage';
 
 const pager: DataPageType = new DataPage(300, 10, 2, 5);
 const pageNumbers: number[] = pager.pageset();
+
+// 後方互換性: 直接プロパティアクセス
+console.log(pager._current_page); // 2
+pager._total_entries = 400; // 直接代入
 ```
 
 **デフォルト値:**
@@ -92,23 +96,39 @@ const pageSet: number[] = pager.pageset();
 DataPage.jsはインターフェースと実装の明確な分離に従っています：
 
 - **`DataPageType` インターフェース**: ページネーション機能の公開契約
-- **`DataPage` クラス**: プライベートフィールドを持つ具体的な実装
+- **`DataPage` クラス**: プライベートフィールドと後方互換性を持つ具体的な実装
 
 ```typescript
-// 公開インターフェースが契約を定義
+// 公開インターフェースが完全な契約を定義
 interface DataPageType {
+  // 後方互換性のためのパブリックプロパティ
+  _total_entries: number;
+  _entries_per_page: number;
+  _current_page: number;
+  _pages_per_pageset: number;
+  
+  // コアページネーションメソッド
   current_page(val?: number): number;
   total_entries(val?: number): number;
   pageset(): number[];
   // ... その他のメソッド
+  
+  // ユーティリティメソッド
+  parseVal(val: any): number;
+  parseUnsignedInt(val: any): number;
 }
 
 // 現代的なES6機能を使用した実装クラス
 class DataPage implements DataPageType {
-  // # 構文を使用したプライベートフィールド
+  // 真のカプセル化のための# 構文によるプライベートフィールド
   #total_entries: number;
   #entries_per_page: number;
-  // ... 実装の詳細
+  // ...
+  
+  // 後方互換性のためのパブリックgetter/setter
+  get _total_entries(): number { return this.#total_entries; }
+  set _total_entries(value: number) { this.#total_entries = value; }
+  // ...
 }
 
 // クリーンなエクスポート
@@ -118,8 +138,9 @@ export type { DataPageType };
 
 この設計により、以下のような利点があります：
 - **型安全性**: インターフェースによる明確な契約
-- **カプセル化**: プライベートフィールドによるデータ整合性の保証
-- **保守性**: APIを壊すことなく実装を進化させることが可能
+- **カプセル化**: パブリックアクセスを提供しながらプライベートフィールドによるデータ整合性の保証
+- **後方互換性**: レガシーなパブリックプロパティへのアクセスが可能
+- **保守性**: 既存のコードを壊すことなく実装を進化させることが可能
 - **現代的なJavaScript**: 互換性を維持しつつES6+機能を活用
 
 ## APIリファレンス

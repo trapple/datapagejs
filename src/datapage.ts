@@ -241,5 +241,4 @@ class DataPage implements DataPageType {
 
 // ES Module export
 export default DataPage;
-//export { DataPage };  // CommonJS named export対応
 export type { DataPageType };
