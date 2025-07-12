@@ -236,24 +236,6 @@ class DataPageImpl {
     }
 }
 _DataPageImpl_total_entries = new WeakMap(), _DataPageImpl_entries_per_page = new WeakMap(), _DataPageImpl_current_page = new WeakMap(), _DataPageImpl_pages_per_pageset = new WeakMap();
-// UMD パターン
-(function (root, factory) {
-    if (typeof exports === 'object' && typeof module !== 'undefined' && typeof module.exports === 'object') {
-        // CommonJS環境 - ES Module環境を避けるため、追加条件をチェック
-        try {
-            module.exports = factory();
-        }
-        catch (e) {
-            // ES Module環境では何もしない
-        }
-    }
-    else if (typeof root !== 'undefined') {
-        // ブラウザ環境
-        root.DataPage = factory();
-    }
-}(typeof self !== 'undefined' ? self : undefined, function () {
-    return DataPageImpl;
-}));
 
 export { DataPageImpl as default };
 //# sourceMappingURL=datapage.esm.js.map

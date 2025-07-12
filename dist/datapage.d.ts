@@ -24,10 +24,6 @@ interface DataPageConstructor {
     new (total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number): DataPage;
     prototype: DataPage;
 }
-export interface DataPageType extends DataPage {
-}
-export interface DataPageConstructorType extends DataPageConstructor {
-}
 declare const _default: DataPageConstructor;
 export default _default;
 //# sourceMappingURL=datapage.d.ts.map

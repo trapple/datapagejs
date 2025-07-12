@@ -304,13 +304,20 @@ pager.has_previous_pageset(); // returns true or false
 
 ## Build Outputs
 
+The library is built in multiple formats to support different environments:
+
 ```
-dist/datapage.js         # UMD version (IE11+ compatible, 11.5KB)
-dist/datapage.esm.js     # ES Module version (10.3KB)
-dist/datapage.min.js     # Production minified version (4.0KB)
-dist/datapage.d.ts       # TypeScript type definitions (1.1KB)
+dist/datapage.js         # UMD format (universal, IE11+ compatible)
+dist/datapage.min.js     # UMD format minified (production ready)
+dist/datapage.esm.js     # ES Module format (modern bundlers)
+dist/datapage.d.ts       # TypeScript type definitions
 dist/*.map               # Source maps for all formats
 ```
+
+**Format Details:**
+- **UMD (`datapage.js`)**: Universal Module Definition for broad compatibility
+- **UMD Minified (`datapage.min.js`)**: Compressed version for production use
+- **ES Module (`datapage.esm.js`)**: Modern ES6 module format for bundlers
 
 ## Development
 

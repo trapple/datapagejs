@@ -304,13 +304,20 @@ pager.has_previous_pageset(); // true または false を返す
 
 ## ビルド出力
 
+ライブラリは異なる環境をサポートするために複数の形式でビルドされます：
+
 ```
-dist/datapage.js         # UMD版（IE11+対応、11.5KB）
-dist/datapage.esm.js     # ES Module版（10.3KB）
-dist/datapage.min.js     # 本番用minified版（4.0KB）
-dist/datapage.d.ts       # TypeScript型定義（1.1KB）
+dist/datapage.js         # UMD形式（ユニバーサル、IE11+対応）
+dist/datapage.min.js     # UMD形式 minified（本番用）
+dist/datapage.esm.js     # ES Module形式（モダンバンドラー用）
+dist/datapage.d.ts       # TypeScript型定義
 dist/*.map               # 全形式のソースマップ
 ```
+
+**形式の詳細:**
+- **UMD (`datapage.js`)**: 幅広い互換性のためのUniversal Module Definition
+- **UMD Minified (`datapage.min.js`)**: 本番用の圧縮版
+- **ES Module (`datapage.esm.js`)**: バンドラー用のモダンES6モジュール形式
 
 ## 開発
 

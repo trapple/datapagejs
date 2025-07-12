@@ -244,26 +244,5 @@ class DataPageImpl implements DataPage {
   }
 }
 
-// UMD パターン
-(function (root: any, factory: () => DataPageConstructor) {
-  if (typeof exports === 'object' && typeof module !== 'undefined' && typeof module.exports === 'object') {
-    // CommonJS環境 - ES Module環境を避けるため、追加条件をチェック
-    try {
-      module.exports = factory();
-    } catch (e) {
-      // ES Module環境では何もしない
-    }
-  } else if (typeof root !== 'undefined') {
-    // ブラウザ環境
-    root.DataPage = factory();
-  }
-}(typeof self !== 'undefined' ? self : this, function () {
-  return DataPageImpl as unknown as DataPageConstructor;
-}));
-
-// TypeScript向けの型定義export
-export interface DataPageType extends DataPage {}
-export interface DataPageConstructorType extends DataPageConstructor {}
-
-// ES Module対応のためのdefault export
+// ES Module export
 export default DataPageImpl as unknown as DataPageConstructor;
