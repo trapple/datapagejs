@@ -5,7 +5,7 @@ export default defineConfig({
     // jsdomを使用してブラウザ環境をシミュレート
     environment: 'jsdom',
     
-    // テストファイルのパターン
+    // テストファイルのパターン（.cjsはNode.jsで直接実行）
     include: ['spec/**/*.spec.ts', 'spec/**/*.spec.js', 'spec/**/*.test.ts', 'spec/**/*.test.js'],
     
     // グローバルにテスト関数を利用可能にする
