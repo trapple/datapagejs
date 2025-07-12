@@ -60,7 +60,9 @@ const pager: DataPageType = new DataPage(100, 10, 1, 5);
 
 #### CommonJS（レガシーサポート）
 ```javascript
-// デフォルトインポート
+// 全てのパターンをサポート:
+const DataPage = require('datapage');
+const { DataPage } = require('datapage');
 const DataPage = require('datapage').default;
 ```
 

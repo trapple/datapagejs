@@ -60,7 +60,9 @@ const pager: DataPageType = new DataPage(100, 10, 1, 5);
 
 #### CommonJS (Legacy Support)
 ```javascript
-// Default import
+// All patterns supported:
+const DataPage = require('datapage');
+const { DataPage } = require('datapage');
 const DataPage = require('datapage').default;
 ```
 
