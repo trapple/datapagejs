@@ -49,17 +49,19 @@ npm install datapage
 
 #### ES Modules (Recommended)
 ```javascript
-// ES6 import
+// Default import (recommended)
 import DataPage from 'datapage';
 
-// TypeScript import
+// TypeScript with types
 import DataPage, { DataPageType } from 'datapage';
+// 型として使用する場合
+const pager: DataPageType = new DataPage(100, 10, 1, 5);
 ```
 
-#### CommonJS
+#### CommonJS (Legacy Support)
 ```javascript
-// Node.js require
-const DataPage = require('datapage');
+// Default import
+const DataPage = require('datapage').default;
 ```
 
 #### Browser (UMD)
@@ -87,32 +89,29 @@ const pageSet: number[] = pager.pageset();
 
 DataPage.js follows a clean separation between interface and implementation:
 
-- **`DataPage` Interface**: Internal contract for pagination functionality
-- **`DataPageType` Interface**: Public interface for consumers
-- **`DataPageImpl` Class**: Concrete implementation with private fields
+- **`DataPageType` Interface**: Public contract for pagination functionality
+- **`DataPage` Class**: Concrete implementation with private fields
 
 ```typescript
-// Internal interface defines the core contract
-interface DataPage {
+// Public interface defines the contract
+interface DataPageType {
   current_page(val?: number): number;
   total_entries(val?: number): number;
   pageset(): number[];
   // ... other methods
 }
 
-// Public interface for consumers
-export interface DataPageType extends DataPage {}
-
 // Implementation class with modern ES6 features
-class DataPageImpl implements DataPage {
+class DataPage implements DataPageType {
   // Private fields using # syntax
   #total_entries: number;
   #entries_per_page: number;
   // ... implementation details
 }
 
-// Users get DataPageImpl through constructor but type it as DataPageType
-export default DataPageImpl as unknown as DataPageConstructor;
+// Clean exports
+export default DataPage;
+export type { DataPageType };
 ```
 
 This design provides several benefits:

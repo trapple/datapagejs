@@ -2,7 +2,7 @@
   "name": "datapage",
   "version": "1.3.4",
   "description": "Simple Pagination Data Object",
-  "main": "datapage.js",
+  "main": "dist/datapage.esm.js",
   "types": "dist/datapage.d.ts",
   "type": "module",
   "scripts": {

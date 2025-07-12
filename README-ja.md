@@ -49,17 +49,19 @@ npm install datapage
 
 #### ES Modules（推奨）
 ```javascript
-// ES6 import
+// デフォルトインポート（推奨）
 import DataPage from 'datapage';
 
-// TypeScript import
+// TypeScript with 型定義
 import DataPage, { DataPageType } from 'datapage';
+// 型として使用する場合
+const pager: DataPageType = new DataPage(100, 10, 1, 5);
 ```
 
-#### CommonJS
+#### CommonJS（レガシーサポート）
 ```javascript
-// Node.js require
-const DataPage = require('datapage');
+// デフォルトインポート
+const DataPage = require('datapage').default;
 ```
 
 #### ブラウザ（UMD）
@@ -87,32 +89,29 @@ const pageSet: number[] = pager.pageset();
 
 DataPage.jsはインターフェースと実装の明確な分離に従っています：
 
-- **`DataPage` インターフェース**: ページネーション機能の内部契約
-- **`DataPageType` インターフェース**: 利用者向けの公開インターフェース
-- **`DataPageImpl` クラス**: プライベートフィールドを持つ具体的な実装
+- **`DataPageType` インターフェース**: ページネーション機能の公開契約
+- **`DataPage` クラス**: プライベートフィールドを持つ具体的な実装
 
 ```typescript
-// 内部インターフェースはコア契約を定義
-interface DataPage {
+// 公開インターフェースが契約を定義
+interface DataPageType {
   current_page(val?: number): number;
   total_entries(val?: number): number;
   pageset(): number[];
   // ... その他のメソッド
 }
 
-// 利用者向けの公開インターフェース
-export interface DataPageType extends DataPage {}
-
 // 現代的なES6機能を使用した実装クラス
-class DataPageImpl implements DataPage {
+class DataPage implements DataPageType {
   // # 構文を使用したプライベートフィールド
   #total_entries: number;
   #entries_per_page: number;
   // ... 実装の詳細
 }
 
-// 利用者はコンストラクタ経由でDataPageImplを取得し、DataPageTypeとして型付け
-export default DataPageImpl as unknown as DataPageConstructor;
+// クリーンなエクスポート
+export default DataPage;
+export type { DataPageType };
 ```
 
 この設計により、以下のような利点があります：

@@ -18,7 +18,8 @@ export default [
       format: 'umd',
       name: 'DataPage',
       banner,
-      sourcemap: true
+      sourcemap: true,
+      exports: 'named'
     },
     plugins: [
       typescript({ 
@@ -38,7 +39,8 @@ export default [
       format: 'umd',
       name: 'DataPage',
       banner,
-      sourcemap: true
+      sourcemap: true,
+      exports: 'named'
     },
     plugins: [
       typescript({ 

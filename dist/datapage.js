@@ -6,10 +6,10 @@
  * Version: 1.3.4
  */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.DataPage = factory());
-})(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.DataPage = {}));
+})(this, (function (exports) { 'use strict';
 
     /******************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -46,31 +46,31 @@
         return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
-    var _DataPageImpl_total_entries, _DataPageImpl_entries_per_page, _DataPageImpl_current_page, _DataPageImpl_pages_per_pageset;
+    var _DataPage_total_entries, _DataPage_entries_per_page, _DataPage_current_page, _DataPage_pages_per_pageset;
     // ES6 Class実装
-    class DataPageImpl {
+    class DataPage {
         // 後方互換性のためのpublicプロパティ
-        get _total_entries() { return __classPrivateFieldGet(this, _DataPageImpl_total_entries, "f"); }
-        set _total_entries(value) { __classPrivateFieldSet(this, _DataPageImpl_total_entries, value, "f"); }
-        get _entries_per_page() { return __classPrivateFieldGet(this, _DataPageImpl_entries_per_page, "f"); }
-        set _entries_per_page(value) { __classPrivateFieldSet(this, _DataPageImpl_entries_per_page, value, "f"); }
-        get _current_page() { return __classPrivateFieldGet(this, _DataPageImpl_current_page, "f"); }
-        set _current_page(value) { __classPrivateFieldSet(this, _DataPageImpl_current_page, value, "f"); }
-        get _pages_per_pageset() { return __classPrivateFieldGet(this, _DataPageImpl_pages_per_pageset, "f"); }
-        set _pages_per_pageset(value) { __classPrivateFieldSet(this, _DataPageImpl_pages_per_pageset, value, "f"); }
+        get _total_entries() { return __classPrivateFieldGet(this, _DataPage_total_entries, "f"); }
+        set _total_entries(value) { __classPrivateFieldSet(this, _DataPage_total_entries, value, "f"); }
+        get _entries_per_page() { return __classPrivateFieldGet(this, _DataPage_entries_per_page, "f"); }
+        set _entries_per_page(value) { __classPrivateFieldSet(this, _DataPage_entries_per_page, value, "f"); }
+        get _current_page() { return __classPrivateFieldGet(this, _DataPage_current_page, "f"); }
+        set _current_page(value) { __classPrivateFieldSet(this, _DataPage_current_page, value, "f"); }
+        get _pages_per_pageset() { return __classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f"); }
+        set _pages_per_pageset(value) { __classPrivateFieldSet(this, _DataPage_pages_per_pageset, value, "f"); }
         constructor(total_entries, entries_per_page, current_page, pages_per_pageset) {
-            _DataPageImpl_total_entries.set(this, void 0);
-            _DataPageImpl_entries_per_page.set(this, void 0);
-            _DataPageImpl_current_page.set(this, void 0);
-            _DataPageImpl_pages_per_pageset.set(this, void 0);
-            __classPrivateFieldSet(this, _DataPageImpl_total_entries, total_entries || 0, "f");
-            __classPrivateFieldSet(this, _DataPageImpl_entries_per_page, entries_per_page || 10, "f");
-            __classPrivateFieldSet(this, _DataPageImpl_current_page, current_page || 1, "f");
-            __classPrivateFieldSet(this, _DataPageImpl_pages_per_pageset, pages_per_pageset || 10, "f");
-            __classPrivateFieldSet(this, _DataPageImpl_total_entries, this.parseUnsignedInt(__classPrivateFieldGet(this, _DataPageImpl_total_entries, "f")), "f");
-            __classPrivateFieldSet(this, _DataPageImpl_entries_per_page, this.parseVal(__classPrivateFieldGet(this, _DataPageImpl_entries_per_page, "f")), "f");
-            __classPrivateFieldSet(this, _DataPageImpl_current_page, this.parseVal(__classPrivateFieldGet(this, _DataPageImpl_current_page, "f")), "f");
-            __classPrivateFieldSet(this, _DataPageImpl_pages_per_pageset, this.parseVal(__classPrivateFieldGet(this, _DataPageImpl_pages_per_pageset, "f")), "f");
+            _DataPage_total_entries.set(this, void 0);
+            _DataPage_entries_per_page.set(this, void 0);
+            _DataPage_current_page.set(this, void 0);
+            _DataPage_pages_per_pageset.set(this, void 0);
+            __classPrivateFieldSet(this, _DataPage_total_entries, total_entries || 0, "f");
+            __classPrivateFieldSet(this, _DataPage_entries_per_page, entries_per_page || 10, "f");
+            __classPrivateFieldSet(this, _DataPage_current_page, current_page || 1, "f");
+            __classPrivateFieldSet(this, _DataPage_pages_per_pageset, pages_per_pageset || 10, "f");
+            __classPrivateFieldSet(this, _DataPage_total_entries, this.parseUnsignedInt(__classPrivateFieldGet(this, _DataPage_total_entries, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_entries_per_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_entries_per_page, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_current_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_current_page, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_pages_per_pageset, this.parseVal(__classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f")), "f");
         }
         /**
          * @method entries_per_page
@@ -241,9 +241,11 @@
             return parsed;
         }
     }
-    _DataPageImpl_total_entries = new WeakMap(), _DataPageImpl_entries_per_page = new WeakMap(), _DataPageImpl_current_page = new WeakMap(), _DataPageImpl_pages_per_pageset = new WeakMap();
+    _DataPage_total_entries = new WeakMap(), _DataPage_entries_per_page = new WeakMap(), _DataPage_current_page = new WeakMap(), _DataPage_pages_per_pageset = new WeakMap();
 
-    return DataPageImpl;
+    exports.default = DataPage;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
 //# sourceMappingURL=datapage.js.map

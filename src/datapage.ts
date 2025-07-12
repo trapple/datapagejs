@@ -1,5 +1,5 @@
 // 型定義
-interface DataPage {
+interface DataPageType {
   _total_entries: number;
   _entries_per_page: number;
   _current_page: number;
@@ -23,13 +23,8 @@ interface DataPage {
   parseUnsignedInt(val: any): number;
 }
 
-interface DataPageConstructor {
-  new (total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number): DataPage;
-  prototype: DataPage;
-}
-
 // ES6 Class実装
-class DataPageImpl implements DataPage {
+class DataPage implements DataPageType {
   #total_entries: number;
   #entries_per_page: number;
   #current_page: number;
@@ -245,4 +240,6 @@ class DataPageImpl implements DataPage {
 }
 
 // ES Module export
-export default DataPageImpl as unknown as DataPageConstructor;
+export default DataPage;
+//export { DataPage };  // CommonJS named export対応
+export type { DataPageType };
