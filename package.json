@@ -45,7 +45,7 @@
   },
   "homepage": "https://github.com/trapple/datapagejs",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.17.0",
     "npm": ">=8.0.0"
   },
   "devDependencies": {
