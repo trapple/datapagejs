@@ -39,7 +39,7 @@ export default [
       name: 'DataPage',
       banner,
       sourcemap: true,
-      exports: 'named'
+      exports: 'default'
     },
     plugins: [
       typescript({ 
@@ -60,7 +60,7 @@ export default [
       name: 'DataPage',
       banner,
       sourcemap: true,
-      exports: 'named'
+      exports: 'default'
     },
     plugins: [
       typescript({ 

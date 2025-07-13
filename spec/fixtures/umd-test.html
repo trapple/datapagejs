@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataPage UMD Test</title>
+</head>
+<body>
+    <h1>DataPage UMD Test</h1>
+    <div id="results"></div>
+    
+    <!-- Load UMD build -->
+    <script src="../../dist/datapage.js"></script>
+    
+    <script>
+        // Test DataPage UMD version
+        function runTests() {
+            const results = document.getElementById('results');
+            const tests = [];
+            
+            try {
+                // Test basic instantiation
+                const pager = new DataPage(100, 10, 1, 5);
+                tests.push({
+                    name: 'Basic instantiation',
+                    result: 'pass',
+                    details: `totalEntries: ${pager.totalEntries()}, entriesPerPage: ${pager.entriesPerPage()}`
+                });
+                
+                // Test camelCase API methods
+                pager.currentPage(2);
+                tests.push({
+                    name: 'camelCase API - currentPage',
+                    result: pager.currentPage() === 2 ? 'pass' : 'fail',
+                    details: `currentPage(): ${pager.currentPage()}`
+                });
+                
+                pager.totalEntries(200);
+                tests.push({
+                    name: 'camelCase API - totalEntries',
+                    result: pager.totalEntries() === 200 ? 'pass' : 'fail',
+                    details: `totalEntries(): ${pager.totalEntries()}`
+                });
+                
+                pager.entriesPerPage(20);
+                tests.push({
+                    name: 'camelCase API - entriesPerPage',
+                    result: pager.entriesPerPage() === 20 ? 'pass' : 'fail',
+                    details: `entriesPerPage(): ${pager.entriesPerPage()}`
+                });
+                
+                // Test pagination methods
+                tests.push({
+                    name: 'firstPage method',
+                    result: pager.firstPage() === 1 ? 'pass' : 'fail',
+                    details: `firstPage(): ${pager.firstPage()}`
+                });
+                
+                tests.push({
+                    name: 'lastPage method',
+                    result: pager.lastPage() === 10 ? 'pass' : 'fail',
+                    details: `lastPage(): ${pager.lastPage()}`
+                });
+                
+                // Test pageset functionality
+                const pageset = pager.pageset();
+                tests.push({
+                    name: 'pageset method',
+                    result: Array.isArray(pageset) && pageset.length > 0 ? 'pass' : 'fail',
+                    details: `pageset(): [${pageset.join(', ')}]`
+                });
+                
+                // Test boundary methods
+                tests.push({
+                    name: 'previousPage method',
+                    result: pager.previousPage() === 1 ? 'pass' : 'fail',
+                    details: `previousPage(): ${pager.previousPage()}`
+                });
+                
+                tests.push({
+                    name: 'nextPage method',
+                    result: pager.nextPage() === 3 ? 'pass' : 'fail',
+                    details: `nextPage(): ${pager.nextPage()}`
+                });
+                
+                // Test entry calculations
+                tests.push({
+                    name: 'first entry calculation',
+                    result: pager.first() === 21 ? 'pass' : 'fail',
+                    details: `first(): ${pager.first()}`
+                });
+                
+                tests.push({
+                    name: 'last entry calculation',
+                    result: pager.last() === 40 ? 'pass' : 'fail',
+                    details: `last(): ${pager.last()}`
+                });
+                
+                tests.push({
+                    name: 'entriesOnThisPage calculation',
+                    result: pager.entriesOnThisPage() === 20 ? 'pass' : 'fail',
+                    details: `entriesOnThisPage(): ${pager.entriesOnThisPage()}`
+                });
+                
+                // Test hasNext/hasPrevious pageset
+                tests.push({
+                    name: 'hasNextPageset method',
+                    result: typeof pager.hasNextPageset() === 'boolean' ? 'pass' : 'fail',
+                    details: `hasNextPageset(): ${pager.hasNextPageset()}`
+                });
+                
+                tests.push({
+                    name: 'hasPreviousPageset method',
+                    result: typeof pager.hasPreviousPageset() === 'boolean' ? 'pass' : 'fail',
+                    details: `hasPreviousPageset(): ${pager.hasPreviousPageset()}`
+                });
+                
+            } catch (error) {
+                tests.push({
+                    name: 'Error occurred',
+                    result: 'error',
+                    details: error.message
+                });
+            }
+            
+            // Display results
+            const passCount = tests.filter(t => t.result === 'pass').length;
+            const totalCount = tests.length;
+            
+            results.innerHTML = `
+                <h2>Test Results: ${passCount}/${totalCount} passed</h2>
+                <div id="test-summary" data-pass="${passCount}" data-total="${totalCount}"></div>
+                <ul>
+                    ${tests.map(test => `
+                        <li class="${test.result}">
+                            <strong>${test.name}</strong>: ${test.result}
+                            <br><small>${test.details}</small>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+        
+        // Expose for Playwright
+        window.getTestResults = function() {
+            const summary = document.getElementById('test-summary');
+            if (!summary) return null;
+            return {
+                passed: parseInt(summary.dataset.pass),
+                total: parseInt(summary.dataset.total)
+            };
+        };
+    </script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .pass { color: green; }
+        .fail { color: red; }
+        .error { color: orange; }
+        li { margin-bottom: 10px; }
+    </style>
+</body>
+</html>
