@@ -352,7 +352,7 @@ const stringValue = pager.parseUnsignedInt("50"); // returns 50
 
 The library is built in multiple formats to support different environments:
 
-```
+```text
 dist/datapage.js         # UMD format (universal, IE11+ compatible)
 dist/datapage.min.js     # UMD format minified (production ready)
 dist/datapage.esm.js     # ES Module format (modern bundlers)

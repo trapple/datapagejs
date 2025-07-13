@@ -328,7 +328,7 @@ pager.has_previous_pageset(); // true または false を返す
 
 ライブラリは異なる環境をサポートするために複数の形式でビルドされます：
 
-```
+```text
 dist/datapage.js         # UMD形式（ユニバーサル、IE11+対応）
 dist/datapage.min.js     # UMD形式 minified（本番用）
 dist/datapage.esm.js     # ES Module形式（モダンバンドラー用）
