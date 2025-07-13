@@ -5,6 +5,31 @@ import tsparser from '@typescript-eslint/parser';
 export default [
   js.configs.recommended,
   {
+    files: ['**/*.cjs'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'commonjs',
+      globals: {
+        // Node.js環境
+        global: 'readonly',
+        process: 'readonly',
+        Buffer: 'readonly',
+        console: 'readonly',
+        module: 'readonly',
+        exports: 'readonly',
+        require: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly'
+      }
+    },
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-console': 'off',
+      'prefer-const': 'error',
+      'no-var': 'warn'
+    }
+  },
+  {
     files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 2022,

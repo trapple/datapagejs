@@ -22,8 +22,8 @@
     "build:types": "tsc --emitDeclarationOnly",
     "dev": "npm run lint && npm run test && npm run build",
     "watch": "rollup -c --watch",
-    "lint": "eslint src/ spec/ --ext .js,.ts",
-    "lint:fix": "eslint src/ spec/ --ext .js,.ts --fix",
+    "lint": "eslint src/ spec/ --ext .js,.ts,.cjs",
+    "lint:fix": "eslint src/ spec/ --ext .js,.ts,.cjs --fix",
     "format": "prettier --write src/ spec/",
     "format:check": "prettier --check src/ spec/"
   },
