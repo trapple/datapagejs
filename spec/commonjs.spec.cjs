@@ -1,33 +1,6 @@
 // CommonJS import pattern tests
-const assert = require('assert');
-
-// Simple test runner for CommonJS
-function describe(name, fn) {
-  console.log(`\n${name}`);
-  fn();
-}
-
-function it(name, fn) {
-  try {
-    fn();
-    console.log(`  ✓ ${name}`);
-  } catch (error) {
-    console.log(`  ✗ ${name}`);
-    console.error(`    ${error.message}`);
-    process.exit(1);
-  }
-}
-
-function expect(actual) {
-  return {
-    toBe: (expected) => {
-      assert.strictEqual(actual, expected);
-    },
-    toEqual: (expected) => {
-      assert.deepStrictEqual(actual, expected);
-    }
-  };
-}
+// vitestのglobalsを使用
+const { describe, it, expect } = globalThis;
 
 describe('CommonJS imports', () => {
   describe('require("datapage")', () => {

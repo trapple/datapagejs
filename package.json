@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "test": "vitest run && node spec/commonjs.spec.cjs",
+    "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "build": "npm run build:types && rollup -c",
