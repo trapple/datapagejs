@@ -6,7 +6,7 @@ const banner = `/*
  * Simple Pagination Data Object
  * https://github.com/trapple/datapagejs.git
  * Copyright 2013 trapple
- * Version: 1.3.4
+ * Version: 2.0.0
  */`
 
 export default [

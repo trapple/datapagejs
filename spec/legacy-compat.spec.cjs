@@ -3,14 +3,14 @@ const { describe, it, expect } = globalThis;
 
 // 古いNode.js/バンドラーでのrequire()パターン動作確認テスト
 
-describe('Legacy CommonJS Compatibility Tests', () => {
+describe('CommonJS Compatibility Tests (Modern API)', () => {
   
   it('should work with direct require pattern', () => {
     const DataPage = require('../');
     const pager = new DataPage(100, 10, 3);
     
-    expect(pager.first_page()).toBe(1);
-    expect(pager.current_page()).toBe(3);
+    expect(pager.firstPage()).toBe(1);
+    expect(pager.currentPage()).toBe(3);
     expect(pager.first()).toBe(21);
     expect(pager.last()).toBe(30);
   });
@@ -19,34 +19,34 @@ describe('Legacy CommonJS Compatibility Tests', () => {
     const { DataPage } = require('../');
     const pager = new DataPage(250, 20, 5);
     
-    expect(pager.first_page()).toBe(1);
-    expect(pager.current_page()).toBe(5);
-    expect(pager.entries_per_page()).toBe(20);
-    expect(pager.total_entries()).toBe(250);
+    expect(pager.firstPage()).toBe(1);
+    expect(pager.currentPage()).toBe(5);
+    expect(pager.entriesPerPage()).toBe(20);
+    expect(pager.totalEntries()).toBe(250);
   });
   
   it('should work with .default require pattern', () => {
     const DataPage = require('../').default;
     const pager = new DataPage(300, 15, 2);
     
-    expect(pager.first_page()).toBe(1);
-    expect(pager.last_page()).toBe(20);
+    expect(pager.firstPage()).toBe(1);
+    expect(pager.lastPage()).toBe(20);
     expect(pager.first()).toBe(16);
     expect(pager.last()).toBe(30);
   });
   
-  it('should maintain backward compatibility with public properties', () => {
+  it('should work with modern API methods', () => {
     const DataPage = require('../');
     const pager = new DataPage(500, 25, 10);
     
-    // 直接プロパティアクセス（後方互換性）
-    expect(pager._total_entries).toBe(500);
-    expect(pager._entries_per_page).toBe(25);
-    expect(pager._current_page).toBe(10);
+    // モダンAPIメソッドの動作確認
+    expect(pager.totalEntries()).toBe(500);
+    expect(pager.entriesPerPage()).toBe(25);
+    expect(pager.currentPage()).toBe(10);
     
-    // 直接代入も動作するか確認
-    pager._total_entries = 600;
-    expect(pager.total_entries()).toBe(600);
+    // セッターメソッドの動作確認
+    pager.totalEntries(600);
+    expect(pager.totalEntries()).toBe(600);
   });
   
   it('should work consistently across all require patterns', () => {

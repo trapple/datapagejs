@@ -3,7 +3,7 @@
  * Simple Pagination Data Object
  * https://github.com/trapple/datapagejs.git
  * Copyright 2013 trapple
- * Version: 1.3.4
+ * Version: 2.0.0
  */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
