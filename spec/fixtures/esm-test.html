@@ -10,11 +10,13 @@
     <div id="results"></div>
 
     <script type="module">
-      // Import ESM build
-      import DataPage from '../../dist/datapage.esm.js';
+      // Import ESM build with error handling
+      try {
+        const { default: DataPage } = await import('../../dist/datapage.esm.js');
+        console.log('ESM DataPage imported successfully:', typeof DataPage);
 
-      // Test DataPage ESM version
-      function runTests() {
+        // Test DataPage ESM version
+        function runTests() {
         const results = document.getElementById('results');
         const tests = [];
 
@@ -145,18 +147,30 @@
             `;
       }
 
-      // Run tests when page loads
-      window.addEventListener('load', runTests);
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
 
-      // Expose for Playwright
-      window.getTestResults = function () {
-        const summary = document.getElementById('test-summary');
-        if (!summary) return null;
-        return {
-          passed: parseInt(summary.dataset.pass),
-          total: parseInt(summary.dataset.total),
+        // Expose for Playwright
+        window.getTestResults = function () {
+          const summary = document.getElementById('test-summary');
+          if (!summary) return null;
+          return {
+            passed: parseInt(summary.dataset.pass),
+            total: parseInt(summary.dataset.total),
+          };
         };
-      };
+      } catch (error) {
+        console.error('ESM import failed:', error);
+        // Show error in page
+        const results = document.getElementById('results');
+        if (results) {
+          results.innerHTML = `<h2>ESM Import Error</h2><p>${error.message}</p>`;
+        }
+        // Expose error result for Playwright
+        window.getTestResults = function () {
+          return { passed: 0, total: 1, error: error.message };
+        };
+      }
     </script>
 
     <style>

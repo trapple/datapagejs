@@ -6,7 +6,7 @@ test.describe('DataPage ESM Build', () => {
     // Navigate to ESM test page
     await page.goto('/spec/fixtures/esm-test.html');
 
-    // Wait for tests to complete
+    // Wait for tests to complete with longer timeout
     await page.waitForFunction(
       () => {
         return window.getTestResults && window.getTestResults() !== null;
