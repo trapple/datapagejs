@@ -275,4 +275,28 @@ describe('DataPage', function () {
     pager.currentPage(6);
     expect(pager.hasPreviousPageset()).toEqual(false);
   });
+
+  it('parseUnsignedInt should reject negative numbers', function () {
+    const pager: DataPageType = new DataPage();
+
+    // Valid cases
+    expect(pager.parseUnsignedInt(0)).toEqual(0);
+    expect(pager.parseUnsignedInt(5)).toEqual(5);
+    expect(pager.parseUnsignedInt('10')).toEqual(10);
+
+    // Invalid cases - negative numbers
+    expect(() => pager.parseUnsignedInt(-1)).toThrow(
+      'Number must be unsigned: -1'
+    );
+    expect(() => pager.parseUnsignedInt(-10)).toThrow(
+      'Number must be unsigned: -10'
+    );
+    expect(() => pager.parseUnsignedInt('-5')).toThrow(
+      'Number must be unsigned: -5'
+    );
+
+    // Invalid cases - non-numbers
+    expect(() => pager.parseUnsignedInt('abc')).toThrow('Invalid number: abc');
+    expect(() => pager.parseUnsignedInt(null)).toThrow('Invalid number: null');
+  });
 });

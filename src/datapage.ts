@@ -220,6 +220,7 @@ class DataPage implements DataPageType {
   parseUnsignedInt(val: any): number {
     const parsed = parseInt(val);
     if (isNaN(parsed)) throw new Error(`Invalid number: ${val}`);
+    if (parsed < 0) throw new Error(`Number must be unsigned: ${parsed}`);
     return parsed;
   }
 }
