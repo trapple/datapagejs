@@ -404,6 +404,64 @@ npm run format
 npm run lint:fix
 ```
 
+## リリース管理
+
+### 手動リリースプロセス
+
+```bash
+# 品質チェックとテストの実行
+npm run release
+
+# バージョンアップとリリース（GitHub Actionsが自動実行される）
+npm run version:patch  # バグ修正用 (2.0.0 -> 2.0.1)
+npm run version:minor  # 新機能用 (2.0.0 -> 2.1.0)
+npm run version:major  # 破壊的変更用 (2.0.0 -> 3.0.0)
+```
+
+### 自動化されたCI/CD
+
+このプロジェクトはGitHub Actionsを使用した自動テストとリリースを使用しています：
+
+- **Pull Request チェック**: 全PRで自動的な品質チェック、テスト、ビルドを実行
+- **自動リリース**: gitタグをプッシュすると（`npm run version:*`経由）、GitHub Actionsが自動で：
+  - 完全なテストスイート実行（ユニット + ブラウザテスト）
+  - 全形式ビルド
+  - NPMへの自動公開
+  - アーティファクト付きGitHub Release作成
+  - CHANGELOG.mdからのリリースノート生成
+
+### NPM自動公開の設定
+
+NPMへの自動公開を有効にするため、リポジトリメンテナは以下の設定が必要です：
+
+1. **NPMアクセストークンの作成**:
+   - npmjs.com にログイン
+   - 右上のプロフィール画像をクリック
+   - ドロップダウンメニューから「Access Tokens」を選択
+   - "Automation"権限で新しいトークンを作成
+   - トークン値をコピー
+
+2. **GitHub Secretの追加**:
+   - リポジトリの Settings → Secrets and variables → Actions に移動
+   - 新しいシークレットを追加：`NPM_TOKEN`にNPMトークン値を設定
+
+3. **リリースプロセス**:
+   ```bash
+   # CHANGELOG.mdに新バージョンの詳細を更新
+   # その後、以下のいずれかを実行：
+   npm run version:patch  # 自動でNPMに公開
+   npm run version:minor  # 自動でNPMに公開
+   npm run version:major  # 自動でNPMに公開
+   ```
+
+リリースワークフローは自動で以下を実行します：
+
+- ✅ 品質チェックとテストの実行
+- ✅ 全配布形式のビルド
+- ✅ NPMレジストリへの公開
+- ✅ ダウンロード可能なアーティファクト付きGitHub Release作成
+- ✅ CHANGELOG.mdからのリリースノート抽出
+
 ## 参照
 
 このソフトウェアは [Data::Page](http://search.cpan.org/~lbrocard/Data-Page/lib/Data/Page.pm) から移植されました。

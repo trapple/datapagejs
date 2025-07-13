@@ -428,6 +428,64 @@ npm run format
 npm run lint:fix
 ```
 
+## Release Management
+
+### Manual Release Process
+
+```bash
+# Run quality checks and tests
+npm run release
+
+# Version bump and release (will trigger GitHub Actions)
+npm run version:patch  # for bug fixes (2.0.0 -> 2.0.1)
+npm run version:minor  # for new features (2.0.0 -> 2.1.0)
+npm run version:major  # for breaking changes (2.0.0 -> 3.0.0)
+```
+
+### Automated CI/CD
+
+This project uses GitHub Actions for automated testing and releases:
+
+- **Pull Request Checks**: Automatic quality checks, tests, and builds on all PRs
+- **Automated Releases**: When you push a git tag (via `npm run version:*`), GitHub Actions will:
+  - Run full test suite (unit + browser tests)
+  - Build all formats
+  - Publish to NPM automatically
+  - Create GitHub Release with artifacts
+  - Generate release notes from CHANGELOG.md
+
+### Setting Up NPM Auto-Publishing
+
+To enable automated NPM publishing, repository maintainers need to:
+
+1. **Create NPM Access Token**:
+   - Log in to npmjs.com
+   - Click your profile picture in the upper right corner
+   - Select "Access Tokens" from the dropdown menu
+   - Create new token with "Automation" permissions
+   - Copy the token value
+
+2. **Add GitHub Secret**:
+   - Go to repository Settings → Secrets and variables → Actions
+   - Add new secret: `NPM_TOKEN` with your NPM token value
+
+3. **Release Process**:
+   ```bash
+   # Update CHANGELOG.md with new version details
+   # Then run one of:
+   npm run version:patch  # Auto-publishes to NPM
+   npm run version:minor  # Auto-publishes to NPM
+   npm run version:major  # Auto-publishes to NPM
+   ```
+
+The release workflow will automatically:
+
+- ✅ Run quality checks and tests
+- ✅ Build all distribution formats
+- ✅ Publish to NPM registry
+- ✅ Create GitHub Release with downloadable artifacts
+- ✅ Extract release notes from CHANGELOG.md
+
 ## SEE ALSO
 
 This software has been ported from [Data::Page](http://search.cpan.org/~lbrocard/Data-Page/lib/Data/Page.pm)
