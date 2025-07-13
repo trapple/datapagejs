@@ -25,8 +25,23 @@ const server = createServer(async (req, res) => {
     requestPath = decodeURIComponent(requestPath);
     requestPath = normalize(requestPath);
 
-    // Remove leading slashes and any remaining '../' sequences
-    requestPath = requestPath.replace(/^\/+/, '').replace(/\.\.\//g, '');
+    // Remove leading slashes and prevent directory traversal attacks
+    requestPath = requestPath.replace(/^\/+/, '');
+
+    // Allow access to dist/ folder through relative paths but prevent other traversals
+    if (requestPath.includes('../')) {
+      // Only allow legitimate access to dist folder from fixtures
+      if (requestPath.match(/^(spec\/fixtures\/)?\.\.\/\.\.\/dist\//)) {
+        // This is a legitimate access to dist folder from fixtures
+        requestPath = requestPath.replace(
+          /^(spec\/fixtures\/)?\.\.\/\.\.\//,
+          ''
+        );
+      } else {
+        // Block other directory traversal attempts
+        requestPath = requestPath.replace(/\.\.\//g, '');
+      }
+    }
 
     // Resolve the full path and ensure it's within the base directory
     const fullPath = resolve(__dirname, requestPath);

@@ -6,17 +6,6 @@ test.describe('DataPage UMD Build', () => {
     // Navigate to UMD test page
     await page.goto('/spec/fixtures/umd-test.html');
 
-    // Debug: Check if DataPage is loaded
-    const debugInfo = await page.evaluate(() => {
-      return {
-        hasDataPage: typeof window.DataPage !== 'undefined',
-        dataPageType: typeof window.DataPage,
-        windowKeys: Object.keys(window).filter((key) => key.includes('Data')),
-        errors: window.console?.errors || 'No console errors tracked',
-      };
-    });
-    console.log('UMD Debug Info:', debugInfo);
-
     // Wait for tests to complete
     await page.waitForFunction(
       () => {
