@@ -73,7 +73,8 @@ jobs:
           fi
         shell: bash
 
-      - name: Debug file structure
+      - name: Debug file structure (Unix)
+        if: runner.os != 'Windows'
         run: |
           echo "Current directory structure:"
           ls -la
@@ -82,6 +83,17 @@ jobs:
           echo "Spec fixtures directory:"
           ls -la spec/fixtures/
         shell: bash
+
+      - name: Debug file structure (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "Current directory structure:"
+          dir
+          echo "Dist directory contents:"
+          dir dist\
+          echo "Spec fixtures directory:"
+          dir spec\fixtures\
+        shell: cmd
 
       - name: Run browser tests
         run: npm run test:browser
