@@ -6,7 +6,7 @@ const { describe, it, expect } = globalThis;
 describe('CommonJS Compatibility Tests (Modern API)', () => {
   
   it('should work with direct require pattern', () => {
-    const DataPage = require('../');
+    const DataPage = require('../../');
     const pager = new DataPage(100, 10, 3);
     
     expect(pager.firstPage()).toBe(1);
@@ -16,7 +16,7 @@ describe('CommonJS Compatibility Tests (Modern API)', () => {
   });
   
   it('should work with destructuring require pattern', () => {
-    const { DataPage } = require('../');
+    const { DataPage } = require('../../');
     const pager = new DataPage(250, 20, 5);
     
     expect(pager.firstPage()).toBe(1);
@@ -26,7 +26,7 @@ describe('CommonJS Compatibility Tests (Modern API)', () => {
   });
   
   it('should work with .default require pattern', () => {
-    const DataPage = require('../').default;
+    const DataPage = require('../../').default;
     const pager = new DataPage(300, 15, 2);
     
     expect(pager.firstPage()).toBe(1);
@@ -36,7 +36,7 @@ describe('CommonJS Compatibility Tests (Modern API)', () => {
   });
   
   it('should work with modern API methods', () => {
-    const DataPage = require('../');
+    const DataPage = require('../../');
     const pager = new DataPage(500, 25, 10);
     
     // モダンAPIメソッドの動作確認
@@ -50,9 +50,9 @@ describe('CommonJS Compatibility Tests (Modern API)', () => {
   });
   
   it('should work consistently across all require patterns', () => {
-    const DataPage1 = require('../');
-    const { DataPage: DataPage2 } = require('../');
-    const DataPage3 = require('../').default;
+    const DataPage1 = require('../../');
+    const { DataPage: DataPage2 } = require('../../');
+    const DataPage3 = require('../../').default;
     
     const pager1 = new DataPage1(100, 10, 5);
     const pager2 = new DataPage2(100, 10, 5);

@@ -5,7 +5,7 @@ const { describe, it, expect } = globalThis;
 describe('CommonJS imports', () => {
   describe('require("datapage")', () => {
     it('should import DataPage class correctly', () => {
-      const DataPage = require('../index.cjs');
+      const DataPage = require('../../index.cjs');
       expect(typeof DataPage).toBe('function');
       
       const instance = new DataPage(100, 10, 1, 5);
@@ -16,7 +16,7 @@ describe('CommonJS imports', () => {
     });
 
     it('should work with all methods', () => {
-      const DataPage = require('../index.cjs');
+      const DataPage = require('../../index.cjs');
       const pager = new DataPage(50, 10, 3, 5);
       
       expect(pager.firstPage()).toBe(1);
@@ -34,7 +34,7 @@ describe('CommonJS imports', () => {
 
   describe('const { DataPage } = require("datapage")', () => {
     it('should import DataPage via destructuring', () => {
-      const { DataPage } = require('../index.cjs');
+      const { DataPage } = require('../../index.cjs');
       expect(typeof DataPage).toBe('function');
       
       const instance = new DataPage(200, 20, 2, 10);
@@ -45,8 +45,8 @@ describe('CommonJS imports', () => {
     });
 
     it('should have the same functionality as direct import', () => {
-      const { DataPage } = require('../index.cjs');
-      const DirectDataPage = require('../index.cjs');
+      const { DataPage } = require('../../index.cjs');
+      const DirectDataPage = require('../../index.cjs');
       
       const instance1 = new DataPage(100, 10, 1, 5);
       const instance2 = new DirectDataPage(100, 10, 1, 5);
@@ -58,7 +58,7 @@ describe('CommonJS imports', () => {
 
   describe('require("datapage").default', () => {
     it('should import DataPage via .default property', () => {
-      const DataPage = require('../index.cjs').default;
+      const DataPage = require('../../index.cjs').default;
       expect(typeof DataPage).toBe('function');
       
       const instance = new DataPage(300, 15, 5, 7);
@@ -69,8 +69,8 @@ describe('CommonJS imports', () => {
     });
 
     it('should be identical to direct import', () => {
-      const DefaultDataPage = require('../index.cjs').default;
-      const DirectDataPage = require('../index.cjs');
+      const DefaultDataPage = require('../../index.cjs').default;
+      const DirectDataPage = require('../../index.cjs');
       
       expect(DefaultDataPage).toBe(DirectDataPage);
     });
@@ -78,9 +78,9 @@ describe('CommonJS imports', () => {
 
   describe('Cross-pattern consistency', () => {
     it('should create identical instances across all import patterns', () => {
-      const DataPage1 = require('../index.cjs');
-      const { DataPage: DataPage2 } = require('../index.cjs');
-      const DataPage3 = require('../index.cjs').default;
+      const DataPage1 = require('../../index.cjs');
+      const { DataPage: DataPage2 } = require('../../index.cjs');
+      const DataPage3 = require('../../index.cjs').default;
       
       const instance1 = new DataPage1(100, 10, 3, 5);
       const instance2 = new DataPage2(100, 10, 3, 5);

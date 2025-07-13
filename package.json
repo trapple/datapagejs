@@ -14,12 +14,13 @@
     }
   },
   "scripts": {
-    "test": "vitest run",
+    "test": "npm run test:unit && npm run test:browser",
+    "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:browser": "npm run build && playwright test",
     "test:browser:ui": "npm run build && playwright test --ui",
-    "test:all": "npm run test && npm run test:browser",
+    "test:all": "npm run test:unit && npm run test:browser",
     "serve:test": "node test-server.js",
     "build": "npm run build:types && rollup -c",
     "build:rollup": "rollup -c",

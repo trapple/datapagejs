@@ -1,5 +1,5 @@
 // 型定義ファイルの検証テスト
-import DataPage, { DataPageType } from '../src/datapage.js';
+import DataPage, { DataPageType } from '../../src/datapage.js';
 
 describe('TypeScript Type Definitions', () => {
   
