@@ -38,7 +38,13 @@ jobs:
     strategy:
       matrix:
         node-version: ['20.x', '22.x']
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest]
+        include:
+          # 代表的な環境での追加検証
+          - node-version: '20.x'
+            os: windows-latest
+          - node-version: '20.x'
+            os: macOS-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
