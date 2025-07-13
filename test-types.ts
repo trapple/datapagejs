@@ -2,7 +2,11 @@
 import DataPage from './dist/datapage.esm.js';
 import type { DataPageType } from './dist/datapage.d.ts';
 
-// 型チェック用のテスト関数
+/**
+ * Verifies the TypeScript type definitions of the DataPage class by performing type checks on its methods.
+ *
+ * This function instantiates a DataPage object, invokes its getter and setter methods, and assigns their results to variables with explicit types to ensure type correctness. It logs a confirmation message upon successful validation.
+ */
 function testTypeDefinitions() {
   // インスタンス作成
   const pager: DataPageType = new DataPage(100, 10, 1, 5);
