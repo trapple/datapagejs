@@ -708,3 +708,232 @@ npm run build
 - 🚫 **重複管理不要**: レガシーファイルの同期作業完全廃止
 - ⚡ **開発効率向上**: 1つのファイルでの集中開発
 - 🔍 **デバッグ簡素化**: 単一ソースによるトレーサビリティ向上
+
+## Phase 2.5: CI/CD整備
+
+### 🎯 実装目標
+
+**GitHub Actions によるCI/CDパイプライン構築**
+
+- 自動テスト・ビルド・リリース
+- 品質ゲートの自動化
+- 開発効率とリリース品質の向上
+
+### 📋 要件分析
+
+#### 現在の開発環境（Phase 2.4完了時点）
+
+**テスト環境:**
+
+- 36ユニットテスト（Vitest）
+- 21ブラウザテスト（Playwright: Chromium、Firefox、WebKit）
+- テストコマンド体系完備（unit/browser/coverage）
+
+**品質チェック:**
+
+- ESLint + TypeScript対応（構文・品質チェック）
+- Prettier（コード整形）
+- TypeScript型チェック（tsc --noEmit）
+- pre-commit hooks（husky + lint-staged）
+
+**ビルドシステム:**
+
+- TypeScript単一ソース（src/datapage.ts）
+- 4形式自動出力（CJS、UMD、UMD minified、ESM）
+- 型定義ファイル自動生成（.d.ts）
+- ソースマップ全形式対応
+
+**現在のコマンド:**
+
+```bash
+npm test              # ユニット + ブラウザテスト
+npm run test:unit     # Vitestユニットテスト
+npm run test:browser  # Playwrightブラウザテスト
+npm run test:coverage # カバレッジ付きテスト
+npm run build         # 型定義 + 4形式ビルド
+npm run lint          # ESLint チェック
+npm run lint:fix      # ESLint 自動修正
+npm run format        # Prettier 整形
+npm run format:check  # Prettier チェック
+npm run dev           # lint + test + build
+```
+
+### 🏗️ CI/CDワークフロー設計
+
+#### 1. **Pull Request検証ワークフロー（ci.yml）**
+
+**トリガー条件:**
+
+- Pull Request作成・更新（target: main/master branch）
+- Push to main/master branch（マージ後の検証）
+
+**実行ジョブ:**
+
+```yaml
+jobs:
+  quality-check:
+    # ESLint + Prettier + TypeScript型チェック
+    runs-on: ubuntu-latest
+    steps:
+      - checkout, setup-node
+      - npm run lint
+      - npm run format:check
+      - tsc --noEmit
+
+  test:
+    # クロスプラットフォーム・クロスバージョンテスト
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - ユニットテスト実行
+      - ブラウザテスト実行（Playwright）
+
+  build:
+    # ビルド成功確認とアーティファクト保存
+    runs-on: ubuntu-latest
+    steps:
+      - npm run build
+      - dist/ファイルのアップロード
+      - ビルドサイズ確認
+```
+
+#### 2. **リリース自動化ワークフロー（release.yml）**
+
+**トリガー条件:**
+
+- Git tag push (`v*` pattern)
+
+**実行内容:**
+
+```yaml
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - 品質チェック・テスト・ビルド実行
+      - NPMパッケージ自動公開
+      - GitHub Release自動作成
+      - リリースノート自動生成
+```
+
+### 📊 実装計画詳細
+
+#### **Phase 2.5a: 基本CI/CDワークフロー作成**
+
+- `.github/workflows/ci.yml` 作成
+- Node.js環境マトリックス設定（18.x, 20.x, 22.x）
+- OS環境マトリックス設定（Ubuntu, Windows, macOS）
+- 基本的な品質チェック・テスト・ビルド自動化
+
+#### **Phase 2.5b: ブラウザテスト自動化**
+
+- Playwright GitHub Action統合
+- ブラウザテストの安定実行環境構築
+- テスト結果の可視化
+
+#### **Phase 2.5c: 品質ゲート強化**
+
+- ESLint・Prettier・TypeScript型チェックの自動実行
+- テストカバレッジレポート生成
+- 品質基準未達時のPR自動ブロック
+
+#### **Phase 2.5d: ビルド検証・アーティファクト管理**
+
+- 全形式ビルドの自動検証
+- ビルド成果物（dist/）の保存・ダウンロード機能
+- Bundle size monitoring導入検討
+
+#### **Phase 2.5e: リリース自動化**
+
+- Git tagトリガーによるNPM自動公開
+- GitHub Release自動作成
+- セマンティックバージョニング対応
+
+### ⚙️ 技術仕様
+
+#### **使用GitHub Actions**
+
+- `actions/checkout@v4`: リポジトリチェックアウト
+- `actions/setup-node@v4`: Node.js環境セットアップ
+- `microsoft/playwright-github-action@v1`: Playwright環境構築
+- `actions/upload-artifact@v4`: ビルド成果物保存
+- `actions/download-artifact@v4`: 成果物取得
+
+#### **環境要件**
+
+- **Node.js versions**: 18.x, 20.x, 22.x（現在のengines: >=20.17.0に対応）
+- **OS platforms**: ubuntu-latest, windows-latest, macOS-latest
+- **ブラウザ**: Chromium, Firefox, WebKit（Playwright管理）
+
+#### **セキュリティ・認証**
+
+- `NPM_TOKEN`: GitHub Secrets管理
+- 依存関係脆弱性スキャン検討
+- 最小権限の原則適用
+
+### 🎯 期待される効果
+
+#### **品質保証の自動化**
+
+- Pull Request時の包括的品質チェック
+- 複数環境での動作確認（Node.js版・OS・ブラウザ）
+- 人的ミスの防止とリリース品質の向上
+
+#### **開発効率の向上**
+
+- 手動テスト・ビルド作業の完全自動化
+- リリースプロセスの標準化
+- 迅速なフィードバックサイクル
+
+#### **メンテナンス負荷軽減**
+
+- 一貫したCI/CDプロセス
+- 自動化されたリリース管理
+- 開発者の単調作業削減
+
+### 🚀 実装優先度
+
+#### **高優先度（基盤整備）**
+
+1. 基本CI/CDワークフロー作成
+2. 自動テスト実行（ユニット+ブラウザ）
+3. 品質ゲート自動化
+
+#### **中優先度（機能拡張）**
+
+1. リリース自動化
+2. ビルド成果物管理
+3. クロスプラットフォーム対応強化
+
+#### **低優先度（監視・改善）**
+
+1. カバレッジレポート改善
+2. Bundle size monitoring
+3. 依存関係脆弱性スキャン
+
+### 📅 実装スケジュール予定
+
+- **Week 1**: Phase 2.5a-b（基本CI/CD + ブラウザテスト）
+- **Week 2**: Phase 2.5c-d（品質ゲート + ビルド検証）
+- **Week 3**: Phase 2.5e（リリース自動化）
+
+### 🎉 完了時の成果物
+
+#### **ワークフローファイル**
+
+- `.github/workflows/ci.yml`: 継続的インテグレーション
+- `.github/workflows/release.yml`: リリース自動化
+
+#### **品質保証強化**
+
+- Pull Request自動検証
+- マルチ環境テスト
+- 自動品質ゲート
+
+#### **開発体験向上**
+
+- ワンクリックリリース
+- 包括的自動テスト
+- 迅速なフィードバック
