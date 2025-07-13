@@ -19,15 +19,15 @@ export default [
         exports: 'readonly',
         require: 'readonly',
         __dirname: 'readonly',
-        __filename: 'readonly'
-      }
+        __filename: 'readonly',
+      },
     },
     rules: {
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-console': 'off',
       'prefer-const': 'error',
-      'no-var': 'warn'
-    }
+      'no-var': 'warn',
+    },
   },
   {
     files: ['**/*.js'],
@@ -39,6 +39,8 @@ export default [
         global: 'readonly',
         process: 'readonly',
         Buffer: 'readonly',
+        console: 'readonly',
+        URL: 'readonly',
         // ブラウザ環境
         window: 'readonly',
         document: 'readonly',
@@ -54,15 +56,15 @@ export default [
         beforeEach: 'readonly',
         afterEach: 'readonly',
         expect: 'readonly',
-        jasmine: 'readonly'
-      }
+        jasmine: 'readonly',
+      },
     },
     rules: {
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'no-console': 'off',
       'prefer-const': 'error',
-      'no-var': 'warn'
-    }
+      'no-var': 'warn',
+    },
   },
   {
     files: ['**/*.ts'],
@@ -87,17 +89,20 @@ export default [
         it: 'readonly',
         beforeEach: 'readonly',
         afterEach: 'readonly',
-        expect: 'readonly'
-      }
+        expect: 'readonly',
+      },
     },
     plugins: {
-      '@typescript-eslint': tseslint
+      '@typescript-eslint': tseslint,
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
       'no-unused-vars': 'off', // TypeScript版を使用
       'no-console': 'off',
-      'prefer-const': 'error'
-    }
-  }
+      'prefer-const': 'error',
+    },
+  },
 ];

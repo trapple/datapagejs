@@ -14,9 +14,14 @@
     }
   },
   "scripts": {
-    "test": "vitest run",
+    "test": "npm run test:unit && npm run test:browser",
+    "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:browser": "npm run build && playwright test",
+    "test:browser:ui": "npm run build && playwright test --ui",
+    "test:all": "npm run test:unit && npm run test:browser",
+    "serve:test": "node test-server.js",
     "build": "npm run build:types && rollup -c",
     "build:rollup": "rollup -c",
     "build:types": "tsc --emitDeclarationOnly",
@@ -26,7 +31,8 @@
     "lint:fix": "eslint src/ spec/ --ext .js,.ts,.cjs --fix",
     "format": "prettier --write src/ spec/",
     "format:check": "prettier --check src/ spec/",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -39,18 +45,21 @@
   },
   "homepage": "https://github.com/trapple/datapagejs",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.17.0",
     "npm": ">=8.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
+    "@playwright/test": "^1.54.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.4",
     "@types/node": "^24.0.12",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
     "eslint": "^9.30.1",
+    "husky": "^9.1.7",
     "jsdom": "^26.1.0",
+    "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
     "rollup": "^4.44.2",
     "tslib": "^2.8.1",
@@ -62,5 +71,14 @@
     "pagenation",
     "pager",
     "page"
-  ]
+  ],
+  "lint-staged": {
+    "*.{ts,js,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,json}": [
+      "prettier --write"
+    ]
+  }
 }

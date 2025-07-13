@@ -1,6 +1,6 @@
 // メインのDataPageクラスをインポート
-import DataPage from '../src/datapage.js';
-import { DataPageType } from '../src/datapage.js';
+import DataPage from '../../src/datapage.js';
+import { DataPageType } from '../../src/datapage.js';
 
 describe("DataPage", function () {
 

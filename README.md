@@ -15,12 +15,17 @@ DataPage.js is a simple and lightweight pagination library with full TypeScript 
 
 ```javascript
 // JavaScript
-const pager = new DataPage(totalEntries, entriesPerPage, currentPage, pagesPerPageset);
-pager.firstPage();  // 1
-pager.lastPage();   // last page number
-pager.first();       // first entry number of current page
-pager.last();        // last entry number of current page
-pager.pageset();     // [1,2,3,4,5...] page set array
+const pager = new DataPage(
+  totalEntries,
+  entriesPerPage,
+  currentPage,
+  pagesPerPageset
+);
+pager.firstPage(); // 1
+pager.lastPage(); // last page number
+pager.first(); // first entry number of current page
+pager.last(); // last entry number of current page
+pager.pageset(); // [1,2,3,4,5...] page set array
 ```
 
 ```typescript
@@ -36,8 +41,9 @@ pager.totalEntries(400); // Set total entries
 ```
 
 **Default values:**
+
 - `totalEntries`: 0
-- `entriesPerPage`: 10  
+- `entriesPerPage`: 10
 - `currentPage`: 1
 - `pagesPerPageset`: 10
 
@@ -52,6 +58,7 @@ npm install datapage
 ### Import Methods
 
 #### ES Modules (Recommended)
+
 ```javascript
 // Default import (recommended)
 import DataPage from 'datapage';
@@ -63,6 +70,7 @@ const pager: DataPageType = new DataPage(100, 10, 1, 5);
 ```
 
 #### CommonJS (Legacy Support)
+
 ```javascript
 // All patterns supported:
 const DataPage = require('datapage');
@@ -71,6 +79,7 @@ const DataPage = require('datapage').default;
 ```
 
 #### Browser (UMD)
+
 ```html
 <script src="path/to/datapage.min.js"></script>
 <script>
@@ -116,7 +125,7 @@ interface DataPageType {
   pageset(): number[];
   hasNextPageset(): boolean;
   hasPreviousPageset(): boolean;
-  
+
   // Utility methods
   parseVal(val: any): number;
   parseUnsignedInt(val: any): number;
@@ -129,14 +138,23 @@ class DataPage implements DataPageType {
   #entriesPerPage: number;
   #currentPage: number;
   #pagesPerPageset: number;
-  
-  constructor(totalEntries?: number, entriesPerPage?: number, currentPage?: number, pagesPerPageset?: number) {
+
+  constructor(
+    totalEntries?: number,
+    entriesPerPage?: number,
+    currentPage?: number,
+    pagesPerPageset?: number
+  ) {
     // Implementation details...
   }
-  
+
   // Modern camelCase API methods
-  currentPage(val?: number): number { /* ... */ }
-  totalEntries(val?: number): number { /* ... */ }
+  currentPage(val?: number): number {
+    /* ... */
+  }
+  totalEntries(val?: number): number {
+    /* ... */
+  }
   // ... other methods
 }
 
@@ -146,8 +164,9 @@ export type { DataPageType };
 ```
 
 This design provides several benefits:
+
 - **Type Safety**: Clear contracts through interfaces
-- **Encapsulation**: Private fields ensure data integrity  
+- **Encapsulation**: Private fields ensure data integrity
 - **Modern API**: Clean camelCase method names following JavaScript conventions
 - **Maintainability**: Implementation can evolve independently from interface
 - **Modern JavaScript**: Uses ES6+ features including private fields and ES2022 syntax
@@ -162,6 +181,7 @@ new DataPage(totalEntries: number, entriesPerPage?: number, currentPage?: number
 ```
 
 **Parameters:**
+
 - `totalEntries`: Total number of entries (default: 0)
 - `entriesPerPage`: Number of entries per page (default: 10)
 - `currentPage`: Current page number (default: 1)
@@ -323,7 +343,7 @@ Parses and validates a positive integer value.
 ```typescript
 const pager = new DataPage();
 const validValue = pager.parseVal(5); // returns 5
-const validString = pager.parseVal("10"); // returns 10
+const validString = pager.parseVal('10'); // returns 10
 // pager.parseVal(-1); // throws Error: "Number must be positive: -1"
 // pager.parseVal("abc"); // throws Error: "Invalid number: abc"
 ```
@@ -336,7 +356,7 @@ Parses an integer value (allows zero and positive numbers).
 const pager = new DataPage();
 const zeroValue = pager.parseUnsignedInt(0); // returns 0
 const positiveValue = pager.parseUnsignedInt(100); // returns 100
-const stringValue = pager.parseUnsignedInt("50"); // returns 50
+const stringValue = pager.parseUnsignedInt('50'); // returns 50
 // pager.parseUnsignedInt("abc"); // throws Error: "Invalid number: abc"
 ```
 
@@ -346,9 +366,11 @@ const stringValue = pager.parseUnsignedInt("50"); // returns 50
 - 🏗️ **Clean Architecture**: Interface and implementation separation for better maintainability
 - 🎯 **ES6 Classes**: Modern ES6 class syntax with private fields
 - 📦 **Multiple Formats**: UMD, ES Modules, and CommonJS support
-- 🧪 **Well Tested**: Comprehensive test suite with 18 test cases
+- 🧪 **Well Tested**: Comprehensive test suite with 36 unit tests and 7 browser tests
+- 🌐 **Browser Tested**: Multi-browser testing with Playwright (Chromium, Firefox, WebKit)
 - 🚀 **Modern API**: Clean camelCase naming following JavaScript conventions
 - 📊 **Source Maps**: Full source map support for all builds
+- 🎣 **Quality Assured**: Pre-commit hooks with ESLint and Prettier
 - 🚀 **Lightweight**: Only 4KB minified
 
 ## Browser Support
@@ -370,6 +392,7 @@ dist/*.map               # Source maps for all formats
 ```
 
 **Format Details:**
+
 - **UMD (`datapage.js`)**: Universal Module Definition for broad compatibility
 - **UMD Minified (`datapage.min.js`)**: Compressed version for production use
 - **ES Module (`datapage.esm.js`)**: Modern ES6 module format for bundlers
@@ -380,8 +403,17 @@ dist/*.map               # Source maps for all formats
 # Install dependencies
 npm install
 
-# Run tests
+# Run all tests (unit + browser)
 npm test
+
+# Run unit tests only
+npm run test:unit
+
+# Run browser tests only
+npm run test:browser
+
+# Run tests with coverage
+npm run test:coverage
 
 # Build all formats
 npm run build
