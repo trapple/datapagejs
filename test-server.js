@@ -1,7 +1,7 @@
 // Simple HTTP server for serving test files
 import { createServer } from 'http';
 import { readFile, stat } from 'fs/promises';
-import { join, extname } from 'path';
+import { extname, normalize, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -12,25 +12,48 @@ const mimeTypes = {
   '.js': 'application/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
-  '.map': 'application/json'
+  '.map': 'application/json',
 };
 
 const server = createServer(async (req, res) => {
   try {
-    let filePath = req.url === '/' ? '/spec/fixtures/umd-test.html' : req.url;
-    filePath = join(__dirname, filePath);
-    
+    // Sanitize URL to prevent directory traversal attacks
+    let requestPath =
+      req.url === '/' ? '/spec/fixtures/umd-test.html' : req.url;
+
+    // Decode and normalize the path
+    requestPath = decodeURIComponent(requestPath);
+    requestPath = normalize(requestPath);
+
+    // Remove leading slashes and any remaining '../' sequences
+    requestPath = requestPath.replace(/^\/+/, '').replace(/\.\.\//g, '');
+
+    // Resolve the full path and ensure it's within the base directory
+    const fullPath = resolve(__dirname, requestPath);
+    const basePath = resolve(__dirname);
+
+    if (!fullPath.startsWith(basePath)) {
+      res.statusCode = 403;
+      res.end('Forbidden');
+      return;
+    }
+
+    const filePath = fullPath;
+
     const stats = await stat(filePath);
-    
+
     if (stats.isFile()) {
       const ext = extname(filePath);
       const mimeType = mimeTypes[ext] || 'text/plain';
-      
+
       res.setHeader('Content-Type', mimeType);
       res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, OPTIONS'
+      );
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      
+
       const content = await readFile(filePath);
       res.end(content);
     } else {
@@ -38,8 +61,14 @@ const server = createServer(async (req, res) => {
       res.end('File not found');
     }
   } catch (error) {
-    res.statusCode = 404;
-    res.end('File not found');
+    if (error.code === 'ENOENT') {
+      res.statusCode = 404;
+      res.end('File not found');
+    } else {
+      console.error('Server error:', error.stack);
+      res.statusCode = 500;
+      res.end('Internal server error');
+    }
   }
 });
 
