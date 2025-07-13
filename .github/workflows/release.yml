@@ -1,0 +1,119 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run quality checks
+        run: |
+          npm run lint
+          npm run format:check
+          npx tsc --noEmit
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: |
+          npm run test:unit
+          
+      - name: Install Playwright browsers for E2E tests
+        run: npx playwright install --with-deps
+
+      - name: Run browser tests
+        run: npm run test:browser
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Extract release notes
+        id: extract_notes
+        run: |
+          # CHANGELOGから該当バージョンのリリースノートを抽出
+          VERSION=${{ steps.get_version.outputs.VERSION }}
+          if [ -f CHANGELOG.md ]; then
+            # バージョンセクションの開始行を見つける
+            START_LINE=$(grep -n "## \[${VERSION}\]" CHANGELOG.md | cut -d: -f1)
+            if [ -n "$START_LINE" ]; then
+              # 次のバージョンセクションまでを抽出
+              NEXT_LINE=$(tail -n +$((START_LINE + 1)) CHANGELOG.md | grep -n "^## \[" | head -1 | cut -d: -f1)
+              if [ -n "$NEXT_LINE" ]; then
+                END_LINE=$((START_LINE + NEXT_LINE))
+                sed -n "${START_LINE},$((END_LINE - 1))p" CHANGELOG.md > release_notes.md
+              else
+                # 最後のバージョンの場合
+                tail -n +$START_LINE CHANGELOG.md > release_notes.md
+              fi
+              # バージョンヘッダーを除去し、内容のみを取得
+              tail -n +2 release_notes.md > release_notes_clean.md
+              mv release_notes_clean.md release_notes.md
+            else
+              echo "バージョン ${VERSION} のリリースノートがCHANGELOG.mdに見つかりません" > release_notes.md
+            fi
+          else
+            echo "v${VERSION} のリリース" > release_notes.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.VERSION }}
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          body_path: release_notes.md
+          files: |
+            dist/datapage.js
+            dist/datapage.min.js
+            dist/datapage.esm.js
+            dist/datapage.cjs
+            dist/datapage.d.ts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create release summary
+        run: |
+          echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Version**: v${{ steps.get_version.outputs.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **GitHub Release**: Created with artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **NPM Package**: Published successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Quality Checks**: All passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Tests**: All tests completed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Published Files" >> $GITHUB_STEP_SUMMARY
+          echo "- \`dist/datapage.js\` (UMD版)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`dist/datapage.min.js\` (UMD minified版)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`dist/datapage.esm.js\` (ES Module版)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`dist/datapage.cjs\` (CommonJS版)" >> $GITHUB_STEP_SUMMARY
+          echo "- \`dist/datapage.d.ts\` (TypeScript型定義)" >> $GITHUB_STEP_SUMMARY
