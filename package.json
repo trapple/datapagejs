@@ -25,7 +25,8 @@
     "lint": "eslint src/ spec/ --ext .js,.ts,.cjs",
     "lint:fix": "eslint src/ spec/ --ext .js,.ts,.cjs --fix",
     "format": "prettier --write src/ spec/",
-    "format:check": "prettier --check src/ spec/"
+    "format:check": "prettier --check src/ spec/",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
