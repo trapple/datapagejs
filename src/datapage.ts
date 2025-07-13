@@ -196,14 +196,16 @@ class DataPage implements DataPageType {
    * @method hasNextPageset
    */
   hasNextPageset(): boolean {
-    return this.pageset()[this.#pagesPerPageset - 1] !== this.lastPage();
+    const pages = this.pageset();
+    return pages.length > 0 && pages[pages.length - 1] !== this.lastPage();
   }
 
   /**
    * @method hasPreviousPageset
    */
   hasPreviousPageset(): boolean {
-    return this.firstPage() !== this.pageset()[0];
+    const pages = this.pageset();
+    return pages.length > 0 && this.firstPage() !== pages[0];
   }
 
   parseVal(val: any): number {

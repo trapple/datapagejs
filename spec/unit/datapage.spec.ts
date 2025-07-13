@@ -299,4 +299,21 @@ describe('DataPage', function () {
     expect(() => pager.parseUnsignedInt('abc')).toThrow('Invalid number: abc');
     expect(() => pager.parseUnsignedInt(null)).toThrow('Invalid number: null');
   });
+
+  it('hasNextPageset and hasPreviousPageset should handle edge cases', function () {
+    // Default constructor case (0 entries)
+    const emptyPager: DataPageType = new DataPage();
+    expect(emptyPager.hasNextPageset()).toEqual(false);
+    expect(emptyPager.hasPreviousPageset()).toEqual(false);
+
+    // Small dataset where total pages < pagesPerPageset
+    const smallPager: DataPageType = new DataPage(15, 10, 1, 10); // 2 pages, pageset size 10
+    expect(smallPager.hasNextPageset()).toEqual(false);
+    expect(smallPager.hasPreviousPageset()).toEqual(false);
+
+    // Single page
+    const singlePager: DataPageType = new DataPage(5, 10, 1, 10); // 1 page, pageset size 10
+    expect(singlePager.hasNextPageset()).toEqual(false);
+    expect(singlePager.hasPreviousPageset()).toEqual(false);
+  });
 });
