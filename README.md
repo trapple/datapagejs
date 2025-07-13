@@ -15,9 +15,9 @@ DataPage.js is a simple and lightweight pagination library with full TypeScript 
 
 ```javascript
 // JavaScript
-const pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
-pager.first_page();  // 1
-pager.last_page();   // last page number
+const pager = new DataPage(totalEntries, entriesPerPage, currentPage, pagesPerPageset);
+pager.firstPage();  // 1
+pager.lastPage();   // last page number
 pager.first();       // first entry number of current page
 pager.last();        // last entry number of current page
 pager.pageset();     // [1,2,3,4,5...] page set array
@@ -30,16 +30,16 @@ import DataPage, { DataPageType } from 'datapage';
 const pager: DataPageType = new DataPage(300, 10, 2, 5);
 const pageNumbers: number[] = pager.pageset();
 
-// Backward compatibility: Direct property access
-console.log(pager._current_page); // 2
-pager._total_entries = 400; // Direct assignment
+// Modern camelCase API
+console.log(pager.currentPage()); // 2
+pager.totalEntries(400); // Set total entries
 ```
 
 **Default values:**
-- `total_entries`: 0
-- `entries_per_page`: 10  
-- `current_page`: 1
-- `pages_per_pageset`: 10
+- `totalEntries`: 0
+- `entriesPerPage`: 10  
+- `currentPage`: 1
+- `pagesPerPageset`: 10
 
 ## Installation
 
@@ -58,7 +58,7 @@ import DataPage from 'datapage';
 
 // TypeScript with types
 import DataPage, { DataPageType } from 'datapage';
-// 型として使用する場合
+// Type usage example
 const pager: DataPageType = new DataPage(100, 10, 1, 5);
 ```
 
@@ -72,7 +72,7 @@ const DataPage = require('datapage').default;
 
 #### Browser (UMD)
 ```html
-<script src="node_modules/datapage/dist/datapage.min.js"></script>
+<script src="path/to/datapage.min.js"></script>
 <script>
   const pager = new DataPage(100, 10, 1, 5);
 </script>
@@ -87,7 +87,7 @@ import DataPage, { DataPageType } from 'datapage';
 
 // Full type safety
 const pager: DataPageType = new DataPage(300, 10, 1, 5);
-const currentPage: number = pager.current_page();
+const currentPage: number = pager.currentPage();
 const pageSet: number[] = pager.pageset();
 ```
 
@@ -101,17 +101,21 @@ DataPage.js follows a clean separation between interface and implementation:
 ```typescript
 // Public interface defines the complete contract
 interface DataPageType {
-  // Public properties for backward compatibility
-  _total_entries: number;
-  _entries_per_page: number;
-  _current_page: number;
-  _pages_per_pageset: number;
-  
-  // Core pagination methods
-  current_page(val?: number): number;
-  total_entries(val?: number): number;
+  // Core pagination methods (camelCase API)
+  currentPage(val?: number): number;
+  totalEntries(val?: number): number;
+  entriesPerPage(val?: number): number;
+  entriesOnThisPage(): number;
+  firstPage(): number;
+  lastPage(): number;
+  first(): number;
+  last(): number;
+  previousPage(): number | undefined;
+  nextPage(): number | undefined;
+  pagesPerPageset(val?: number): number;
   pageset(): number[];
-  // ... other methods
+  hasNextPageset(): boolean;
+  hasPreviousPageset(): boolean;
   
   // Utility methods
   parseVal(val: any): number;
@@ -121,14 +125,19 @@ interface DataPageType {
 // Implementation class with modern ES6 features
 class DataPage implements DataPageType {
   // Private fields using # syntax for true encapsulation
-  #total_entries: number;
-  #entries_per_page: number;
-  // ...
+  #totalEntries: number;
+  #entriesPerPage: number;
+  #currentPage: number;
+  #pagesPerPageset: number;
   
-  // Public getters/setters for backward compatibility
-  get _total_entries(): number { return this.#total_entries; }
-  set _total_entries(value: number) { this.#total_entries = value; }
-  // ...
+  constructor(totalEntries?: number, entriesPerPage?: number, currentPage?: number, pagesPerPageset?: number) {
+    // Implementation details...
+  }
+  
+  // Modern camelCase API methods
+  currentPage(val?: number): number { /* ... */ }
+  totalEntries(val?: number): number { /* ... */ }
+  // ... other methods
 }
 
 // Clean exports
@@ -138,10 +147,10 @@ export type { DataPageType };
 
 This design provides several benefits:
 - **Type Safety**: Clear contracts through interfaces
-- **Encapsulation**: Private fields ensure data integrity while providing public access
-- **Backward Compatibility**: Legacy public properties remain accessible
-- **Maintainability**: Implementation can evolve without breaking existing code
-- **Modern JavaScript**: Uses ES6+ features while maintaining compatibility
+- **Encapsulation**: Private fields ensure data integrity  
+- **Modern API**: Clean camelCase method names following JavaScript conventions
+- **Maintainability**: Implementation can evolve independently from interface
+- **Modern JavaScript**: Uses ES6+ features including private fields and ES2022 syntax
 
 ## API Reference
 
@@ -149,82 +158,82 @@ This design provides several benefits:
 
 ```typescript
 new DataPage()
-new DataPage(total_entries: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number)
+new DataPage(totalEntries: number, entriesPerPage?: number, currentPage?: number, pagesPerPageset?: number)
 ```
 
 **Parameters:**
-- `total_entries`: Total number of entries (default: 0)
-- `entries_per_page`: Number of entries per page (default: 10)
-- `current_page`: Current page number (default: 1)
-- `pages_per_pageset`: Number of pages per pageset (default: 10)
+- `totalEntries`: Total number of entries (default: 0)
+- `entriesPerPage`: Number of entries per page (default: 10)
+- `currentPage`: Current page number (default: 1)
+- `pagesPerPageset`: Number of pages per pageset (default: 10)
 
 ```typescript
 // Example
 const pager = new DataPage(300, 10, 1, 5);
 ```
 
-### entries_per_page(val?: number): number
+### entriesPerPage(val?: number): number
 
 Sets or gets the number of entries per page.
 
 ```typescript
 // Set
-pager.entries_per_page(15);
+pager.entriesPerPage(15);
 // Get
-const entriesPerPage: number = pager.entries_per_page();
+const entriesPerPage: number = pager.entriesPerPage();
 ```
 
-### current_page(val?: number): number
+### currentPage(val?: number): number
 
 Sets or gets the current page number.
 
 ```typescript
 // Set
-pager.current_page(2);
+pager.currentPage(2);
 // Get
-const currentPage: number = pager.current_page();
+const currentPage: number = pager.currentPage();
 ```
 
-### total_entries(val?: number): number
+### totalEntries(val?: number): number
 
 Sets or gets the total number of entries.
 
 ```typescript
 // Set
-pager.total_entries(300);
+pager.totalEntries(300);
 // Get
-const totalEntries: number = pager.total_entries();
+const totalEntries: number = pager.totalEntries();
 ```
 
-### entries_on_this_page(): number
+### entriesOnThisPage(): number
 
 Returns the number of entries on the current page.
 
 ```typescript
 // Normal page
 const pager = new DataPage(300, 10, 2, 5);
-pager.entries_on_this_page(); // returns 10
+pager.entriesOnThisPage(); // returns 10
 
 // Last page with remainder
 const pager2 = new DataPage(317, 10, 32, 5);
-pager2.entries_on_this_page(); // returns 7
+pager2.entriesOnThisPage(); // returns 7
 ```
 
-### first_page(): number
+### firstPage(): number
 
 Always returns 1.
 
 ```typescript
-pager.first_page(); // 1
+pager.firstPage(); // 1
 ```
 
-### last_page(): number
+### lastPage(): number
 
 Returns the last page number.
 
 ```typescript
 const pager = new DataPage(500, 30, 1);
-pager.last_page(); // returns 17
+pager.lastPage(); // returns 17
 ```
 
 ### first(): number
@@ -245,39 +254,39 @@ const pager = new DataPage(100, 10, 3);
 pager.last(); // returns 30
 ```
 
-### previous_page(): number | undefined
+### previousPage(): number | undefined
 
 Returns the previous page number, or `undefined` if on the first page.
 
 ```typescript
 const pager = new DataPage(100, 10, 3);
-pager.previous_page(); // returns 2
+pager.previousPage(); // returns 2
 
 const pager2 = new DataPage(100, 10, 1);
-pager2.previous_page(); // returns undefined
+pager2.previousPage(); // returns undefined
 ```
 
-### next_page(): number | undefined
+### nextPage(): number | undefined
 
 Returns the next page number, or `undefined` if on the last page.
 
 ```typescript
 const pager = new DataPage(100, 10, 3);
-pager.next_page(); // returns 4
+pager.nextPage(); // returns 4
 
 const pager2 = new DataPage(100, 10, 10);
-pager2.next_page(); // returns undefined
+pager2.nextPage(); // returns undefined
 ```
 
-### pages_per_pageset(val?: number): number
+### pagesPerPageset(val?: number): number
 
 Sets or gets the number of pages per pageset.
 
 ```typescript
 // Set
-pager.pages_per_pageset(5);
+pager.pagesPerPageset(5);
 // Get
-const pagesPerPageset: number = pager.pages_per_pageset();
+const pagesPerPageset: number = pager.pagesPerPageset();
 ```
 
 ### pageset(): number[]
@@ -289,22 +298,22 @@ const pager = new DataPage(500, 10, 7, 5);
 pager.pageset(); // returns [5, 6, 7, 8, 9]
 ```
 
-### has_next_pageset(): boolean
+### hasNextPageset(): boolean
 
 Returns whether there is a next pageset.
 
 ```typescript
 const pager = new DataPage(500, 10, 7, 5);
-pager.has_next_pageset(); // returns true or false
+pager.hasNextPageset(); // returns true or false
 ```
 
-### has_previous_pageset(): boolean
+### hasPreviousPageset(): boolean
 
 Returns whether there is a previous pageset.
 
 ```typescript
 const pager = new DataPage(500, 10, 7, 5);
-pager.has_previous_pageset(); // returns true or false
+pager.hasPreviousPageset(); // returns true or false
 ```
 
 ### parseVal(val: any): number
@@ -338,7 +347,7 @@ const stringValue = pager.parseUnsignedInt("50"); // returns 50
 - 🎯 **ES6 Classes**: Modern ES6 class syntax with private fields
 - 📦 **Multiple Formats**: UMD, ES Modules, and CommonJS support
 - 🧪 **Well Tested**: Comprehensive test suite with 18 test cases
-- 🔄 **100% Backward Compatible**: Existing JavaScript APIs fully maintained
+- 🚀 **Modern API**: Clean camelCase naming following JavaScript conventions
 - 📊 **Source Maps**: Full source map support for all builds
 - 🚀 **Lightweight**: Only 4KB minified
 

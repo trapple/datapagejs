@@ -10,25 +10,25 @@ describe('CommonJS imports', () => {
       
       const instance = new DataPage(100, 10, 1, 5);
       expect(instance.constructor.name).toBe('DataPage');
-      expect(instance.current_page()).toBe(1);
-      expect(instance.total_entries()).toBe(100);
-      expect(instance.entries_per_page()).toBe(10);
+      expect(instance.currentPage()).toBe(1);
+      expect(instance.totalEntries()).toBe(100);
+      expect(instance.entriesPerPage()).toBe(10);
     });
 
     it('should work with all methods', () => {
       const DataPage = require('../index.cjs');
       const pager = new DataPage(50, 10, 3, 5);
       
-      expect(pager.first_page()).toBe(1);
-      expect(pager.last_page()).toBe(5);
+      expect(pager.firstPage()).toBe(1);
+      expect(pager.lastPage()).toBe(5);
       expect(pager.first()).toBe(21);
       expect(pager.last()).toBe(30);
-      expect(pager.previous_page()).toBe(2);
-      expect(pager.next_page()).toBe(4);
-      expect(pager.entries_on_this_page()).toBe(10);
+      expect(pager.previousPage()).toBe(2);
+      expect(pager.nextPage()).toBe(4);
+      expect(pager.entriesOnThisPage()).toBe(10);
       expect(Array.isArray(pager.pageset())).toBe(true);
-      expect(typeof pager.has_next_pageset()).toBe('boolean');
-      expect(typeof pager.has_previous_pageset()).toBe('boolean');
+      expect(typeof pager.hasNextPageset()).toBe('boolean');
+      expect(typeof pager.hasPreviousPageset()).toBe('boolean');
     });
   });
 
@@ -39,9 +39,9 @@ describe('CommonJS imports', () => {
       
       const instance = new DataPage(200, 20, 2, 10);
       expect(instance.constructor.name).toBe('DataPage');
-      expect(instance.current_page()).toBe(2);
-      expect(instance.total_entries()).toBe(200);
-      expect(instance.entries_per_page()).toBe(20);
+      expect(instance.currentPage()).toBe(2);
+      expect(instance.totalEntries()).toBe(200);
+      expect(instance.entriesPerPage()).toBe(20);
     });
 
     it('should have the same functionality as direct import', () => {
@@ -52,7 +52,7 @@ describe('CommonJS imports', () => {
       const instance2 = new DirectDataPage(100, 10, 1, 5);
       
       expect(instance1.constructor).toBe(instance2.constructor);
-      expect(instance1.current_page()).toBe(instance2.current_page());
+      expect(instance1.currentPage()).toBe(instance2.currentPage());
     });
   });
 
@@ -63,9 +63,9 @@ describe('CommonJS imports', () => {
       
       const instance = new DataPage(300, 15, 5, 7);
       expect(instance.constructor.name).toBe('DataPage');
-      expect(instance.current_page()).toBe(5);
-      expect(instance.total_entries()).toBe(300);
-      expect(instance.entries_per_page()).toBe(15);
+      expect(instance.currentPage()).toBe(5);
+      expect(instance.totalEntries()).toBe(300);
+      expect(instance.entriesPerPage()).toBe(15);
     });
 
     it('should be identical to direct import', () => {
@@ -89,8 +89,8 @@ describe('CommonJS imports', () => {
       expect(instance1.constructor).toBe(instance2.constructor);
       expect(instance2.constructor).toBe(instance3.constructor);
       
-      expect(instance1.current_page()).toBe(instance2.current_page());
-      expect(instance2.current_page()).toBe(instance3.current_page());
+      expect(instance1.currentPage()).toBe(instance2.currentPage());
+      expect(instance2.currentPage()).toBe(instance3.currentPage());
       
       expect(instance1.pageset()).toEqual(instance2.pageset());
       expect(instance2.pageset()).toEqual(instance3.pageset());

@@ -15,9 +15,9 @@ DataPage.jsはシンプルで軽量なページネーションライブラリで
 
 ```javascript
 // JavaScript
-const pager = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
-pager.first_page();  // 1
-pager.last_page();   // 最終ページ番号
+const pager = new DataPage(totalEntries, entriesPerPage, currentPage, pagesPerPageset);
+pager.firstPage();  // 1
+pager.lastPage();   // 最終ページ番号
 pager.first();       // このページの最初のエントリ番号
 pager.last();        // このページの最後のエントリ番号
 pager.pageset();     // [1,2,3,4,5...] ページセット配列
@@ -30,16 +30,16 @@ import DataPage, { DataPageType } from 'datapage';
 const pager: DataPageType = new DataPage(300, 10, 2, 5);
 const pageNumbers: number[] = pager.pageset();
 
-// 後方互換性: 直接プロパティアクセス
-console.log(pager._current_page); // 2
-pager._total_entries = 400; // 直接代入
+// Modern camelCase API
+console.log(pager.currentPage()); // 2
+pager.totalEntries(400); // Set total entries
 ```
 
 **デフォルト値:**
-- `total_entries`: 0
-- `entries_per_page`: 10  
-- `current_page`: 1
-- `pages_per_pageset`: 10
+- `totalEntries`: 0
+- `entriesPerPage`: 10  
+- `currentPage`: 1
+- `pagesPerPageset`: 10
 
 ## インストール
 
@@ -72,7 +72,7 @@ const DataPage = require('datapage').default;
 
 #### ブラウザ（UMD）
 ```html
-<script src="node_modules/datapage/dist/datapage.min.js"></script>
+<script src="path/to/datapage.min.js"></script>
 <script>
   const pager = new DataPage(100, 10, 1, 5);
 </script>
@@ -87,7 +87,7 @@ import DataPage, { DataPageType } from 'datapage';
 
 // 完全な型安全性
 const pager: DataPageType = new DataPage(300, 10, 1, 5);
-const currentPage: number = pager.current_page();
+const currentPage: number = pager.currentPage();
 const pageSet: number[] = pager.pageset();
 ```
 
@@ -101,17 +101,21 @@ DataPage.jsはインターフェースと実装の明確な分離に従ってい
 ```typescript
 // 公開インターフェースが完全な契約を定義
 interface DataPageType {
-  // 後方互換性のためのパブリックプロパティ
-  _total_entries: number;
-  _entries_per_page: number;
-  _current_page: number;
-  _pages_per_pageset: number;
-  
-  // コアページネーションメソッド
-  current_page(val?: number): number;
-  total_entries(val?: number): number;
+  // コアページネーションメソッド（camelCase API）
+  currentPage(val?: number): number;
+  totalEntries(val?: number): number;
+  entriesPerPage(val?: number): number;
+  entriesOnThisPage(): number;
+  firstPage(): number;
+  lastPage(): number;
+  first(): number;
+  last(): number;
+  previousPage(): number | undefined;
+  nextPage(): number | undefined;
+  pagesPerPageset(val?: number): number;
   pageset(): number[];
-  // ... その他のメソッド
+  hasNextPageset(): boolean;
+  hasPreviousPageset(): boolean;
   
   // ユーティリティメソッド
   parseVal(val: any): number;
@@ -121,14 +125,19 @@ interface DataPageType {
 // 現代的なES6機能を使用した実装クラス
 class DataPage implements DataPageType {
   // 真のカプセル化のための# 構文によるプライベートフィールド
-  #total_entries: number;
-  #entries_per_page: number;
-  // ...
+  #totalEntries: number;
+  #entriesPerPage: number;
+  #currentPage: number;
+  #pagesPerPageset: number;
   
-  // 後方互換性のためのパブリックgetter/setter
-  get _total_entries(): number { return this.#total_entries; }
-  set _total_entries(value: number) { this.#total_entries = value; }
-  // ...
+  constructor(totalEntries?: number, entriesPerPage?: number, currentPage?: number, pagesPerPageset?: number) {
+    // Implementation details...
+  }
+  
+  // Modern camelCase API methods
+  currentPage(val?: number): number { /* ... */ }
+  totalEntries(val?: number): number { /* ... */ }
+  // ... other methods
 }
 
 // クリーンなエクスポート
@@ -138,10 +147,10 @@ export type { DataPageType };
 
 この設計により、以下のような利点があります：
 - **型安全性**: インターフェースによる明確な契約
-- **カプセル化**: パブリックアクセスを提供しながらプライベートフィールドによるデータ整合性の保証
-- **後方互換性**: レガシーなパブリックプロパティへのアクセスが可能
-- **保守性**: 既存のコードを壊すことなく実装を進化させることが可能
-- **現代的なJavaScript**: 互換性を維持しつつES6+機能を活用
+- **カプセル化**: プライベートフィールドによるデータ整合性の保証  
+- **モダンAPI**: JavaScript標準に準拠したcamelCase メソッド名
+- **保守性**: 実装がインターフェースから独立して進化可能
+- **現代的なJavaScript**: ES6+機能およびES2022プライベートフィールドを活用
 
 ## APIリファレンス
 
@@ -149,82 +158,82 @@ export type { DataPageType };
 
 ```typescript
 new DataPage()
-new DataPage(total_entries: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number)
+new DataPage(totalEntries: number, entriesPerPage?: number, currentPage?: number, pagesPerPageset?: number)
 ```
 
 **パラメータ:**
-- `total_entries`: 総エントリ数（デフォルト: 0）
-- `entries_per_page`: 1ページあたりのエントリ数（デフォルト: 10）
-- `current_page`: 現在のページ番号（デフォルト: 1）
-- `pages_per_pageset`: ページセットあたりのページ数（デフォルト: 10）
+- `totalEntries`: 総エントリ数（デフォルト: 0）
+- `entriesPerPage`: 1ページあたりのエントリ数（デフォルト: 10）
+- `currentPage`: 現在のページ番号（デフォルト: 1）
+- `pagesPerPageset`: ページセットあたりのページ数（デフォルト: 10）
 
 ```typescript
 // 例
 const pager = new DataPage(300, 10, 1, 5);
 ```
 
-### entries_per_page(val?: number): number
+### entriesPerPage(val?: number): number
 
 1ページあたりのエントリ数を設定または取得します。
 
 ```typescript
 // 設定
-pager.entries_per_page(15);
+pager.entriesPerPage(15);
 // 取得
-const entriesPerPage: number = pager.entries_per_page();
+const entriesPerPage: number = pager.entriesPerPage();
 ```
 
-### current_page(val?: number): number
+### currentPage(val?: number): number
 
 現在のページ番号を設定または取得します。
 
 ```typescript
 // 設定
-pager.current_page(2);
+pager.currentPage(2);
 // 取得
-const currentPage: number = pager.current_page();
+const currentPage: number = pager.currentPage();
 ```
 
-### total_entries(val?: number): number
+### totalEntries(val?: number): number
 
 総エントリ数を設定または取得します。
 
 ```typescript
 // 設定
-pager.total_entries(300);
+pager.totalEntries(300);
 // 取得
-const totalEntries: number = pager.total_entries();
+const totalEntries: number = pager.totalEntries();
 ```
 
-### entries_on_this_page(): number
+### entriesOnThisPage(): number
 
 現在のページのエントリ数を返します。
 
 ```typescript
 // 通常ページの場合
 const pager = new DataPage(300, 10, 2, 5);
-pager.entries_on_this_page(); // 10 を返す
+pager.entriesOnThisPage(); // 10 を返す
 
 // 最終ページで端数がある場合
 const pager2 = new DataPage(317, 10, 32, 5);
-pager2.entries_on_this_page(); // 7 を返す
+pager2.entriesOnThisPage(); // 7 を返す
 ```
 
-### first_page(): number
+### firstPage(): number
 
 常に 1 を返します。
 
 ```typescript
-pager.first_page(); // 1
+pager.firstPage(); // 1
 ```
 
-### last_page(): number
+### lastPage(): number
 
 最終ページ番号を返します。
 
 ```typescript
 const pager = new DataPage(500, 30, 1);
-pager.last_page(); // 17 を返す
+pager.lastPage(); // 17 を返す
 ```
 
 ### first(): number
@@ -245,39 +254,39 @@ const pager = new DataPage(100, 10, 3);
 pager.last(); // 30 を返す
 ```
 
-### previous_page(): number | undefined
+### previousPage(): number | undefined
 
 前のページ番号を返します。最初のページの場合は `undefined` を返します。
 
 ```typescript
 const pager = new DataPage(100, 10, 3);
-pager.previous_page(); // 2 を返す
+pager.previousPage(); // 2 を返す
 
 const pager2 = new DataPage(100, 10, 1);
-pager2.previous_page(); // undefined を返す
+pager2.previousPage(); // undefined を返す
 ```
 
-### next_page(): number | undefined
+### nextPage(): number | undefined
 
 次のページ番号を返します。最終ページの場合は `undefined` を返します。
 
 ```typescript
 const pager = new DataPage(100, 10, 3);
-pager.next_page(); // 4 を返す
+pager.nextPage(); // 4 を返す
 
 const pager2 = new DataPage(100, 10, 10);
-pager2.next_page(); // undefined を返す
+pager2.nextPage(); // undefined を返す
 ```
 
-### pages_per_pageset(val?: number): number
+### pagesPerPageset(val?: number): number
 
 ページセットあたりのページ数を設定または取得します。
 
 ```typescript
 // 設定
-pager.pages_per_pageset(5);
+pager.pagesPerPageset(5);
 // 取得
-const pagesPerPageset: number = pager.pages_per_pageset();
+const pagesPerPageset: number = pager.pagesPerPageset();
 ```
 
 ### pageset(): number[]
@@ -289,22 +298,22 @@ const pager = new DataPage(500, 10, 7, 5);
 pager.pageset(); // [5, 6, 7, 8, 9] を返す
 ```
 
-### has_next_pageset(): boolean
+### hasNextPageset(): boolean
 
 次のページセットが存在するかどうかを返します。
 
 ```typescript
 const pager = new DataPage(500, 10, 7, 5);
-pager.has_next_pageset(); // true または false を返す
+pager.hasNextPageset(); // true または false を返す
 ```
 
-### has_previous_pageset(): boolean
+### hasPreviousPageset(): boolean
 
 前のページセットが存在するかどうかを返します。
 
 ```typescript
 const pager = new DataPage(500, 10, 7, 5);
-pager.has_previous_pageset(); // true または false を返す
+pager.hasPreviousPageset(); // true または false を返す
 ```
 
 ## 機能
@@ -314,7 +323,7 @@ pager.has_previous_pageset(); // true または false を返す
 - 🎯 **ES6クラス**: プライベートフィールドを持つ現代的なES6クラス構文
 - 📦 **複数フォーマット**: UMD、ES Modules、CommonJSサポート
 - 🧪 **十分にテスト済み**: 18のテストケースによる包括的なテストスイート
-- 🔄 **100%後方互換**: 既存のJavaScript APIを完全に維持
+- 🚀 **モダンAPI**: JavaScript標準に準拠したcamelCase命名規約
 - 📊 **ソースマップ**: 全ビルドでソースマップサポート
 - 🚀 **軽量**: minified版は4KBのみ
 
