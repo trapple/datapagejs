@@ -73,6 +73,16 @@ jobs:
           fi
         shell: bash
 
+      - name: Debug file structure
+        run: |
+          echo "Current directory structure:"
+          ls -la
+          echo "Dist directory contents:"
+          ls -la dist/
+          echo "Spec fixtures directory:"
+          ls -la spec/fixtures/
+        shell: bash
+
       - name: Run browser tests
         run: npm run test:browser
 

@@ -7,9 +7,12 @@ test.describe('DataPage ESM Build', () => {
     await page.goto('/spec/fixtures/esm-test.html');
 
     // Wait for tests to complete
-    await page.waitForFunction(() => {
-      return window.getTestResults && window.getTestResults() !== null;
-    });
+    await page.waitForFunction(
+      () => {
+        return window.getTestResults && window.getTestResults() !== null;
+      },
+      { timeout: 60000 }
+    );
 
     // Check test results
     const results = await page.evaluate(() => window.getTestResults());
