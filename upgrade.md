@@ -114,14 +114,14 @@
   - UMD/ESM互換性問題の解決 ✅
 - 成果物: 型安全なテストスイート ✅
 
-#### Phase 2.2: テストフレームワーク移行
+#### Phase 2.3: 追加機能
 - Jasmine → Vitest ✅（完了済み）
 - ブラウザテストの追加（Playwright）
+- pre-commit hooks (husky)
 
-#### Phase 2.3: コード品質向上
+#### Phase 2.4: コード品質向上
 - ESLint設定 ✅（完了済み）
 - Prettier設定 ✅（完了済み）
-- pre-commit hooks (husky)
 
 ### Phase 3: 機能拡張
 1. **Tree-shaking対応**
@@ -250,15 +250,20 @@ npm run format       # Prettier整形
 4. **Phase 2.1d**: ビルド設定調整（リスク：中） ✅
 5. **Phase 2.1e**: テストの型安全化（リスク：低） ✅
 
-**Phase 2.2: 追加機能**
+**Phase 2.2: モダンJS命名規約への移行** ✅
+- snake_case → camelCase API移行（TDD方式）
+- v2.0.0リリース（破壊的変更）
+- ドキュメント完全同期
+
+**Phase 2.3: 追加機能**
 - ブラウザテストの追加（Playwright）
 - pre-commit hooks (husky)
 
-**Phase 2.3: コード統一**
+**Phase 2.4: コード統一**
 - 一時的な2ファイル構成（datapage.js + datapage.esm.js）の解消
 - 単一ソースからの多形式出力
 
-**Phase 2.4: CI/CD整備**
+**Phase 2.5: CI/CD整備**
 - GitHub Actions設定
 - 自動テスト・ビルド・リリース
 
