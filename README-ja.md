@@ -15,12 +15,17 @@ DataPage.jsはシンプルで軽量なページネーションライブラリで
 
 ```javascript
 // JavaScript
-const pager = new DataPage(totalEntries, entriesPerPage, currentPage, pagesPerPageset);
-pager.firstPage();  // 1
-pager.lastPage();   // 最終ページ番号
-pager.first();       // このページの最初のエントリ番号
-pager.last();        // このページの最後のエントリ番号
-pager.pageset();     // [1,2,3,4,5...] ページセット配列
+const pager = new DataPage(
+  totalEntries,
+  entriesPerPage,
+  currentPage,
+  pagesPerPageset
+);
+pager.firstPage(); // 1
+pager.lastPage(); // 最終ページ番号
+pager.first(); // このページの最初のエントリ番号
+pager.last(); // このページの最後のエントリ番号
+pager.pageset(); // [1,2,3,4,5...] ページセット配列
 ```
 
 ```typescript
@@ -36,8 +41,9 @@ pager.totalEntries(400); // Set total entries
 ```
 
 **デフォルト値:**
+
 - `totalEntries`: 0
-- `entriesPerPage`: 10  
+- `entriesPerPage`: 10
 - `currentPage`: 1
 - `pagesPerPageset`: 10
 
@@ -52,6 +58,7 @@ npm install datapage
 ### インポート方法
 
 #### ES Modules（推奨）
+
 ```javascript
 // デフォルトインポート（推奨）
 import DataPage from 'datapage';
@@ -63,6 +70,7 @@ const pager: DataPageType = new DataPage(100, 10, 1, 5);
 ```
 
 #### CommonJS（レガシーサポート）
+
 ```javascript
 // 全てのパターンをサポート:
 const DataPage = require('datapage');
@@ -71,6 +79,7 @@ const DataPage = require('datapage').default;
 ```
 
 #### ブラウザ（UMD）
+
 ```html
 <script src="path/to/datapage.min.js"></script>
 <script>
@@ -116,7 +125,7 @@ interface DataPageType {
   pageset(): number[];
   hasNextPageset(): boolean;
   hasPreviousPageset(): boolean;
-  
+
   // ユーティリティメソッド
   parseVal(val: any): number;
   parseUnsignedInt(val: any): number;
@@ -129,14 +138,23 @@ class DataPage implements DataPageType {
   #entriesPerPage: number;
   #currentPage: number;
   #pagesPerPageset: number;
-  
-  constructor(totalEntries?: number, entriesPerPage?: number, currentPage?: number, pagesPerPageset?: number) {
+
+  constructor(
+    totalEntries?: number,
+    entriesPerPage?: number,
+    currentPage?: number,
+    pagesPerPageset?: number
+  ) {
     // Implementation details...
   }
-  
+
   // Modern camelCase API methods
-  currentPage(val?: number): number { /* ... */ }
-  totalEntries(val?: number): number { /* ... */ }
+  currentPage(val?: number): number {
+    /* ... */
+  }
+  totalEntries(val?: number): number {
+    /* ... */
+  }
   // ... other methods
 }
 
@@ -146,8 +164,9 @@ export type { DataPageType };
 ```
 
 この設計により、以下のような利点があります：
+
 - **型安全性**: インターフェースによる明確な契約
-- **カプセル化**: プライベートフィールドによるデータ整合性の保証  
+- **カプセル化**: プライベートフィールドによるデータ整合性の保証
 - **モダンAPI**: JavaScript標準に準拠したcamelCase メソッド名
 - **保守性**: 実装がインターフェースから独立して進化可能
 - **現代的なJavaScript**: ES6+機能およびES2022プライベートフィールドを活用
@@ -162,6 +181,7 @@ new DataPage(totalEntries: number, entriesPerPage?: number, currentPage?: number
 ```
 
 **パラメータ:**
+
 - `totalEntries`: 総エントリ数（デフォルト: 0）
 - `entriesPerPage`: 1ページあたりのエントリ数（デフォルト: 10）
 - `currentPage`: 現在のページ番号（デフォルト: 1）
@@ -322,9 +342,11 @@ pager.hasPreviousPageset(); // true または false を返す
 - 🏗️ **クリーンアーキテクチャ**: 保守性を向上させるインターフェースと実装の分離
 - 🎯 **ES6クラス**: プライベートフィールドを持つ現代的なES6クラス構文
 - 📦 **複数フォーマット**: UMD、ES Modules、CommonJSサポート
-- 🧪 **十分にテスト済み**: 18のテストケースによる包括的なテストスイート
+- 🧪 **十分にテスト済み**: 36のユニットテストと6のブラウザテストによる包括的なテストスイート
+- 🌐 **ブラウザテスト済み**: Playwrightによるマルチブラウザテスト（Chromium、Firefox、WebKit）
 - 🚀 **モダンAPI**: JavaScript標準に準拠したcamelCase命名規約
 - 📊 **ソースマップ**: 全ビルドでソースマップサポート
+- 🎣 **品質保証**: ESLintとPrettierによるpre-commitフック
 - 🚀 **軽量**: minified版は4KBのみ
 
 ## ブラウザサポート
@@ -346,6 +368,7 @@ dist/*.map               # 全形式のソースマップ
 ```
 
 **形式の詳細:**
+
 - **UMD (`datapage.js`)**: 幅広い互換性のためのUniversal Module Definition
 - **UMD Minified (`datapage.min.js`)**: 本番用の圧縮版
 - **ES Module (`datapage.esm.js`)**: バンドラー用のモダンES6モジュール形式
@@ -356,8 +379,17 @@ dist/*.map               # 全形式のソースマップ
 # 依存関係のインストール
 npm install
 
-# テスト実行
+# 全テスト実行（ユニット + ブラウザ）
 npm test
+
+# ユニットテストのみ実行
+npm run test:unit
+
+# ブラウザテストのみ実行
+npm run test:browser
+
+# カバレッジ付きテスト実行
+npm run test:coverage
 
 # 全形式ビルド
 npm run build
