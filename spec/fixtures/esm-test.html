@@ -147,8 +147,8 @@
             `;
       }
 
-        // Run tests when page loads
-        window.addEventListener('load', runTests);
+        // Run tests immediately since module scripts run after DOM is loaded
+        runTests();
 
         // Expose for Playwright
         window.getTestResults = function () {
