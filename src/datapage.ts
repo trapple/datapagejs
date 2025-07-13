@@ -25,11 +25,11 @@ class DataPage implements DataPageType {
   #currentPage: number;
   #pagesPerPageset: number;
 
-  constructor(total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number) {
-    this.#totalEntries     = total_entries || 0;
-    this.#entriesPerPage  = entries_per_page || 10;
-    this.#currentPage      = current_page || 1;
-    this.#pagesPerPageset = pages_per_pageset || 10;
+  constructor(totalEntries?: number, entriesPerPage?: number, currentPage?: number, pagesPerPageset?: number) {
+    this.#totalEntries     = totalEntries || 0;
+    this.#entriesPerPage  = entriesPerPage || 10;
+    this.#currentPage      = currentPage || 1;
+    this.#pagesPerPageset = pagesPerPageset || 10;
 
     this.#totalEntries     = this.parseUnsignedInt( this.#totalEntries );
     this.#entriesPerPage  = this.parseVal( this.#entriesPerPage );

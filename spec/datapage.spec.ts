@@ -87,20 +87,20 @@ describe("DataPage", function () {
   });
 
   it('entries_on_this_page', function () {
-    const total_entries: number = 315,
-        entries_per_page: number = 10,
-        current_page: number = 2,
-        pages_per_pageset: number = 5;
-    const pager: DataPageType = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+    const totalEntries: number = 315,
+        entriesPerPage: number = 10,
+        currentPage: number = 2,
+        pagesPerPageset: number = 5;
+    const pager: DataPageType = new DataPage(totalEntries, entriesPerPage, currentPage, pagesPerPageset);
     expect( pager.entriesOnThisPage() ).toEqual(10);
   });
 
   it('entries_on_this_page with lastpage', function () {
-    const total_entries: number = 315,
-        entries_per_page: number = 10,
-        current_page: number = 32,
-        pages_per_pageset: number = 5;
-    const pager: DataPageType = new DataPage(total_entries, entries_per_page, current_page, pages_per_pageset);
+    const totalEntries: number = 315,
+        entriesPerPage: number = 10,
+        currentPage: number = 32,
+        pagesPerPageset: number = 5;
+    const pager: DataPageType = new DataPage(totalEntries, entriesPerPage, currentPage, pagesPerPageset);
     expect( pager.entriesOnThisPage() ).toEqual(5);
   });
 
