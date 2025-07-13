@@ -366,7 +366,7 @@ const stringValue = pager.parseUnsignedInt('50'); // returns 50
 - 🏗️ **Clean Architecture**: Interface and implementation separation for better maintainability
 - 🎯 **ES6 Classes**: Modern ES6 class syntax with private fields
 - 📦 **Multiple Formats**: UMD, ES Modules, and CommonJS support
-- 🧪 **Well Tested**: Comprehensive test suite with 36 unit tests and 6 browser tests
+- 🧪 **Well Tested**: Comprehensive test suite with 36 unit tests and 7 browser tests
 - 🌐 **Browser Tested**: Multi-browser testing with Playwright (Chromium, Firefox, WebKit)
 - 🚀 **Modern API**: Clean camelCase naming following JavaScript conventions
 - 📊 **Source Maps**: Full source map support for all builds
