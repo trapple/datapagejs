@@ -289,10 +289,10 @@ npm run format       # Prettier整形
 - テストファイル構造の整理（Vitest/Playwright分離） ✅
 - pre-commit hooks (husky) ✅
 
-**Phase 2.4: コード統一**
+**Phase 2.4: コード統一** ✅
 
-- 一時的な2ファイル構成（datapage.js + datapage.esm.js）の解消
-- 単一ソースからの多形式出力
+- 一時的な2ファイル構成（datapage.js + datapage.esm.js）の解消 ✅
+- 単一ソースからの多形式出力 ✅
 
 **Phase 2.5: CI/CD整備**
 
@@ -636,3 +636,75 @@ spec/
 - 🎯 **lint-staged 16.1.2**: ステージングファイル対象の効率的処理
 - ⚙️ **package.json統合**: 設定の一元管理
 - 🔄 **prepare script**: npm install時の自動セットアップ
+
+## Phase 2.4 完了記録 - コード統一
+
+### ✅ 完了済み（2025年7月）
+
+**🎯 単一ソース構成への完全移行**
+
+**実装完了内容:**
+
+- 🗂️ **2ファイル構成の解消**: レガシーESMファイル削除によるコード重複解消
+- 📦 **単一ソースビルド**: `src/datapage.ts`から4形式の自動生成
+- 🔧 **ビルドシステム統一**: Rollup設定による効率的な多形式出力
+
+**技術的成果:**
+
+- 🚫 **レガシーファイル削除**: `src/datapage.esm.js`の完全除去
+- 📁 **クリーンな構成**: `src/datapage.ts`単一ソースファイル
+- 🏗️ **効率的ビルド**: 単一入力から4形式出力（CJS、UMD、UMD minified、ESM）
+- 📊 **型定義統合**: TypeScriptコンパイラによる`.d.ts`自動生成
+- 🗺️ **ソースマップ完備**: 全出力形式でのデバッグサポート
+
+**ファイル構成変更:**
+
+**Before（Phase 2.3時点）:**
+
+```
+src/
+├── datapage.ts          # メインのTypeScriptソース
+└── datapage.esm.js      # レガシーESMファイル（重複）
+```
+
+**After（Phase 2.4完了時点）:**
+
+```
+src/
+└── datapage.ts          # 単一のTypeScriptソース
+
+dist/ (自動生成)
+├── datapage.cjs         # CommonJS版
+├── datapage.js          # UMD版
+├── datapage.min.js      # UMD minified版
+├── datapage.esm.js      # ES Module版（自動生成）
+├── datapage.d.ts        # TypeScript型定義
+└── *.map                # 全形式のソースマップ
+```
+
+**品質保証成果:**
+
+- 🎯 **36ユニットテスト**: 単一ソース構成で全て通過
+- 🌐 **21ブラウザテスト**: 3ブラウザ × 7テストで全形式動作確認
+- 🔄 **ビルド安定性**: TypeScript → 多形式出力の確実な変換
+- 📋 **保守性向上**: 1ファイル編集で全形式に反映
+
+**ビルドプロセス最適化:**
+
+```bash
+# 単一コマンドで完全ビルド
+npm run build
+  ├── tsc --emitDeclarationOnly  # 型定義生成
+  └── rollup -c                  # 4形式並列生成
+    ├── dist/datapage.cjs       # CommonJS
+    ├── dist/datapage.js        # UMD
+    ├── dist/datapage.min.js    # UMD minified
+    └── dist/datapage.esm.js    # ES Module
+```
+
+**メンテナンス負荷軽減:**
+
+- 💡 **単一編集点**: `src/datapage.ts`のみ編集で全形式に反映
+- 🚫 **重複管理不要**: レガシーファイルの同期作業完全廃止
+- ⚡ **開発効率向上**: 1つのファイルでの集中開発
+- 🔍 **デバッグ簡素化**: 単一ソースによるトレーサビリティ向上
