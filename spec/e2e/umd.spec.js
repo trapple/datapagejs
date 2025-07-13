@@ -42,8 +42,26 @@ test.describe('DataPage UMD Build', () => {
   }) => {
     await page.goto('/spec/fixtures/umd-test.html');
 
+    // Debug: Check DataPage availability before creating instance
+    const debugInfo = await page.evaluate(() => {
+      return {
+        hasDataPage: typeof window.DataPage !== 'undefined',
+        dataPageType: typeof window.DataPage,
+        isConstructor: window.DataPage && typeof window.DataPage === 'function',
+        scriptTags: Array.from(document.scripts)
+          .map((s) => s.src)
+          .filter((src) => src),
+      };
+    });
+    console.log('UMD Method Test Debug:', debugInfo);
+
     // Test that all expected camelCase methods exist
     const methodTests = await page.evaluate(() => {
+      if (typeof window.DataPage !== 'function') {
+        return {
+          error: `DataPage is ${typeof window.DataPage}, not a function`,
+        };
+      }
       const pager = new window.DataPage(100, 10, 1, 5);
       const methods = [
         'totalEntries',

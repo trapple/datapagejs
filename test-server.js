@@ -74,6 +74,7 @@ const server = createServer(async (req, res) => {
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
       const content = await readFile(filePath);
+      console.log(`Serving file: ${filePath} (${content.length} bytes)`);
       res.end(content);
     } else {
       res.statusCode = 404;
