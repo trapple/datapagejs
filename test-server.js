@@ -1,7 +1,7 @@
 // Simple HTTP server for serving test files
 import { createServer } from 'http';
 import { readFile, stat } from 'fs/promises';
-import { extname, normalize, resolve } from 'path';
+import { extname, resolve, sep } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -23,13 +23,42 @@ const server = createServer(async (req, res) => {
 
     // Decode and normalize the path
     requestPath = decodeURIComponent(requestPath);
-    requestPath = normalize(requestPath);
 
-    // Remove leading slashes and any remaining '../' sequences
-    requestPath = requestPath.replace(/^\/+/, '').replace(/\.\.\//g, '');
+    // Convert to POSIX path format for consistent handling across platforms
+    requestPath = requestPath.replace(/\\/g, '/');
 
-    // Resolve the full path and ensure it's within the base directory
-    const fullPath = resolve(__dirname, requestPath);
+    // Remove leading slashes and prevent directory traversal attacks
+    requestPath = requestPath.replace(/^\/+/, '');
+
+    // Allow access to dist/ folder through relative paths but prevent other traversals
+    if (requestPath.includes('../')) {
+      // Allow specific legitimate paths to dist folder (normalized to POSIX paths)
+      const allowedPaths = [
+        'spec/fixtures/../../dist/datapage.js',
+        'spec/fixtures/../../dist/datapage.esm.js',
+        'spec/fixtures/../../dist/datapage.cjs',
+        'spec/fixtures/../../dist/datapage.min.js',
+        '../../dist/datapage.js',
+        '../../dist/datapage.esm.js',
+        '../../dist/datapage.cjs',
+        '../../dist/datapage.min.js',
+      ];
+
+      if (allowedPaths.includes(requestPath)) {
+        // This is a legitimate access to dist folder from fixtures
+        requestPath = requestPath.replace(
+          /^(spec\/fixtures\/)?\.\.\/\.\.\//,
+          ''
+        );
+      } else {
+        // Block other directory traversal attempts
+        requestPath = requestPath.replace(/\.\.\//g, '');
+      }
+    }
+
+    // Convert to platform-specific path and resolve
+    const platformPath = requestPath.split('/').join(sep);
+    const fullPath = resolve(__dirname, platformPath);
     const basePath = resolve(__dirname);
 
     if (!fullPath.startsWith(basePath)) {

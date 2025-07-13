@@ -1,166 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DataPage ESM Test</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>DataPage ESM Test</h1>
     <div id="results"></div>
-    
+
     <script type="module">
-        // Import ESM build
-        import DataPage from '../../dist/datapage.esm.js';
-        
+      // Import ESM build with error handling
+      try {
+        const { default: DataPage } = await import(
+          '../../dist/datapage.esm.js'
+        );
+        console.log('ESM DataPage imported successfully:', typeof DataPage);
+
         // Test DataPage ESM version
         function runTests() {
-            const results = document.getElementById('results');
-            const tests = [];
-            
-            try {
-                // Test basic instantiation
-                const pager = new DataPage(100, 10, 1, 5);
-                tests.push({
-                    name: 'Basic instantiation (ESM)',
-                    result: 'pass',
-                    details: `totalEntries: ${pager.totalEntries()}, entriesPerPage: ${pager.entriesPerPage()}`
-                });
-                
-                // Test camelCase API methods
-                pager.currentPage(3);
-                tests.push({
-                    name: 'camelCase API - currentPage (ESM)',
-                    result: pager.currentPage() === 3 ? 'pass' : 'fail',
-                    details: `currentPage(): ${pager.currentPage()}`
-                });
-                
-                pager.totalEntries(150);
-                tests.push({
-                    name: 'camelCase API - totalEntries (ESM)',
-                    result: pager.totalEntries() === 150 ? 'pass' : 'fail',
-                    details: `totalEntries(): ${pager.totalEntries()}`
-                });
-                
-                pager.entriesPerPage(15);
-                tests.push({
-                    name: 'camelCase API - entriesPerPage (ESM)',
-                    result: pager.entriesPerPage() === 15 ? 'pass' : 'fail',
-                    details: `entriesPerPage(): ${pager.entriesPerPage()}`
-                });
-                
-                // Test pagination methods
-                tests.push({
-                    name: 'firstPage method (ESM)',
-                    result: pager.firstPage() === 1 ? 'pass' : 'fail',
-                    details: `firstPage(): ${pager.firstPage()}`
-                });
-                
-                tests.push({
-                    name: 'lastPage method (ESM)',
-                    result: pager.lastPage() === 10 ? 'pass' : 'fail',
-                    details: `lastPage(): ${pager.lastPage()}`
-                });
-                
-                // Test pageset functionality
-                const pageset = pager.pageset();
-                tests.push({
-                    name: 'pageset method (ESM)',
-                    result: Array.isArray(pageset) && pageset.length > 0 ? 'pass' : 'fail',
-                    details: `pageset(): [${pageset.join(', ')}]`
-                });
-                
-                // Test boundary methods
-                tests.push({
-                    name: 'previousPage method (ESM)',
-                    result: pager.previousPage() === 2 ? 'pass' : 'fail',
-                    details: `previousPage(): ${pager.previousPage()}`
-                });
-                
-                tests.push({
-                    name: 'nextPage method (ESM)',
-                    result: pager.nextPage() === 4 ? 'pass' : 'fail',
-                    details: `nextPage(): ${pager.nextPage()}`
-                });
-                
-                // Test entry calculations
-                tests.push({
-                    name: 'first entry calculation (ESM)',
-                    result: pager.first() === 31 ? 'pass' : 'fail',
-                    details: `first(): ${pager.first()}`
-                });
-                
-                tests.push({
-                    name: 'last entry calculation (ESM)',
-                    result: pager.last() === 45 ? 'pass' : 'fail',
-                    details: `last(): ${pager.last()}`
-                });
-                
-                tests.push({
-                    name: 'entriesOnThisPage calculation (ESM)',
-                    result: pager.entriesOnThisPage() === 15 ? 'pass' : 'fail',
-                    details: `entriesOnThisPage(): ${pager.entriesOnThisPage()}`
-                });
-                
-                // Test validation methods
-                tests.push({
-                    name: 'parseVal method (ESM)',
-                    result: pager.parseVal(5) === 5 ? 'pass' : 'fail',
-                    details: `parseVal(5): ${pager.parseVal(5)}`
-                });
-                
-                tests.push({
-                    name: 'parseUnsignedInt method (ESM)',
-                    result: pager.parseUnsignedInt(0) === 0 ? 'pass' : 'fail',
-                    details: `parseUnsignedInt(0): ${pager.parseUnsignedInt(0)}`
-                });
-                
-            } catch (error) {
-                tests.push({
-                    name: 'Error occurred (ESM)',
-                    result: 'error',
-                    details: error.message
-                });
-            }
-            
-            // Display results
-            const passCount = tests.filter(t => t.result === 'pass').length;
-            const totalCount = tests.length;
-            
-            results.innerHTML = `
+          const results = document.getElementById('results');
+          const tests = [];
+
+          try {
+            // Test basic instantiation
+            const pager = new DataPage(100, 10, 1, 5);
+            tests.push({
+              name: 'Basic instantiation (ESM)',
+              result: 'pass',
+              details: `totalEntries: ${pager.totalEntries()}, entriesPerPage: ${pager.entriesPerPage()}`,
+            });
+
+            // Test camelCase API methods
+            pager.currentPage(3);
+            tests.push({
+              name: 'camelCase API - currentPage (ESM)',
+              result: pager.currentPage() === 3 ? 'pass' : 'fail',
+              details: `currentPage(): ${pager.currentPage()}`,
+            });
+
+            pager.totalEntries(150);
+            tests.push({
+              name: 'camelCase API - totalEntries (ESM)',
+              result: pager.totalEntries() === 150 ? 'pass' : 'fail',
+              details: `totalEntries(): ${pager.totalEntries()}`,
+            });
+
+            pager.entriesPerPage(15);
+            tests.push({
+              name: 'camelCase API - entriesPerPage (ESM)',
+              result: pager.entriesPerPage() === 15 ? 'pass' : 'fail',
+              details: `entriesPerPage(): ${pager.entriesPerPage()}`,
+            });
+
+            // Test pagination methods
+            tests.push({
+              name: 'firstPage method (ESM)',
+              result: pager.firstPage() === 1 ? 'pass' : 'fail',
+              details: `firstPage(): ${pager.firstPage()}`,
+            });
+
+            tests.push({
+              name: 'lastPage method (ESM)',
+              result: pager.lastPage() === 10 ? 'pass' : 'fail',
+              details: `lastPage(): ${pager.lastPage()}`,
+            });
+
+            // Test pageset functionality
+            const pageset = pager.pageset();
+            tests.push({
+              name: 'pageset method (ESM)',
+              result:
+                Array.isArray(pageset) && pageset.length > 0 ? 'pass' : 'fail',
+              details: `pageset(): [${pageset.join(', ')}]`,
+            });
+
+            // Test boundary methods
+            tests.push({
+              name: 'previousPage method (ESM)',
+              result: pager.previousPage() === 2 ? 'pass' : 'fail',
+              details: `previousPage(): ${pager.previousPage()}`,
+            });
+
+            tests.push({
+              name: 'nextPage method (ESM)',
+              result: pager.nextPage() === 4 ? 'pass' : 'fail',
+              details: `nextPage(): ${pager.nextPage()}`,
+            });
+
+            // Test entry calculations
+            tests.push({
+              name: 'first entry calculation (ESM)',
+              result: pager.first() === 31 ? 'pass' : 'fail',
+              details: `first(): ${pager.first()}`,
+            });
+
+            tests.push({
+              name: 'last entry calculation (ESM)',
+              result: pager.last() === 45 ? 'pass' : 'fail',
+              details: `last(): ${pager.last()}`,
+            });
+
+            tests.push({
+              name: 'entriesOnThisPage calculation (ESM)',
+              result: pager.entriesOnThisPage() === 15 ? 'pass' : 'fail',
+              details: `entriesOnThisPage(): ${pager.entriesOnThisPage()}`,
+            });
+
+            // Test validation methods
+            tests.push({
+              name: 'parseVal method (ESM)',
+              result: pager.parseVal(5) === 5 ? 'pass' : 'fail',
+              details: `parseVal(5): ${pager.parseVal(5)}`,
+            });
+
+            tests.push({
+              name: 'parseUnsignedInt method (ESM)',
+              result: pager.parseUnsignedInt(0) === 0 ? 'pass' : 'fail',
+              details: `parseUnsignedInt(0): ${pager.parseUnsignedInt(0)}`,
+            });
+          } catch (error) {
+            tests.push({
+              name: 'Error occurred (ESM)',
+              result: 'error',
+              details: error.message,
+            });
+          }
+
+          // Display results
+          const passCount = tests.filter((t) => t.result === 'pass').length;
+          const totalCount = tests.length;
+
+          results.innerHTML = `
                 <h2>Test Results (ESM): ${passCount}/${totalCount} passed</h2>
                 <div id="test-summary" data-pass="${passCount}" data-total="${totalCount}"></div>
                 <ul>
-                    ${tests.map(test => `
+                    ${tests
+                      .map(
+                        (test) => `
                         <li class="${test.result}">
                             <strong>${test.name}</strong>: ${test.result}
                             <br><small>${test.details}</small>
                         </li>
-                    `).join('')}
+                    `
+                      )
+                      .join('')}
                 </ul>
             `;
         }
-        
-        // Run tests when page loads
-        window.addEventListener('load', runTests);
-        
+
+        // Run tests immediately since module scripts run after DOM is loaded
+        runTests();
+
         // Expose for Playwright
-        window.getTestResults = function() {
-            const summary = document.getElementById('test-summary');
-            if (!summary) return null;
-            return {
-                passed: parseInt(summary.dataset.pass),
-                total: parseInt(summary.dataset.total)
-            };
+        window.getTestResults = function () {
+          const summary = document.getElementById('test-summary');
+          if (!summary) return null;
+          return {
+            passed: parseInt(summary.dataset.pass),
+            total: parseInt(summary.dataset.total),
+          };
         };
+      } catch (error) {
+        console.error('ESM import failed:', error);
+        // Show error in page
+        const results = document.getElementById('results');
+        if (results) {
+          results.innerHTML = `<h2>ESM Import Error</h2><p>${error.message}</p>`;
+        }
+        // Expose error result for Playwright
+        window.getTestResults = function () {
+          return { passed: 0, total: 1, error: error.message };
+        };
+      }
     </script>
-    
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .pass { color: green; }
-        .fail { color: red; }
-        .error { color: orange; }
-        li { margin-bottom: 10px; }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .pass {
+        color: green;
+      }
+      .fail {
+        color: red;
+      }
+      .error {
+        color: orange;
+      }
+      li {
+        margin-bottom: 10px;
+      }
     </style>
-</body>
+  </body>
 </html>

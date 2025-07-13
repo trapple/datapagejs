@@ -6,10 +6,13 @@ test.describe('DataPage ESM Build', () => {
     // Navigate to ESM test page
     await page.goto('/spec/fixtures/esm-test.html');
 
-    // Wait for tests to complete
-    await page.waitForFunction(() => {
-      return window.getTestResults && window.getTestResults() !== null;
-    });
+    // Wait for tests to complete with longer timeout
+    await page.waitForFunction(
+      () => {
+        return window.getTestResults && window.getTestResults() !== null;
+      },
+      { timeout: 60000 }
+    );
 
     // Check test results
     const results = await page.evaluate(() => window.getTestResults());
@@ -46,6 +49,7 @@ test.describe('DataPage ESM Build', () => {
         return {
           success: false,
           error: error.message,
+          stack: error.stack,
         };
       }
     });

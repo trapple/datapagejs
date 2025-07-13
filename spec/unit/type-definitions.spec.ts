@@ -2,13 +2,12 @@
 import DataPage, { DataPageType } from '../../src/datapage.js';
 
 describe('TypeScript Type Definitions', () => {
-  
   it('should have correct interface types', () => {
     const pager: DataPageType = new DataPage(100, 10, 1, 5);
-    
+
     // 型推論の検証（コンパイル時チェック）
     const totalEntries: number = pager.totalEntries();
-    const entriesPerPage: number = pager.entriesPerPage(); 
+    const entriesPerPage: number = pager.entriesPerPage();
     const currentPage: number = pager.currentPage();
     const firstPage: number = pager.firstPage();
     const lastPage: number = pager.lastPage();
@@ -19,7 +18,7 @@ describe('TypeScript Type Definitions', () => {
     const pageset: number[] = pager.pageset();
     const hasNextPageset: boolean = pager.hasNextPageset();
     const hasPreviousPageset: boolean = pager.hasPreviousPageset();
-    
+
     // 実際の値の検証
     expect(typeof totalEntries).toBe('number');
     expect(typeof entriesPerPage).toBe('number');
@@ -31,21 +30,23 @@ describe('TypeScript Type Definitions', () => {
     expect(Array.isArray(pageset)).toBe(true);
     expect(typeof hasNextPageset).toBe('boolean');
     expect(typeof hasPreviousPageset).toBe('boolean');
-    
+
     // previousPage/nextPageはundefinedまたはnumber
-    expect(previousPage === undefined || typeof previousPage === 'number').toBe(true);
+    expect(previousPage === undefined || typeof previousPage === 'number').toBe(
+      true
+    );
     expect(nextPage === undefined || typeof nextPage === 'number').toBe(true);
   });
 
   it('should support method chaining with setter methods', () => {
     const pager: DataPageType = new DataPage();
-    
+
     // セッターメソッドの戻り値型チェック
     const result1: number = pager.totalEntries(200);
     const result2: number = pager.entriesPerPage(20);
     const result3: number = pager.currentPage(2);
     const result4: number = pager.pagesPerPageset(10);
-    
+
     expect(typeof result1).toBe('number');
     expect(typeof result2).toBe('number');
     expect(typeof result3).toBe('number');
@@ -59,7 +60,7 @@ describe('TypeScript Type Definitions', () => {
     const pager3: DataPageType = new DataPage(100, 10);
     const pager4: DataPageType = new DataPage(100, 10, 1);
     const pager5: DataPageType = new DataPage(100, 10, 1, 5);
-    
+
     expect(pager1).toBeInstanceOf(DataPage);
     expect(pager2).toBeInstanceOf(DataPage);
     expect(pager3).toBeInstanceOf(DataPage);
@@ -71,7 +72,7 @@ describe('TypeScript Type Definitions', () => {
     // デフォルトエクスポートの型チェック
     expect(typeof DataPage).toBe('function');
     expect(DataPage.name).toBe('DataPage');
-    
+
     // インスタンスの型チェック
     const instance = new DataPage();
     expect(instance).toBeInstanceOf(DataPage);
@@ -80,7 +81,7 @@ describe('TypeScript Type Definitions', () => {
 
   it('should work with all camelCase method names', () => {
     const pager = new DataPage(100, 10, 5, 5);
-    
+
     // 全キャメルケースメソッドが存在することを確認
     expect(typeof pager.totalEntries).toBe('function');
     expect(typeof pager.entriesPerPage).toBe('function');
@@ -100,7 +101,7 @@ describe('TypeScript Type Definitions', () => {
 
   it('should not have old snake_case methods', () => {
     const pager = new DataPage() as any;
-    
+
     // 古いスネークケースメソッドが存在しないことを確認
     expect(pager.total_entries).toBeUndefined();
     expect(pager.entries_per_page).toBeUndefined();
