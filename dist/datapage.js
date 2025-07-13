@@ -46,70 +46,61 @@
         return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
-    var _DataPage_total_entries, _DataPage_entries_per_page, _DataPage_current_page, _DataPage_pages_per_pageset;
+    var _DataPage_totalEntries, _DataPage_entriesPerPage, _DataPage_currentPage, _DataPage_pagesPerPageset;
     // ES6 Class実装
     class DataPage {
-        // 後方互換性のためのpublicプロパティ
-        get _total_entries() { return __classPrivateFieldGet(this, _DataPage_total_entries, "f"); }
-        set _total_entries(value) { __classPrivateFieldSet(this, _DataPage_total_entries, value, "f"); }
-        get _entries_per_page() { return __classPrivateFieldGet(this, _DataPage_entries_per_page, "f"); }
-        set _entries_per_page(value) { __classPrivateFieldSet(this, _DataPage_entries_per_page, value, "f"); }
-        get _current_page() { return __classPrivateFieldGet(this, _DataPage_current_page, "f"); }
-        set _current_page(value) { __classPrivateFieldSet(this, _DataPage_current_page, value, "f"); }
-        get _pages_per_pageset() { return __classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f"); }
-        set _pages_per_pageset(value) { __classPrivateFieldSet(this, _DataPage_pages_per_pageset, value, "f"); }
         constructor(total_entries, entries_per_page, current_page, pages_per_pageset) {
-            _DataPage_total_entries.set(this, void 0);
-            _DataPage_entries_per_page.set(this, void 0);
-            _DataPage_current_page.set(this, void 0);
-            _DataPage_pages_per_pageset.set(this, void 0);
-            __classPrivateFieldSet(this, _DataPage_total_entries, total_entries || 0, "f");
-            __classPrivateFieldSet(this, _DataPage_entries_per_page, entries_per_page || 10, "f");
-            __classPrivateFieldSet(this, _DataPage_current_page, current_page || 1, "f");
-            __classPrivateFieldSet(this, _DataPage_pages_per_pageset, pages_per_pageset || 10, "f");
-            __classPrivateFieldSet(this, _DataPage_total_entries, this.parseUnsignedInt(__classPrivateFieldGet(this, _DataPage_total_entries, "f")), "f");
-            __classPrivateFieldSet(this, _DataPage_entries_per_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_entries_per_page, "f")), "f");
-            __classPrivateFieldSet(this, _DataPage_current_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_current_page, "f")), "f");
-            __classPrivateFieldSet(this, _DataPage_pages_per_pageset, this.parseVal(__classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f")), "f");
+            _DataPage_totalEntries.set(this, void 0);
+            _DataPage_entriesPerPage.set(this, void 0);
+            _DataPage_currentPage.set(this, void 0);
+            _DataPage_pagesPerPageset.set(this, void 0);
+            __classPrivateFieldSet(this, _DataPage_totalEntries, total_entries || 0, "f");
+            __classPrivateFieldSet(this, _DataPage_entriesPerPage, entries_per_page || 10, "f");
+            __classPrivateFieldSet(this, _DataPage_currentPage, current_page || 1, "f");
+            __classPrivateFieldSet(this, _DataPage_pagesPerPageset, pages_per_pageset || 10, "f");
+            __classPrivateFieldSet(this, _DataPage_totalEntries, this.parseUnsignedInt(__classPrivateFieldGet(this, _DataPage_totalEntries, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_entriesPerPage, this.parseVal(__classPrivateFieldGet(this, _DataPage_entriesPerPage, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_currentPage, this.parseVal(__classPrivateFieldGet(this, _DataPage_currentPage, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_pagesPerPageset, this.parseVal(__classPrivateFieldGet(this, _DataPage_pagesPerPageset, "f")), "f");
         }
         /**
-         * @method entries_per_page
+         * @method entriesPerPage
          * @param {Number|null}
          */
-        entries_per_page(val) {
+        entriesPerPage(val) {
             if (val !== undefined) {
-                this._entries_per_page = this.parseVal(val);
+                __classPrivateFieldSet(this, _DataPage_entriesPerPage, this.parseVal(val), "f");
             }
-            return this._entries_per_page;
+            return __classPrivateFieldGet(this, _DataPage_entriesPerPage, "f");
         }
         /**
-         * @method current_page
+         * @method currentPage
          * @param {Number|null}
          */
-        current_page(val) {
+        currentPage(val) {
             if (val !== undefined) {
                 const parsedVal = this.parseVal(val);
-                this._current_page = parsedVal;
-                if (parsedVal > this.last_page())
-                    this._current_page = this.last_page();
-                return this._current_page;
+                __classPrivateFieldSet(this, _DataPage_currentPage, parsedVal, "f");
+                if (parsedVal > this.lastPage())
+                    __classPrivateFieldSet(this, _DataPage_currentPage, this.lastPage(), "f");
+                return __classPrivateFieldGet(this, _DataPage_currentPage, "f");
             }
-            return this._current_page;
+            return __classPrivateFieldGet(this, _DataPage_currentPage, "f");
         }
         /**
-         * @method total_entries
+         * @method totalEntries
          * @param {Number|null}
          */
-        total_entries(val) {
+        totalEntries(val) {
             if (val !== undefined)
-                this._total_entries = this.parseUnsignedInt(val);
-            return this._total_entries;
+                __classPrivateFieldSet(this, _DataPage_totalEntries, this.parseUnsignedInt(val), "f");
+            return __classPrivateFieldGet(this, _DataPage_totalEntries, "f");
         }
         /**
-         * @method entries_on_this_page
+         * @method entriesOnThisPage
          */
-        entries_on_this_page() {
-            if (this.total_entries() === 0) {
+        entriesOnThisPage() {
+            if (__classPrivateFieldGet(this, _DataPage_totalEntries, "f") === 0) {
                 return 0;
             }
             else {
@@ -117,112 +108,112 @@
             }
         }
         /**
-         * @method first_page
+         * @method firstPage
          */
-        first_page() {
+        firstPage() {
             return 1;
         }
         /**
-         * @method last_page
+         * @method lastPage
          */
-        last_page() {
-            const pages = this.total_entries() / this.entries_per_page();
-            let last_page;
+        lastPage() {
+            const pages = __classPrivateFieldGet(this, _DataPage_totalEntries, "f") / __classPrivateFieldGet(this, _DataPage_entriesPerPage, "f");
+            let lastPage;
             if (pages == parseInt(pages.toString())) {
-                last_page = pages;
+                lastPage = pages;
             }
             else {
-                last_page = 1 + parseInt(pages.toString());
+                lastPage = 1 + parseInt(pages.toString());
             }
-            if (last_page < 1)
-                last_page = 1;
-            return last_page;
+            if (lastPage < 1)
+                lastPage = 1;
+            return lastPage;
         }
         /**
          * @method first
          */
         first() {
-            if (this.total_entries() === 0) {
+            if (__classPrivateFieldGet(this, _DataPage_totalEntries, "f") === 0) {
                 return 0;
             }
             else {
-                return ((this.current_page() - 1) * this.entries_per_page()) + 1;
+                return ((__classPrivateFieldGet(this, _DataPage_currentPage, "f") - 1) * __classPrivateFieldGet(this, _DataPage_entriesPerPage, "f")) + 1;
             }
         }
         /**
          * @method last
          */
         last() {
-            if (this.current_page() == this.last_page()) {
-                return this.total_entries();
+            if (__classPrivateFieldGet(this, _DataPage_currentPage, "f") == this.lastPage()) {
+                return __classPrivateFieldGet(this, _DataPage_totalEntries, "f");
             }
             else {
-                return (this.current_page() * this.entries_per_page());
+                return (__classPrivateFieldGet(this, _DataPage_currentPage, "f") * __classPrivateFieldGet(this, _DataPage_entriesPerPage, "f"));
             }
         }
         /**
-         * @method previous_page
+         * @method previousPage
          */
-        previous_page() {
-            if (this.current_page() > 1) {
-                return this.current_page() - 1;
+        previousPage() {
+            if (__classPrivateFieldGet(this, _DataPage_currentPage, "f") > 1) {
+                return __classPrivateFieldGet(this, _DataPage_currentPage, "f") - 1;
             }
             else {
                 return undefined;
             }
         }
         /**
-         * @method next_page
+         * @method nextPage
          */
-        next_page() {
-            return this.current_page() < this.last_page() ? this.current_page() + 1 : undefined;
+        nextPage() {
+            return __classPrivateFieldGet(this, _DataPage_currentPage, "f") < this.lastPage() ? __classPrivateFieldGet(this, _DataPage_currentPage, "f") + 1 : undefined;
         }
         /**
-         * @method pages_per_pageset
+         * @method pagesPerPageset
          * @param {Number|null}
          */
-        pages_per_pageset(val) {
+        pagesPerPageset(val) {
             if (val !== undefined) {
-                this._pages_per_pageset = this.parseVal(val);
-                if (this._pages_per_pageset > this.last_page())
-                    this._pages_per_pageset = this.last_page();
+                __classPrivateFieldSet(this, _DataPage_pagesPerPageset, this.parseVal(val), "f");
+                if (__classPrivateFieldGet(this, _DataPage_pagesPerPageset, "f") > this.lastPage())
+                    __classPrivateFieldSet(this, _DataPage_pagesPerPageset, this.lastPage(), "f");
             }
-            return this._pages_per_pageset;
+            return __classPrivateFieldGet(this, _DataPage_pagesPerPageset, "f");
         }
         /**
          * @method pageset
          * @param {Number|null}
          */
         pageset() {
-            let page_all = [];
+            let pageAll = [];
             let i;
-            let splice_start = 0;
-            const len = this.pages_per_pageset();
-            for (i = this.first_page(); i <= this.last_page(); i++) {
-                page_all.push(i);
+            let spliceStart = 0;
+            const len = __classPrivateFieldGet(this, _DataPage_pagesPerPageset, "f");
+            for (i = this.firstPage(); i <= this.lastPage(); i++) {
+                pageAll.push(i);
             }
-            if (this.current_page() > parseInt((len / 2).toString())) {
-                splice_start = this.current_page() - parseInt((len / 2).toString()) - 1;
+            if (__classPrivateFieldGet(this, _DataPage_currentPage, "f") > parseInt((len / 2).toString())) {
+                spliceStart = __classPrivateFieldGet(this, _DataPage_currentPage, "f") - parseInt((len / 2).toString()) - 1;
             }
-            if (this.current_page() + parseInt((len / 2).toString()) > this.last_page()) {
-                splice_start = this.last_page() - len;
+            if (__classPrivateFieldGet(this, _DataPage_currentPage, "f") + parseInt((len / 2).toString()) > this.lastPage()) {
+                spliceStart = this.lastPage() - len;
             }
-            if (page_all.length > len) {
-                page_all = page_all.splice(splice_start, len);
+            if (pageAll.length > len) {
+                pageAll = pageAll.splice(spliceStart, len);
             }
-            return page_all;
+            return pageAll;
         }
         /**
-         * @method has_next_pageset
+         * @method hasNextPageset
          */
-        has_next_pageset() {
-            return (this.pageset()[this.pages_per_pageset() - 1] !== this.last_page());
+        hasNextPageset() {
+            return (this.pageset()[__classPrivateFieldGet(this, _DataPage_pagesPerPageset, "f") - 1] !== this.lastPage());
         }
         /**
-         * @method has_previous_pageset
+         * @method hasPreviousPageset
          */
-        has_previous_pageset() {
-            return (this.first_page() !== this.pageset()[0]);
+        hasPreviousPageset() {
+            return (this.firstPage() !== this.pageset()[0]);
         }
         parseVal(val) {
             const parsed = parseInt(val);
@@ -241,7 +232,7 @@
             return parsed;
         }
     }
-    _DataPage_total_entries = new WeakMap(), _DataPage_entries_per_page = new WeakMap(), _DataPage_current_page = new WeakMap(), _DataPage_pages_per_pageset = new WeakMap();
+    _DataPage_totalEntries = new WeakMap(), _DataPage_entriesPerPage = new WeakMap(), _DataPage_currentPage = new WeakMap(), _DataPage_pagesPerPageset = new WeakMap();
 
     exports.default = DataPage;
 

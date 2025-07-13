@@ -1,63 +1,51 @@
 interface DataPageType {
-    _total_entries: number;
-    _entries_per_page: number;
-    _current_page: number;
-    _pages_per_pageset: number;
-    entries_per_page(val?: number): number;
-    current_page(val?: number): number;
-    total_entries(val?: number): number;
-    entries_on_this_page(): number;
-    first_page(): number;
-    last_page(): number;
+    entriesPerPage(val?: number): number;
+    currentPage(val?: number): number;
+    totalEntries(val?: number): number;
+    entriesOnThisPage(): number;
+    firstPage(): number;
+    lastPage(): number;
     first(): number;
     last(): number;
-    previous_page(): number | undefined;
-    next_page(): number | undefined;
-    pages_per_pageset(val?: number): number;
+    previousPage(): number | undefined;
+    nextPage(): number | undefined;
+    pagesPerPageset(val?: number): number;
     pageset(): number[];
-    has_next_pageset(): boolean;
-    has_previous_pageset(): boolean;
+    hasNextPageset(): boolean;
+    hasPreviousPageset(): boolean;
     parseVal(val: any): number;
     parseUnsignedInt(val: any): number;
 }
 declare class DataPage implements DataPageType {
     #private;
-    get _total_entries(): number;
-    set _total_entries(value: number);
-    get _entries_per_page(): number;
-    set _entries_per_page(value: number);
-    get _current_page(): number;
-    set _current_page(value: number);
-    get _pages_per_pageset(): number;
-    set _pages_per_pageset(value: number);
     constructor(total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number);
     /**
-     * @method entries_per_page
+     * @method entriesPerPage
      * @param {Number|null}
      */
-    entries_per_page(val?: number): number;
+    entriesPerPage(val?: number): number;
     /**
-     * @method current_page
+     * @method currentPage
      * @param {Number|null}
      */
-    current_page(val?: number): number;
+    currentPage(val?: number): number;
     /**
-     * @method total_entries
+     * @method totalEntries
      * @param {Number|null}
      */
-    total_entries(val?: number): number;
+    totalEntries(val?: number): number;
     /**
-     * @method entries_on_this_page
+     * @method entriesOnThisPage
      */
-    entries_on_this_page(): number;
+    entriesOnThisPage(): number;
     /**
-     * @method first_page
+     * @method firstPage
      */
-    first_page(): number;
+    firstPage(): number;
     /**
-     * @method last_page
+     * @method lastPage
      */
-    last_page(): number;
+    lastPage(): number;
     /**
      * @method first
      */
@@ -67,31 +55,31 @@ declare class DataPage implements DataPageType {
      */
     last(): number;
     /**
-     * @method previous_page
+     * @method previousPage
      */
-    previous_page(): number | undefined;
+    previousPage(): number | undefined;
     /**
-     * @method next_page
+     * @method nextPage
      */
-    next_page(): number | undefined;
+    nextPage(): number | undefined;
     /**
-     * @method pages_per_pageset
+     * @method pagesPerPageset
      * @param {Number|null}
      */
-    pages_per_pageset(val?: number): number;
+    pagesPerPageset(val?: number): number;
     /**
      * @method pageset
      * @param {Number|null}
      */
     pageset(): number[];
     /**
-     * @method has_next_pageset
+     * @method hasNextPageset
      */
-    has_next_pageset(): boolean;
+    hasNextPageset(): boolean;
     /**
-     * @method has_previous_pageset
+     * @method hasPreviousPageset
      */
-    has_previous_pageset(): boolean;
+    hasPreviousPageset(): boolean;
     parseVal(val: any): number;
     parseUnsignedInt(val: any): number;
 }
