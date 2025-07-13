@@ -30,12 +30,19 @@ const server = createServer(async (req, res) => {
 
     // Allow access to dist/ folder through relative paths but prevent other traversals
     if (requestPath.includes('../')) {
-      // Only allow legitimate access to dist folder from fixtures (.js, .esm.js, .cjs, .min.js files)
-      if (
-        requestPath.match(
-          /^(spec\/fixtures\/)?\.\.\/\.\.\/dist\/[^/]+\.(esm\.js|min\.js|js|cjs)$/
-        )
-      ) {
+      // Allow specific legitimate paths to dist folder
+      const allowedPaths = [
+        'spec/fixtures/../../dist/datapage.js',
+        'spec/fixtures/../../dist/datapage.esm.js',
+        'spec/fixtures/../../dist/datapage.cjs',
+        'spec/fixtures/../../dist/datapage.min.js',
+        '../../dist/datapage.js',
+        '../../dist/datapage.esm.js',
+        '../../dist/datapage.cjs',
+        '../../dist/datapage.min.js',
+      ];
+
+      if (allowedPaths.includes(requestPath)) {
         // This is a legitimate access to dist folder from fixtures
         requestPath = requestPath.replace(
           /^(spec\/fixtures\/)?\.\.\/\.\.\//,
@@ -74,7 +81,6 @@ const server = createServer(async (req, res) => {
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
       const content = await readFile(filePath);
-      console.log(`Serving file: ${filePath} (${content.length} bytes)`);
       res.end(content);
     } else {
       res.statusCode = 404;
