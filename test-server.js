@@ -30,8 +30,12 @@ const server = createServer(async (req, res) => {
 
     // Allow access to dist/ folder through relative paths but prevent other traversals
     if (requestPath.includes('../')) {
-      // Only allow legitimate access to dist folder from fixtures
-      if (requestPath.match(/^(spec\/fixtures\/)?\.\.\/\.\.\/dist\//)) {
+      // Only allow legitimate access to dist folder from fixtures (.js, .esm.js, .cjs, .min.js files)
+      if (
+        requestPath.match(
+          /^(spec\/fixtures\/)?\.\.\/\.\.\/dist\/[^/]+\.(esm\.js|min\.js|js|cjs)$/
+        )
+      ) {
         // This is a legitimate access to dist folder from fixtures
         requestPath = requestPath.replace(
           /^(spec\/fixtures\/)?\.\.\/\.\.\//,

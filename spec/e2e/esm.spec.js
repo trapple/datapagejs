@@ -49,6 +49,7 @@ test.describe('DataPage ESM Build', () => {
         return {
           success: false,
           error: error.message,
+          stack: error.stack,
         };
       }
     });
