@@ -308,3 +308,122 @@ dist/*.map               # 全形式ソースマップ
 - 既存JavaScript APIの100%互換性維持
 - UMDパターンでのブラウザ・Node.js両対応
 - ES6 Private Fields + getter/setter による後方互換アクセス
+
+## Phase 2.2: モダンJS命名規約への移行
+
+### 🎯 現在の課題
+現在のDataPageクラスは機能的には現代化されましたが、APIの命名がモダンなJavaScriptの標準と異なります：
+
+**問題のある命名パターン:**
+- スネークケースメソッド名（`entries_per_page()` など）
+- アンダースコアプレフィックス付きプロパティ（`_total_entries` など）
+- 一般的でない命名規則
+
+### 📋 移行対象一覧
+
+#### 1. メソッド名の変更（スネークケース → キャメルケース）
+
+| 現在 | 変更後 |
+|------|--------|
+| `entries_per_page()` | `entriesPerPage()` |
+| `current_page()` | `currentPage()` |
+| `total_entries()` | `totalEntries()` |
+| `first_page()` | `firstPage()` |
+| `last_page()` | `lastPage()` |
+| `previous_page()` | `previousPage()` |
+| `next_page()` | `nextPage()` |
+| `pages_per_pageset()` | `pagesPerPageset()` |
+| `entries_on_this_page()` | `entriesOnThisPage()` |
+| `has_next_pageset()` | `hasNextPageset()` |
+| `has_previous_pageset()` | `hasPreviousPageset()` |
+
+#### 2. プロパティ名の変更（アンダースコア → キャメルケース）
+
+| 現在 | 変更後 |
+|------|--------|
+| `_total_entries` | `totalEntries` |
+| `_entries_per_page` | `entriesPerPage` |
+| `_current_page` | `currentPage` |
+| `_pages_per_pageset` | `pagesPerPageset` |
+
+#### 3. 内部実装の統一
+
+- 内部変数名をキャメルケースに統一
+- プライベートフィールド（`#`）の命名も統一
+- TypeScript型定義の更新
+
+### 🚀 実装戦略
+
+#### 🎯 採用戦略: Phase 2.2b - 破壊的変更による一気移行
+
+**方針決定理由:**
+- メジャーバージョンアップ（v2.0.0）での実施
+- 段階的移行期間を設けずに一気に変更
+- 明確で分かりやすいAPI仕様への統一
+
+#### 実装内容
+1. **API名の完全変更**
+   - スネークケースメソッド → キャメルケースメソッド
+   - アンダースコアプレフィックスプロパティ → キャメルケースプロパティ
+   - 古いAPIは完全削除
+
+2. **メジャーバージョンアップ**
+   - semverに従い、メジャーバージョンを上げる（v2.0.0）
+   - BREAKING CHANGESをCHANGELOGに明記
+   - 移行ガイドを提供
+
+### 📋 実装チェックリスト
+
+#### Phase 2.2b: 破壊的変更による一気移行
+- [ ] TypeScript型定義（DataPageType）をキャメルケース命名に更新
+- [ ] DataPageクラスのメソッド名をキャメルケースに変更
+- [ ] DataPageクラスのプロパティ名をキャメルケースに変更  
+- [ ] 内部変数名をキャメルケースに統一
+- [ ] テストファイルを新しいAPI仕様に更新
+- [ ] ビルドとテストの実行確認
+- [ ] 型定義ファイル（.d.ts）の更新確認
+- [ ] package.jsonバージョン更新（v2.0.0）
+- [ ] CHANGELOGの更新
+
+### 🧪 テスト戦略
+
+1. **機能テスト**
+   - 全メソッドが期待通りに動作することを確認
+   - プロパティアクセスの動作確認
+
+2. **型安全性テスト**
+   - TypeScriptでの型チェック確認
+   - IDEでの自動補完動作確認
+
+3. **ビルドテスト**
+   - UMD、ESM、minified版の正常生成確認
+   - 型定義ファイルの正常生成確認
+
+### 📦 リリース計画
+
+1. **v2.0.0**: 破壊的変更による一気移行
+   - 新しいキャメルケースAPI
+   - 完全なTypeScript対応
+   - 詳細な移行ガイド提供
+
+### 📖 ユーザー向けドキュメント
+
+#### 移行ガイド作成予定
+- 新しいAPIの使用方法
+- 段階的移行の手順
+- 破壊的変更の詳細説明
+- 移行期間中のサポート情報
+
+### 🎯 期待される効果
+
+1. **開発者体験の向上**
+   - モダンなJavaScript命名規約に準拠
+   - IDEでの自動補完がより直感的に
+
+2. **コード保守性の向上**
+   - 一貫性のある命名規則
+   - TypeScriptとの親和性向上
+
+3. **ライブラリの現代化**
+   - 2025年の標準に完全対応
+   - 新規プロジェクトでの採用促進
