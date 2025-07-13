@@ -1,6 +1,6 @@
 {
   "name": "datapage",
-  "version": "2.0.0",
+  "version": "1.9.0",
   "description": "Simple Pagination Data Object",
   "main": "index.cjs",
   "module": "dist/datapage.esm.js",
@@ -33,9 +33,10 @@
     "format:check": "prettier --check src/ spec/",
     "prepublishOnly": "npm run build",
     "prepare": "husky",
-    "version:patch": "npm version patch && git push && git push --tags",
-    "version:minor": "npm version minor && git push && git push --tags",
-    "version:major": "npm version major && git push && git push --tags",
+    "version:patch": "npm run check-branch && npm version patch && git push && git push --tags",
+    "version:minor": "npm run check-branch && npm version minor && git push && git push --tags",
+    "version:major": "npm run check-branch && npm version major && git push && git push --tags",
+    "check-branch": "node -e \"const branch = require('child_process').execSync('git branch --show-current', {encoding: 'utf8'}).trim(); if (branch !== 'master') { console.error('Error: npm version commands must be run on master branch. Current branch:', branch); process.exit(1); }\"",
     "release": "npm run build && npm run test && npm run lint && npm run format:check"
   },
   "repository": {
