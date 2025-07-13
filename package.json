@@ -2,9 +2,17 @@
   "name": "datapage",
   "version": "1.3.4",
   "description": "Simple Pagination Data Object",
-  "main": "datapage.js",
+  "main": "index.cjs",
+  "module": "dist/datapage.esm.js",
   "types": "dist/datapage.d.ts",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/datapage.esm.js",
+      "require": "./index.cjs",
+      "default": "./dist/datapage.esm.js"
+    }
+  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
@@ -14,8 +22,8 @@
     "build:types": "tsc --emitDeclarationOnly",
     "dev": "npm run lint && npm run test && npm run build",
     "watch": "rollup -c --watch",
-    "lint": "eslint src/ spec/ --ext .js,.ts",
-    "lint:fix": "eslint src/ spec/ --ext .js,.ts --fix",
+    "lint": "eslint src/ spec/ --ext .js,.ts,.cjs",
+    "lint:fix": "eslint src/ spec/ --ext .js,.ts,.cjs --fix",
     "format": "prettier --write src/ spec/",
     "format:check": "prettier --check src/ spec/"
   },

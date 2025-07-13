@@ -6,10 +6,10 @@
  * Version: 1.3.4
  */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.DataPage = factory());
-})(this, (function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.DataPage = {}));
+})(this, (function (exports) { 'use strict';
 
     /******************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -46,216 +46,206 @@
         return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
     };
 
-    // UMD パターン
-    (function (root, factory) {
-        if (typeof exports === 'object') {
-            module.exports = factory();
+    var _DataPage_total_entries, _DataPage_entries_per_page, _DataPage_current_page, _DataPage_pages_per_pageset;
+    // ES6 Class実装
+    class DataPage {
+        // 後方互換性のためのpublicプロパティ
+        get _total_entries() { return __classPrivateFieldGet(this, _DataPage_total_entries, "f"); }
+        set _total_entries(value) { __classPrivateFieldSet(this, _DataPage_total_entries, value, "f"); }
+        get _entries_per_page() { return __classPrivateFieldGet(this, _DataPage_entries_per_page, "f"); }
+        set _entries_per_page(value) { __classPrivateFieldSet(this, _DataPage_entries_per_page, value, "f"); }
+        get _current_page() { return __classPrivateFieldGet(this, _DataPage_current_page, "f"); }
+        set _current_page(value) { __classPrivateFieldSet(this, _DataPage_current_page, value, "f"); }
+        get _pages_per_pageset() { return __classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f"); }
+        set _pages_per_pageset(value) { __classPrivateFieldSet(this, _DataPage_pages_per_pageset, value, "f"); }
+        constructor(total_entries, entries_per_page, current_page, pages_per_pageset) {
+            _DataPage_total_entries.set(this, void 0);
+            _DataPage_entries_per_page.set(this, void 0);
+            _DataPage_current_page.set(this, void 0);
+            _DataPage_pages_per_pageset.set(this, void 0);
+            __classPrivateFieldSet(this, _DataPage_total_entries, total_entries || 0, "f");
+            __classPrivateFieldSet(this, _DataPage_entries_per_page, entries_per_page || 10, "f");
+            __classPrivateFieldSet(this, _DataPage_current_page, current_page || 1, "f");
+            __classPrivateFieldSet(this, _DataPage_pages_per_pageset, pages_per_pageset || 10, "f");
+            __classPrivateFieldSet(this, _DataPage_total_entries, this.parseUnsignedInt(__classPrivateFieldGet(this, _DataPage_total_entries, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_entries_per_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_entries_per_page, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_current_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_current_page, "f")), "f");
+            __classPrivateFieldSet(this, _DataPage_pages_per_pageset, this.parseVal(__classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f")), "f");
         }
-        else {
-            root.DataPage = factory();
+        /**
+         * @method entries_per_page
+         * @param {Number|null}
+         */
+        entries_per_page(val) {
+            if (val !== undefined) {
+                this._entries_per_page = this.parseVal(val);
+            }
+            return this._entries_per_page;
         }
-    }(typeof self !== 'undefined' ? self : this, function () {
-        var _DataPage_total_entries, _DataPage_entries_per_page, _DataPage_current_page, _DataPage_pages_per_pageset;
-        // ES6 Class実装
-        class DataPage {
-            // 後方互換性のためのpublicプロパティ
-            get _total_entries() { return __classPrivateFieldGet(this, _DataPage_total_entries, "f"); }
-            set _total_entries(value) { __classPrivateFieldSet(this, _DataPage_total_entries, value, "f"); }
-            get _entries_per_page() { return __classPrivateFieldGet(this, _DataPage_entries_per_page, "f"); }
-            set _entries_per_page(value) { __classPrivateFieldSet(this, _DataPage_entries_per_page, value, "f"); }
-            get _current_page() { return __classPrivateFieldGet(this, _DataPage_current_page, "f"); }
-            set _current_page(value) { __classPrivateFieldSet(this, _DataPage_current_page, value, "f"); }
-            get _pages_per_pageset() { return __classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f"); }
-            set _pages_per_pageset(value) { __classPrivateFieldSet(this, _DataPage_pages_per_pageset, value, "f"); }
-            constructor(total_entries, entries_per_page, current_page, pages_per_pageset) {
-                _DataPage_total_entries.set(this, void 0);
-                _DataPage_entries_per_page.set(this, void 0);
-                _DataPage_current_page.set(this, void 0);
-                _DataPage_pages_per_pageset.set(this, void 0);
-                __classPrivateFieldSet(this, _DataPage_total_entries, total_entries || 0, "f");
-                __classPrivateFieldSet(this, _DataPage_entries_per_page, entries_per_page || 10, "f");
-                __classPrivateFieldSet(this, _DataPage_current_page, current_page || 1, "f");
-                __classPrivateFieldSet(this, _DataPage_pages_per_pageset, pages_per_pageset || 10, "f");
-                __classPrivateFieldSet(this, _DataPage_total_entries, this.parseUnsignedInt(__classPrivateFieldGet(this, _DataPage_total_entries, "f")), "f");
-                __classPrivateFieldSet(this, _DataPage_entries_per_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_entries_per_page, "f")), "f");
-                __classPrivateFieldSet(this, _DataPage_current_page, this.parseVal(__classPrivateFieldGet(this, _DataPage_current_page, "f")), "f");
-                __classPrivateFieldSet(this, _DataPage_pages_per_pageset, this.parseVal(__classPrivateFieldGet(this, _DataPage_pages_per_pageset, "f")), "f");
-            }
-            /**
-             * @method entries_per_page
-             * @param {Number|null}
-             */
-            entries_per_page(val) {
-                if (val !== undefined) {
-                    this._entries_per_page = this.parseVal(val);
-                }
-                return this._entries_per_page;
-            }
-            /**
-             * @method current_page
-             * @param {Number|null}
-             */
-            current_page(val) {
-                if (val !== undefined) {
-                    const parsedVal = this.parseVal(val);
-                    this._current_page = parsedVal;
-                    if (parsedVal > this.last_page())
-                        this._current_page = this.last_page();
-                    return this._current_page;
-                }
+        /**
+         * @method current_page
+         * @param {Number|null}
+         */
+        current_page(val) {
+            if (val !== undefined) {
+                const parsedVal = this.parseVal(val);
+                this._current_page = parsedVal;
+                if (parsedVal > this.last_page())
+                    this._current_page = this.last_page();
                 return this._current_page;
             }
-            /**
-             * @method total_entries
-             * @param {Number|null}
-             */
-            total_entries(val) {
-                if (val !== undefined)
-                    this._total_entries = this.parseUnsignedInt(val);
-                return this._total_entries;
+            return this._current_page;
+        }
+        /**
+         * @method total_entries
+         * @param {Number|null}
+         */
+        total_entries(val) {
+            if (val !== undefined)
+                this._total_entries = this.parseUnsignedInt(val);
+            return this._total_entries;
+        }
+        /**
+         * @method entries_on_this_page
+         */
+        entries_on_this_page() {
+            if (this.total_entries() === 0) {
+                return 0;
             }
-            /**
-             * @method entries_on_this_page
-             */
-            entries_on_this_page() {
-                if (this.total_entries() === 0) {
-                    return 0;
-                }
-                else {
-                    return this.last() - this.first() + 1;
-                }
-            }
-            /**
-             * @method first_page
-             */
-            first_page() {
-                return 1;
-            }
-            /**
-             * @method last_page
-             */
-            last_page() {
-                const pages = this.total_entries() / this.entries_per_page();
-                let last_page;
-                if (pages == parseInt(pages.toString())) {
-                    last_page = pages;
-                }
-                else {
-                    last_page = 1 + parseInt(pages.toString());
-                }
-                if (last_page < 1)
-                    last_page = 1;
-                return last_page;
-            }
-            /**
-             * @method first
-             */
-            first() {
-                if (this.total_entries() === 0) {
-                    return 0;
-                }
-                else {
-                    return ((this.current_page() - 1) * this.entries_per_page()) + 1;
-                }
-            }
-            /**
-             * @method last
-             */
-            last() {
-                if (this.current_page() == this.last_page()) {
-                    return this.total_entries();
-                }
-                else {
-                    return (this.current_page() * this.entries_per_page());
-                }
-            }
-            /**
-             * @method previous_page
-             */
-            previous_page() {
-                if (this.current_page() > 1) {
-                    return this.current_page() - 1;
-                }
-                else {
-                    return undefined;
-                }
-            }
-            /**
-             * @method next_page
-             */
-            next_page() {
-                return this.current_page() < this.last_page() ? this.current_page() + 1 : undefined;
-            }
-            /**
-             * @method pages_per_pageset
-             * @param {Number|null}
-             */
-            pages_per_pageset(val) {
-                if (val !== undefined) {
-                    this._pages_per_pageset = this.parseVal(val);
-                    if (this._pages_per_pageset > this.last_page())
-                        this._pages_per_pageset = this.last_page();
-                }
-                return this._pages_per_pageset;
-            }
-            /**
-             * @method pageset
-             * @param {Number|null}
-             */
-            pageset() {
-                let page_all = [];
-                let i;
-                let splice_start = 0;
-                const len = this.pages_per_pageset();
-                for (i = this.first_page(); i <= this.last_page(); i++) {
-                    page_all.push(i);
-                }
-                if (this.current_page() > parseInt((len / 2).toString())) {
-                    splice_start = this.current_page() - parseInt((len / 2).toString()) - 1;
-                }
-                if (this.current_page() + parseInt((len / 2).toString()) > this.last_page()) {
-                    splice_start = this.last_page() - len;
-                }
-                if (page_all.length > len) {
-                    page_all = page_all.splice(splice_start, len);
-                }
-                return page_all;
-            }
-            /**
-             * @method has_next_pageset
-             */
-            has_next_pageset() {
-                return (this.pageset()[this.pages_per_pageset() - 1] !== this.last_page());
-            }
-            /**
-             * @method has_previous_pageset
-             */
-            has_previous_pageset() {
-                return (this.first_page() !== this.pageset()[0]);
-            }
-            parseVal(val) {
-                const parsed = parseInt(val);
-                if (typeof parsed !== 'number' || isNaN(parsed)) {
-                    throw new Error('no number');
-                }
-                if (parsed < 1) {
-                    throw new Error('no int');
-                }
-                return parsed;
-            }
-            parseUnsignedInt(val) {
-                const parsed = parseInt(val);
-                if (typeof parsed !== 'number' || isNaN(parsed))
-                    throw new Error('no number');
-                return parsed;
+            else {
+                return this.last() - this.first() + 1;
             }
         }
-        _DataPage_total_entries = new WeakMap(), _DataPage_entries_per_page = new WeakMap(), _DataPage_current_page = new WeakMap(), _DataPage_pages_per_pageset = new WeakMap();
-        return DataPage;
-    }));
-    var DataPageModule$1 = DataPageModule;
+        /**
+         * @method first_page
+         */
+        first_page() {
+            return 1;
+        }
+        /**
+         * @method last_page
+         */
+        last_page() {
+            const pages = this.total_entries() / this.entries_per_page();
+            let last_page;
+            if (pages == parseInt(pages.toString())) {
+                last_page = pages;
+            }
+            else {
+                last_page = 1 + parseInt(pages.toString());
+            }
+            if (last_page < 1)
+                last_page = 1;
+            return last_page;
+        }
+        /**
+         * @method first
+         */
+        first() {
+            if (this.total_entries() === 0) {
+                return 0;
+            }
+            else {
+                return ((this.current_page() - 1) * this.entries_per_page()) + 1;
+            }
+        }
+        /**
+         * @method last
+         */
+        last() {
+            if (this.current_page() == this.last_page()) {
+                return this.total_entries();
+            }
+            else {
+                return (this.current_page() * this.entries_per_page());
+            }
+        }
+        /**
+         * @method previous_page
+         */
+        previous_page() {
+            if (this.current_page() > 1) {
+                return this.current_page() - 1;
+            }
+            else {
+                return undefined;
+            }
+        }
+        /**
+         * @method next_page
+         */
+        next_page() {
+            return this.current_page() < this.last_page() ? this.current_page() + 1 : undefined;
+        }
+        /**
+         * @method pages_per_pageset
+         * @param {Number|null}
+         */
+        pages_per_pageset(val) {
+            if (val !== undefined) {
+                this._pages_per_pageset = this.parseVal(val);
+                if (this._pages_per_pageset > this.last_page())
+                    this._pages_per_pageset = this.last_page();
+            }
+            return this._pages_per_pageset;
+        }
+        /**
+         * @method pageset
+         * @param {Number|null}
+         */
+        pageset() {
+            let page_all = [];
+            let i;
+            let splice_start = 0;
+            const len = this.pages_per_pageset();
+            for (i = this.first_page(); i <= this.last_page(); i++) {
+                page_all.push(i);
+            }
+            if (this.current_page() > parseInt((len / 2).toString())) {
+                splice_start = this.current_page() - parseInt((len / 2).toString()) - 1;
+            }
+            if (this.current_page() + parseInt((len / 2).toString()) > this.last_page()) {
+                splice_start = this.last_page() - len;
+            }
+            if (page_all.length > len) {
+                page_all = page_all.splice(splice_start, len);
+            }
+            return page_all;
+        }
+        /**
+         * @method has_next_pageset
+         */
+        has_next_pageset() {
+            return (this.pageset()[this.pages_per_pageset() - 1] !== this.last_page());
+        }
+        /**
+         * @method has_previous_pageset
+         */
+        has_previous_pageset() {
+            return (this.first_page() !== this.pageset()[0]);
+        }
+        parseVal(val) {
+            const parsed = parseInt(val);
+            if (isNaN(parsed)) {
+                throw new Error(`Invalid number: ${val}`);
+            }
+            if (parsed < 1) {
+                throw new Error(`Number must be positive: ${parsed}`);
+            }
+            return parsed;
+        }
+        parseUnsignedInt(val) {
+            const parsed = parseInt(val);
+            if (isNaN(parsed))
+                throw new Error(`Invalid number: ${val}`);
+            return parsed;
+        }
+    }
+    _DataPage_total_entries = new WeakMap(), _DataPage_entries_per_page = new WeakMap(), _DataPage_current_page = new WeakMap(), _DataPage_pages_per_pageset = new WeakMap();
 
-    return DataPageModule$1;
+    exports.default = DataPage;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
 //# sourceMappingURL=datapage.js.map

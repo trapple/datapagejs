@@ -5,8 +5,8 @@ export default defineConfig({
     // jsdomを使用してブラウザ環境をシミュレート
     environment: 'jsdom',
     
-    // テストファイルのパターン
-    include: ['spec/**/*.spec.ts', 'spec/**/*.spec.js', 'spec/**/*.test.ts', 'spec/**/*.test.js'],
+    // テストファイルのパターン（.cjsも含む）
+    include: ['spec/**/*.spec.ts', 'spec/**/*.spec.js', 'spec/**/*.test.ts', 'spec/**/*.test.js', 'spec/**/*.spec.cjs'],
     
     // グローバルにテスト関数を利用可能にする
     globals: true,

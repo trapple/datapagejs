@@ -10,6 +10,26 @@ const banner = `/*
  */`
 
 export default [
+  // CommonJS build (for Node.js)
+  {
+    input: 'src/datapage.ts',
+    output: {
+      file: 'dist/datapage.cjs',
+      format: 'cjs',
+      banner,
+      sourcemap: true,
+      exports: 'default',
+      interop: 'auto'
+    },
+    plugins: [
+      typescript({ 
+        tsconfig: './tsconfig.json', 
+        declaration: false,
+        declarationMap: false,
+        sourceMap: true
+      })
+    ]
+  },
   // UMD build
   {
     input: 'src/datapage.ts',
@@ -18,7 +38,8 @@ export default [
       format: 'umd',
       name: 'DataPage',
       banner,
-      sourcemap: true
+      sourcemap: true,
+      exports: 'named'
     },
     plugins: [
       typescript({ 
@@ -38,7 +59,8 @@ export default [
       format: 'umd',
       name: 'DataPage',
       banner,
-      sourcemap: true
+      sourcemap: true,
+      exports: 'named'
     },
     plugins: [
       typescript({ 

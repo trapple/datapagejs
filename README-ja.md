@@ -29,6 +29,10 @@ import DataPage, { DataPageType } from 'datapage';
 
 const pager: DataPageType = new DataPage(300, 10, 2, 5);
 const pageNumbers: number[] = pager.pageset();
+
+// 後方互換性: 直接プロパティアクセス
+console.log(pager._current_page); // 2
+pager._total_entries = 400; // 直接代入
 ```
 
 **デフォルト値:**
@@ -49,17 +53,21 @@ npm install datapage
 
 #### ES Modules（推奨）
 ```javascript
-// ES6 import
+// デフォルトインポート（推奨）
 import DataPage from 'datapage';
 
-// TypeScript import
+// TypeScript with 型定義
 import DataPage, { DataPageType } from 'datapage';
+// 型として使用する場合
+const pager: DataPageType = new DataPage(100, 10, 1, 5);
 ```
 
-#### CommonJS
+#### CommonJS（レガシーサポート）
 ```javascript
-// Node.js require
+// 全てのパターンをサポート:
 const DataPage = require('datapage');
+const { DataPage } = require('datapage');
+const DataPage = require('datapage').default;
 ```
 
 #### ブラウザ（UMD）
@@ -82,6 +90,58 @@ const pager: DataPageType = new DataPage(300, 10, 1, 5);
 const currentPage: number = pager.current_page();
 const pageSet: number[] = pager.pageset();
 ```
+
+### アーキテクチャ: インターフェースと実装の分離
+
+DataPage.jsはインターフェースと実装の明確な分離に従っています：
+
+- **`DataPageType` インターフェース**: ページネーション機能の公開契約
+- **`DataPage` クラス**: プライベートフィールドと後方互換性を持つ具体的な実装
+
+```typescript
+// 公開インターフェースが完全な契約を定義
+interface DataPageType {
+  // 後方互換性のためのパブリックプロパティ
+  _total_entries: number;
+  _entries_per_page: number;
+  _current_page: number;
+  _pages_per_pageset: number;
+  
+  // コアページネーションメソッド
+  current_page(val?: number): number;
+  total_entries(val?: number): number;
+  pageset(): number[];
+  // ... その他のメソッド
+  
+  // ユーティリティメソッド
+  parseVal(val: any): number;
+  parseUnsignedInt(val: any): number;
+}
+
+// 現代的なES6機能を使用した実装クラス
+class DataPage implements DataPageType {
+  // 真のカプセル化のための# 構文によるプライベートフィールド
+  #total_entries: number;
+  #entries_per_page: number;
+  // ...
+  
+  // 後方互換性のためのパブリックgetter/setter
+  get _total_entries(): number { return this.#total_entries; }
+  set _total_entries(value: number) { this.#total_entries = value; }
+  // ...
+}
+
+// クリーンなエクスポート
+export default DataPage;
+export type { DataPageType };
+```
+
+この設計により、以下のような利点があります：
+- **型安全性**: インターフェースによる明確な契約
+- **カプセル化**: パブリックアクセスを提供しながらプライベートフィールドによるデータ整合性の保証
+- **後方互換性**: レガシーなパブリックプロパティへのアクセスが可能
+- **保守性**: 既存のコードを壊すことなく実装を進化させることが可能
+- **現代的なJavaScript**: 互換性を維持しつつES6+機能を活用
 
 ## APIリファレンス
 
@@ -250,6 +310,7 @@ pager.has_previous_pageset(); // true または false を返す
 ## 機能
 
 - 🔧 **完全なTypeScript対応**: 完全な型定義を含む
+- 🏗️ **クリーンアーキテクチャ**: 保守性を向上させるインターフェースと実装の分離
 - 🎯 **ES6クラス**: プライベートフィールドを持つ現代的なES6クラス構文
 - 📦 **複数フォーマット**: UMD、ES Modules、CommonJSサポート
 - 🧪 **十分にテスト済み**: 18のテストケースによる包括的なテストスイート
@@ -265,13 +326,20 @@ pager.has_previous_pageset(); // true または false を返す
 
 ## ビルド出力
 
-```
-dist/datapage.js         # UMD版（IE11+対応、11.5KB）
-dist/datapage.esm.js     # ES Module版（10.3KB）
-dist/datapage.min.js     # 本番用minified版（4.0KB）
-dist/datapage.d.ts       # TypeScript型定義（1.1KB）
+ライブラリは異なる環境をサポートするために複数の形式でビルドされます：
+
+```text
+dist/datapage.js         # UMD形式（ユニバーサル、IE11+対応）
+dist/datapage.min.js     # UMD形式 minified（本番用）
+dist/datapage.esm.js     # ES Module形式（モダンバンドラー用）
+dist/datapage.d.ts       # TypeScript型定義
 dist/*.map               # 全形式のソースマップ
 ```
+
+**形式の詳細:**
+- **UMD (`datapage.js`)**: 幅広い互換性のためのUniversal Module Definition
+- **UMD Minified (`datapage.min.js`)**: 本番用の圧縮版
+- **ES Module (`datapage.esm.js`)**: バンドラー用のモダンES6モジュール形式
 
 ## 開発
 

@@ -5,6 +5,8 @@
  * Copyright 2013 trapple
  * Version: 1.3.4
  */
+'use strict';
+
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -237,5 +239,5 @@ class DataPage {
 }
 _DataPage_total_entries = new WeakMap(), _DataPage_entries_per_page = new WeakMap(), _DataPage_current_page = new WeakMap(), _DataPage_pages_per_pageset = new WeakMap();
 
-export { DataPage as default };
-//# sourceMappingURL=datapage.esm.js.map
+module.exports = DataPage;
+//# sourceMappingURL=datapage.cjs.map

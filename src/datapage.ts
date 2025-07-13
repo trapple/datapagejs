@@ -1,5 +1,5 @@
 // 型定義
-interface DataPageInstance {
+interface DataPageType {
   _total_entries: number;
   _entries_per_page: number;
   _current_page: number;
@@ -23,13 +23,8 @@ interface DataPageInstance {
   parseUnsignedInt(val: any): number;
 }
 
-interface DataPageConstructor {
-  new (total_entries?: number, entries_per_page?: number, current_page?: number, pages_per_pageset?: number): DataPageInstance;
-  prototype: DataPageInstance;
-}
-
 // ES6 Class実装
-class DataPage implements DataPageInstance {
+class DataPage implements DataPageType {
   #total_entries: number;
   #entries_per_page: number;
   #current_page: number;
@@ -244,26 +239,6 @@ class DataPage implements DataPageInstance {
   }
 }
 
-// UMD パターン
-(function (root: any, factory: () => DataPageConstructor) {
-  if (typeof exports === 'object' && typeof module !== 'undefined' && typeof module.exports === 'object') {
-    // CommonJS環境 - ES Module環境を避けるため、追加条件をチェック
-    try {
-      module.exports = factory();
-    } catch (e) {
-      // ES Module環境では何もしない
-    }
-  } else if (typeof root !== 'undefined') {
-    // ブラウザ環境
-    root.DataPage = factory();
-  }
-}(typeof self !== 'undefined' ? self : this, function () {
-  return DataPage as unknown as DataPageConstructor;
-}));
-
-// TypeScript向けの型定義export
-export interface DataPageType extends DataPageInstance {}
-export interface DataPageConstructorType extends DataPageConstructor {}
-
-// ES Module対応のためのdefault export
-export default DataPage as unknown as DataPageConstructor;
+// ES Module export
+export default DataPage;
+export type { DataPageType };

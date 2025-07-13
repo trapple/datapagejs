@@ -29,6 +29,10 @@ import DataPage, { DataPageType } from 'datapage';
 
 const pager: DataPageType = new DataPage(300, 10, 2, 5);
 const pageNumbers: number[] = pager.pageset();
+
+// Backward compatibility: Direct property access
+console.log(pager._current_page); // 2
+pager._total_entries = 400; // Direct assignment
 ```
 
 **Default values:**
@@ -49,17 +53,21 @@ npm install datapage
 
 #### ES Modules (Recommended)
 ```javascript
-// ES6 import
+// Default import (recommended)
 import DataPage from 'datapage';
 
-// TypeScript import
+// TypeScript with types
 import DataPage, { DataPageType } from 'datapage';
+// 型として使用する場合
+const pager: DataPageType = new DataPage(100, 10, 1, 5);
 ```
 
-#### CommonJS
+#### CommonJS (Legacy Support)
 ```javascript
-// Node.js require
+// All patterns supported:
 const DataPage = require('datapage');
+const { DataPage } = require('datapage');
+const DataPage = require('datapage').default;
 ```
 
 #### Browser (UMD)
@@ -82,6 +90,58 @@ const pager: DataPageType = new DataPage(300, 10, 1, 5);
 const currentPage: number = pager.current_page();
 const pageSet: number[] = pager.pageset();
 ```
+
+### Architecture: Interface and Implementation Separation
+
+DataPage.js follows a clean separation between interface and implementation:
+
+- **`DataPageType` Interface**: Public contract for pagination functionality
+- **`DataPage` Class**: Concrete implementation with private fields and backward compatibility
+
+```typescript
+// Public interface defines the complete contract
+interface DataPageType {
+  // Public properties for backward compatibility
+  _total_entries: number;
+  _entries_per_page: number;
+  _current_page: number;
+  _pages_per_pageset: number;
+  
+  // Core pagination methods
+  current_page(val?: number): number;
+  total_entries(val?: number): number;
+  pageset(): number[];
+  // ... other methods
+  
+  // Utility methods
+  parseVal(val: any): number;
+  parseUnsignedInt(val: any): number;
+}
+
+// Implementation class with modern ES6 features
+class DataPage implements DataPageType {
+  // Private fields using # syntax for true encapsulation
+  #total_entries: number;
+  #entries_per_page: number;
+  // ...
+  
+  // Public getters/setters for backward compatibility
+  get _total_entries(): number { return this.#total_entries; }
+  set _total_entries(value: number) { this.#total_entries = value; }
+  // ...
+}
+
+// Clean exports
+export default DataPage;
+export type { DataPageType };
+```
+
+This design provides several benefits:
+- **Type Safety**: Clear contracts through interfaces
+- **Encapsulation**: Private fields ensure data integrity while providing public access
+- **Backward Compatibility**: Legacy public properties remain accessible
+- **Maintainability**: Implementation can evolve without breaking existing code
+- **Modern JavaScript**: Uses ES6+ features while maintaining compatibility
 
 ## API Reference
 
@@ -247,9 +307,34 @@ const pager = new DataPage(500, 10, 7, 5);
 pager.has_previous_pageset(); // returns true or false
 ```
 
+### parseVal(val: any): number
+
+Parses and validates a positive integer value.
+
+```typescript
+const pager = new DataPage();
+const validValue = pager.parseVal(5); // returns 5
+const validString = pager.parseVal("10"); // returns 10
+// pager.parseVal(-1); // throws Error: "Number must be positive: -1"
+// pager.parseVal("abc"); // throws Error: "Invalid number: abc"
+```
+
+### parseUnsignedInt(val: any): number
+
+Parses an integer value (allows zero and positive numbers).
+
+```typescript
+const pager = new DataPage();
+const zeroValue = pager.parseUnsignedInt(0); // returns 0
+const positiveValue = pager.parseUnsignedInt(100); // returns 100
+const stringValue = pager.parseUnsignedInt("50"); // returns 50
+// pager.parseUnsignedInt("abc"); // throws Error: "Invalid number: abc"
+```
+
 ## Features
 
 - 🔧 **Full TypeScript Support**: Complete type definitions included
+- 🏗️ **Clean Architecture**: Interface and implementation separation for better maintainability
 - 🎯 **ES6 Classes**: Modern ES6 class syntax with private fields
 - 📦 **Multiple Formats**: UMD, ES Modules, and CommonJS support
 - 🧪 **Well Tested**: Comprehensive test suite with 18 test cases
@@ -265,13 +350,20 @@ pager.has_previous_pageset(); // returns true or false
 
 ## Build Outputs
 
-```
-dist/datapage.js         # UMD version (IE11+ compatible, 11.5KB)
-dist/datapage.esm.js     # ES Module version (10.3KB)
-dist/datapage.min.js     # Production minified version (4.0KB)
-dist/datapage.d.ts       # TypeScript type definitions (1.1KB)
+The library is built in multiple formats to support different environments:
+
+```text
+dist/datapage.js         # UMD format (universal, IE11+ compatible)
+dist/datapage.min.js     # UMD format minified (production ready)
+dist/datapage.esm.js     # ES Module format (modern bundlers)
+dist/datapage.d.ts       # TypeScript type definitions
 dist/*.map               # Source maps for all formats
 ```
+
+**Format Details:**
+- **UMD (`datapage.js`)**: Universal Module Definition for broad compatibility
+- **UMD Minified (`datapage.min.js`)**: Compressed version for production use
+- **ES Module (`datapage.esm.js`)**: Modern ES6 module format for bundlers
 
 ## Development
 
