@@ -72,7 +72,7 @@ const DataPage = require('datapage').default;
 
 #### ブラウザ（UMD）
 ```html
-<script src="node_modules/datapage/dist/datapage.min.js"></script>
+<script src="path/to/datapage.min.js"></script>
 <script>
   const pager = new DataPage(100, 10, 1, 5);
 </script>
