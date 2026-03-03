@@ -78,6 +78,9 @@
     "pager",
     "page"
   ],
+  "overrides": {
+    "serialize-javascript": "^7.0.3"
+  },
   "lint-staged": {
     "*.{ts,js,cjs}": [
       "eslint --fix",
