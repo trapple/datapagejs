@@ -74,7 +74,7 @@ test.describe('DataPage UMD Minified Build', () => {
     }
   });
 
-  test('should produce identical results to non-minified UMD build', async ({
+  test('should produce expected pagination results in minified UMD build', async ({
     page,
   }) => {
     await page.goto('/spec/fixtures/umd-min-test.html');
