@@ -36,9 +36,9 @@ test.describe('DataPage UMD Minified Build', () => {
 
     const methodTests = await page.evaluate(() => {
       if (typeof window.DataPage !== 'function') {
-        return {
-          error: `DataPage is ${typeof window.DataPage}, not a function`,
-        };
+        throw new Error(
+          `DataPage is ${typeof window.DataPage}, not a function`
+        );
       }
       const pager = new window.DataPage(100, 10, 1, 5);
       const methods = [
@@ -74,7 +74,7 @@ test.describe('DataPage UMD Minified Build', () => {
     }
   });
 
-  test('should produce identical results to non-minified UMD build', async ({
+  test('should produce expected pagination results in minified UMD build', async ({
     page,
   }) => {
     await page.goto('/spec/fixtures/umd-min-test.html');
