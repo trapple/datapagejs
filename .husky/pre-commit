@@ -3,7 +3,4 @@
 # Add Node.js to PATH for GUI Git clients
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-# Load NVM if available
-[ -s "$HOME/.nvm/nvm.sh" ] && \. "$HOME/.nvm/nvm.sh"
-
 npx lint-staged
