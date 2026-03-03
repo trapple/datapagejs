@@ -16,3 +16,9 @@
 1. `src/datapage.ts`でコードを変更
 2. `npm test`でテストを実行
 3. `npm run build`でビルドを実行し、`dist/`フォルダにビルド結果を生成
+
+## リリース
+
+1. `master`ブランチで`npm run version:patch`（または`version:minor`/`version:major`）を実行
+2. バージョンバンプ・コミット・タグ作成・git pushが自動で行われる
+3. `v*`タグのpushをトリガーにGitHub Actions（`.github/workflows/release.yml`）が実行され、GitHub Release作成とnpm publishが自動で行われる
