@@ -448,11 +448,14 @@ This project uses GitHub Actions for automated testing and releases:
 
 - **Pull Request Checks**: Automatic quality checks, tests, and builds on all PRs
 - **Automated Releases**: When you push a git tag (via `npm run version:*`), GitHub Actions will:
+  - Verify the `NPM_TOKEN` secret is set and valid (fails fast if invalid)
   - Run full test suite (unit + browser tests)
   - Build all formats
-  - Publish to NPM automatically
-  - Create GitHub Release with artifacts
+  - Publish to NPM
+  - Create a GitHub Release with artifacts (only after NPM publish succeeds)
   - Generate release notes from CHANGELOG.md
+
+> **Note on re-running**: If a release run fails before NPM publish (e.g. invalid token, failing tests), it can be safely re-run from the GitHub Actions UI without leaving a partial state. The workflow publishes to NPM before creating the GitHub Release so that a failed publish does not produce an orphaned Release.
 
 ### Setting Up NPM Auto-Publishing
 
@@ -480,10 +483,11 @@ To enable automated NPM publishing, repository maintainers need to:
 
 The release workflow will automatically:
 
+- ✅ Verify `NPM_TOKEN` is set and valid before doing anything else
 - ✅ Run quality checks and tests
 - ✅ Build all distribution formats
 - ✅ Publish to NPM registry
-- ✅ Create GitHub Release with downloadable artifacts
+- ✅ Create GitHub Release with downloadable artifacts (after NPM publish succeeds)
 - ✅ Extract release notes from CHANGELOG.md
 
 ## SEE ALSO
