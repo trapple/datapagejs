@@ -28,6 +28,17 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Verify NPM_TOKEN
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "::error::NPM_TOKEN secret is not set"
+            exit 1
+          fi
+          # トークンの有効性を whoami で検証（無効なら 401 で非ゼロ終了）
+          npm whoami --registry=https://registry.npmjs.org/
+
       - name: Install dependencies
         run: npm ci
 
@@ -82,6 +93,11 @@ jobs:
             echo "v${VERSION} のリリース" > release_notes.md
           fi
 
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -96,11 +112,6 @@ jobs:
             dist/datapage.d.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to NPM
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create release summary
         run: |
